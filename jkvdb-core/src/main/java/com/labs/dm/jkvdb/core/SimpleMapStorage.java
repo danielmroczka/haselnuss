@@ -1,6 +1,5 @@
 package com.labs.dm.jkvdb.core;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,15 +33,22 @@ public class SimpleMapStorage implements Serializable, IStorage {
     }
 
     @Override
-    public boolean add(Serializable key, Serializable value) {
+    public boolean add(Serializable key, Serializable value, boolean flush) {
         Serializable result = map.put(key, value);
-        try {
-            flush();
-        } catch (IOException ex) {
-            Logger.getLogger(SimpleMapStorage.class.getName()).log(Level.SEVERE, null, ex);
+        if (flush) {
+            try {
+                flush();
+            } catch (IOException ex) {
+                Logger.getLogger(SimpleMapStorage.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return result == null;
+    }
+
+    @Override
+    public boolean add(Serializable key, Serializable value) {
+        return add(key, value, false);
     }
 
     @Override

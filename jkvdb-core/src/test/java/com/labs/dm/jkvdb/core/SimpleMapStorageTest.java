@@ -41,4 +41,15 @@ public class SimpleMapStorageTest {
         assertEquals(2, storage.size());
     }
 
+    @Test
+    public void benchmark() {
+        IStorage storage = new SimpleMapStorage("target", "testcase2");
+        for (int i = 0; i < 1000; i++) {
+                storage.add(i, "stringValue"+i);
+        }
+        storage.add(999, "stringValue"+999, true);
+
+        System.out.println(storage.get(300));
+        assertEquals(1000, storage.size());
+    }
 }

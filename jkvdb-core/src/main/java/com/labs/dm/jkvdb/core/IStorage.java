@@ -8,6 +8,8 @@ import java.io.Serializable;
  */
 public interface IStorage {
 
+    boolean add(Serializable key, Serializable value, boolean flush);
+    
     boolean add(Serializable key, Serializable value);
 
     Serializable get(Serializable key);
