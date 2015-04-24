@@ -56,10 +56,6 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
         } catch (IOException ex) {
             Logger.getLogger(SimpleFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //return false;
-
-        //return false;
     }
 
     private void load() {

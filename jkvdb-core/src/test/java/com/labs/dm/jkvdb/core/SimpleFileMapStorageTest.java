@@ -42,7 +42,7 @@ public class SimpleFileMapStorageTest {
         assertEquals(2, storage.size());
     }
 
-    @Test
+    //@Test
     public void benchmark() {
         long time = System.currentTimeMillis();
         IStorage storage = new SimpleFileMapStorage("target", "testcase2");
