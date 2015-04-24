@@ -3,20 +3,48 @@ package com.labs.dm.jkvdb.core;
 import java.io.Serializable;
 
 /**
+ * General purpose Storage Interface
  *
  * @author daniel
  */
 public interface IStorage {
 
-    boolean add(Serializable key, Serializable value, boolean flush);
-    
-    boolean add(Serializable key, Serializable value);
+    /**
+     * Create
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    boolean put(Serializable key, Serializable value);
 
+    /**
+     * Read
+     *
+     * @param key
+     * @return
+     */
     Serializable get(Serializable key);
+
+    /**
+     * Update
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    boolean set(Serializable key, Serializable value);
+
+    /**
+     * Delete
+     *
+     * @param key
+     */
+    void remove(Serializable key);
 
     int size();
 
-    void remove(Serializable key);
-    
     void clean();
+
+    void flush();
 }
