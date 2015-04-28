@@ -1,8 +1,6 @@
 package com.labs.dm.jkvdb.core.hashmap;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +36,7 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
         if (file.exists()) {
             try {
                 try (ZipFile zipFile = new ZipFile(filename)) {
+                    
                     Enumeration<? extends ZipEntry> entries = zipFile.entries();
                     
                     while (entries.hasMoreElements()) {
@@ -54,7 +53,7 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
             try {
                 file.createNewFile();
             } catch (IOException ex) {
-                Logger.getLogger(SimpleFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -63,16 +62,16 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
     public void flush() {
 
         try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(filename))) {
-            ZipEntry e = new ZipEntry("entry.file");
+            ZipEntry e = new ZipEntry(filename);
             fos.putNextEntry(e);
             try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                 oos.writeObject(map);
                 //return true;
             } catch (IOException ex) {
-                Logger.getLogger(SimpleFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (IOException ex) {
-            Logger.getLogger(SimpleFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
