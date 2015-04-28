@@ -1,5 +1,6 @@
 package com.labs.dm.jkvdb.core;
 
+import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

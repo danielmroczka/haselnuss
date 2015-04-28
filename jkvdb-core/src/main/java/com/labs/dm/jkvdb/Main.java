@@ -19,7 +19,7 @@ public class Main {
             //}
         //}
 
-        System.out.println("Usage:");
-        System.out.println("-server: starts http server");
+        //System.out.println("Usage:");
+        //System.out.println("-server: starts http server");
     }
 }

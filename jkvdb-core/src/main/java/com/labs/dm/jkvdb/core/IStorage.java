@@ -46,5 +46,4 @@ public interface IStorage {
 
     void clean();
 
-    void flush();
 }

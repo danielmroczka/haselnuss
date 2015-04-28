@@ -1,5 +1,6 @@
-package com.labs.dm.jkvdb.core;
+package com.labs.dm.jkvdb.core.hashmap;
 
+import com.labs.dm.jkvdb.core.IFileStorage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,9 +17,9 @@ import java.util.logging.Logger;
  *
  * @author daniel
  */
-public class SimpleFileMapStorage extends AbstractHashMapStorage implements Serializable, IStorage {
+public class SimpleFileMapStorage extends AbstractHashMapStorage implements Serializable, IFileStorage {
 
-    private final String filename;
+    protected final String filename;
     
     public SimpleFileMapStorage(String dir, String name) {
         this.filename = dir + File.separator + name;
@@ -29,20 +30,7 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
         this("target", name);
     }
 
-    @Override
-    public boolean put(Serializable key, Serializable value) {
-        return map.put(key, value) == null;
-    }
 
-    @Override
-    public Serializable get(Serializable key) {
-        return map.get(key);
-    }
-
-    @Override
-    public int size() {
-        return map.size();
-    }
 
     @Override
     public void flush() {
@@ -58,7 +46,8 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
         }
     }
 
-    private void load() {
+    @Override
+    public void load() {
         File file = new File(filename);
         if (file.exists()) {
             try (FileInputStream fis = new FileInputStream(filename); ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -77,22 +66,6 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
 
         }
     }
-
-    @Override
-    public void remove(Serializable key) {
-        map.remove(key);
-    }
-
-    @Override
-    public void clean() {
-        map.clear();
-
-        flush();
-
-    }
-
-    @Override
-    public boolean set(Serializable key, Serializable value) {
-        return false;
-    }
 }
+
+

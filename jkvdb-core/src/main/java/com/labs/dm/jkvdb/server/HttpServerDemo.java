@@ -1,7 +1,9 @@
 package com.labs.dm.jkvdb.server;
 
+import com.labs.dm.jkvdb.Utils;
+import com.labs.dm.jkvdb.core.IFileStorage;
 import com.labs.dm.jkvdb.core.IStorage;
-import com.labs.dm.jkvdb.core.SimpleFileMapStorage;
+import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -22,7 +24,7 @@ import java.util.concurrent.Executors;
  */
 public class HttpServerDemo {
 
-    final IStorage storage = new SimpleFileMapStorage("rest");
+    final IFileStorage storage = new SimpleFileMapStorage("rest");
 
     public void start() throws IOException {
         storage.put("key", "Hello World!");
@@ -33,9 +35,12 @@ public class HttpServerDemo {
 
         server.createContext("/", new MyHandler());
         server.createContext("/rest", new RestHandler(storage));
+        server.createContext("/storage", new RestHandler(storage));
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
         System.out.println("Server is listening on port 8080");
+        System.out.println("Usage: http://localhost:8080/rest/key");
+        System.out.println("PID: " + Utils.pid());
     }
 
 }
@@ -50,6 +55,7 @@ class RestHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        System.out.println("[" + new Date() + "] Request: " + exchange.getRequestURI());
         String requestMethod = exchange.getRequestMethod();
 
         if ("GET".equalsIgnoreCase(requestMethod)) {
@@ -106,6 +112,7 @@ class MyHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        
         String requestMethod = exchange.getRequestMethod();
 
         if (requestMethod.equalsIgnoreCase("GET")) {
