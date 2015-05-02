@@ -1,4 +1,4 @@
-package com.labs.dm.jkvdb.server;
+package com.labs.dm.jkvdb.server.http;
 
 import com.labs.dm.jkvdb.Utils;
 import com.labs.dm.jkvdb.core.IFileStorage;
