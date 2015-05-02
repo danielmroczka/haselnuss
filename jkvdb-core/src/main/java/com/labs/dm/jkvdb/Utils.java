@@ -1,5 +1,7 @@
 package com.labs.dm.jkvdb;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -16,6 +18,8 @@ public class Utils {
             sun.management.VMManagement mgmt = (sun.management.VMManagement) jvm.get(runtime);
             java.lang.reflect.Method pid_method = mgmt.getClass().getDeclaredMethod("getProcessId");
             pid_method.setAccessible(true);
+            RuntimeMXBean rmxb = ManagementFactory.getRuntimeMXBean();
+            System.out.println(rmxb.getName());
             return (Integer) pid_method.invoke(mgmt);
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
             

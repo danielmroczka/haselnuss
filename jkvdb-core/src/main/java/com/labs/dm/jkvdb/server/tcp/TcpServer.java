@@ -16,7 +16,7 @@ import java.util.Properties;
 public class TcpServer {
 
     private final Properties properties;
-
+ServerSocket serverSocket;
     public TcpServer() {
         this.properties = new Properties();
         loadConfiguration();
@@ -33,11 +33,11 @@ public class TcpServer {
     }
 
     public void runServer() throws IOException, ClassNotFoundException {
-        ServerSocket welcomeSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
-        System.out.println("Server is listening on port: " + welcomeSocket.getLocalPort());
+        serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
+        System.out.println("Server is listening on port: " + serverSocket.getLocalPort());
 
         while (true) {
-            Socket connectionSocket = welcomeSocket.accept();
+            Socket connectionSocket = serverSocket.accept();
             onAccept(connectionSocket);
 
         }
@@ -69,7 +69,7 @@ public class TcpServer {
         } catch (FileNotFoundException fnfe) {
             System.err.println("Configuration file not found.");
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println(ex);
         }
     }
 

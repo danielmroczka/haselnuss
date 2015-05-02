@@ -20,6 +20,11 @@ public class TcpConnection {
     private final int port;
     private Socket socket;
 
+    public TcpConnection(String url) {
+        host = "localhost";
+        port = 1234;
+    }
+
     public TcpConnection(String host, int port) {
         this.host = host;
         this.port = port;
