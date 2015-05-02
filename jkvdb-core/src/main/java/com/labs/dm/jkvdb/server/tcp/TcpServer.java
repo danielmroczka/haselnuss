@@ -16,8 +16,9 @@ public class TcpServer {
     }
 
     public void runServer() throws IOException, ClassNotFoundException {
-        ServerSocket welcomeSocket = new ServerSocket(6789);
-
+        ServerSocket welcomeSocket = new ServerSocket(1234);
+        System.out.println("Server is listening on port: " + welcomeSocket.getLocalPort());
+        
         while (true) {
             Socket connectionSocket = welcomeSocket.accept();
             onAccept(connectionSocket);
