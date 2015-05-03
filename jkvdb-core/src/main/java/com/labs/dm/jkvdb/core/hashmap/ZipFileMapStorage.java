@@ -17,7 +17,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * Simple ZipFile Map Storage Implementation
- * 
+ *
  * @author daniel
  */
 public class ZipFileMapStorage extends SimpleFileMapStorage {
@@ -26,6 +26,11 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
         super(dir, name);
     }
 
+    /**
+     *
+     *
+     * @param name - the name of created storage
+     */
     public ZipFileMapStorage(String name) {
         super(name);
     }
@@ -36,12 +41,13 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
         if (file.exists()) {
             try {
                 try (ZipFile zipFile = new ZipFile(filename)) {
-                    
+
                     Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                    
+
                     while (entries.hasMoreElements()) {
                         ZipEntry entry = entries.nextElement();
-                        try (InputStream stream = zipFile.getInputStream(entry); ObjectInputStream input = new ObjectInputStream(stream)) {
+                        try (InputStream stream = zipFile.getInputStream(entry);
+                                ObjectInputStream input = new ObjectInputStream(stream)) {
                             map = (Map<Serializable, Serializable>) input.readObject();
                         }
                     }

@@ -44,6 +44,9 @@ public interface IStorage {
 
     int size();
 
+    /**
+     *
+     */
     void clean();
 
     void setAutoCommit(boolean value);

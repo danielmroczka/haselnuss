@@ -16,7 +16,7 @@ import java.util.Properties;
 public class TcpServer {
 
     private final Properties properties;
-ServerSocket serverSocket;
+    private ServerSocket serverSocket;
     public TcpServer() {
         this.properties = new Properties();
         loadConfiguration();

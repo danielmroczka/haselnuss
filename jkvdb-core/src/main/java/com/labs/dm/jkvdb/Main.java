@@ -34,18 +34,20 @@ public class Main {
                                 }
                                 default: {
                                     System.err.println("Unrecognized server type!");
+                                    printUsage();
                                 }
                             }
-
                         }
                     } else {
                         System.err.println("Missing server type argument");
+                        printUsage();
                     }
-                            
                 }
             }
         }
+    }
 
+    private static void printUsage() {
         System.out.println("Usage:");
         System.out.println("-server http - starts rest server");
         System.out.println("-server tcp - starts tcp server");

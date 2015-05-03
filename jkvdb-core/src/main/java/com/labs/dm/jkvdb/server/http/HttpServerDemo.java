@@ -24,6 +24,10 @@ import java.util.concurrent.Executors;
  */
 public class HttpServerDemo {
 
+    public static void main(String[] args) throws IOException {
+        new HttpServerDemo().start();
+    }
+
     final IFileStorage storage = new SimpleFileMapStorage("rest");
 
     public void start() throws IOException {
@@ -34,6 +38,7 @@ public class HttpServerDemo {
         HttpServer server = HttpServer.create(addr, 0);
 
         server.createContext("/", new MyHandler());
+        server.createContext("/admin", new AdminHandler());
         server.createContext("/rest", new RestHandler(storage));
         server.createContext("/storage", new RestHandler(storage));
         server.setExecutor(Executors.newCachedThreadPool());
@@ -112,7 +117,7 @@ class MyHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        
+
         String requestMethod = exchange.getRequestMethod();
 
         if (requestMethod.equalsIgnoreCase("GET")) {
@@ -133,4 +138,30 @@ class MyHandler implements HttpHandler {
             }
         }
     }
+
+}
+
+class AdminHandler implements HttpHandler {
+
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        exchange.sendResponseHeaders(200, 0);
+        Headers responseHeaders = exchange.getResponseHeaders();
+        responseHeaders.set("Content-Type", "text/html");
+        try (OutputStream responseBody = exchange.getResponseBody()) {
+
+            java.net.URL url = this.getClass().getResource("/web/admin.html");
+            System.out.println(url.toString());
+            java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
+            String html = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
+
+            //Path path = Paths.get("admin.html");
+            //String html = Files.readAllLines(path).toString();
+            System.out.println(html);
+            responseBody.write(html.getBytes());
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+
 }
