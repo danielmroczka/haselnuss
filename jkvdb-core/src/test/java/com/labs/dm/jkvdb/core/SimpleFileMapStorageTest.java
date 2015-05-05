@@ -41,6 +41,24 @@ public class SimpleFileMapStorageTest {
     }
 
     @Test
+    public void shouldFlushIfAutoCommit() {
+        storage.setAutoCommit(true);
+        storage.put("key1", "value1");
+
+        storage = new SimpleFileMapStorage("target", "testcase1");
+        assertEquals(1, storage.size());
+    }
+
+    @Test
+    public void shouldNotFlushIfNoAutoCommit() {
+        storage.setAutoCommit(false);
+        storage.put("key1", "value1");
+
+        storage = new SimpleFileMapStorage("target", "testcase1");
+        assertEquals(0, storage.size());
+    }
+
+    @Test
     public void shouldAddTwoKeys() {
         storage.put("1", "stringValue");
         storage.put(1, "intvalue");
@@ -53,9 +71,9 @@ public class SimpleFileMapStorageTest {
         long time = System.currentTimeMillis();
         IStorage storage = new SimpleFileMapStorage("target", "testcase2");
         for (int i = 0; i < 1000000; i++) {
-          //      storage.add(i, "a");
+            //      storage.add(i, "a");
         }
-      //  storage.add(999, "stringValue"+99999, true);
+        //  storage.add(999, "stringValue"+99999, true);
 
         System.out.println(System.currentTimeMillis() - time);
         assertTrue(storage.size() > 0);
