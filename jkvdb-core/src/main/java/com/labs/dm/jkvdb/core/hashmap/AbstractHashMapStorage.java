@@ -11,11 +11,17 @@ import java.util.Map;
  */
 public abstract class AbstractHashMapStorage implements IStorage {
 
+    protected boolean autoCommit;
+    
     protected Map<Serializable, Serializable> map = new HashMap<>(1000);
 
     @Override
     public boolean put(Serializable key, Serializable value) {
-        return map.put(key, value) == null;
+        Serializable result = map.put(key, value);
+        if (autoCommit) {
+            flush();
+        }
+        return result == null;
     }
 
     @Override
@@ -31,6 +37,9 @@ public abstract class AbstractHashMapStorage implements IStorage {
     @Override
     public void remove(Serializable key) {
         map.remove(key);
+        if (autoCommit) {
+            flush();
+        }
     }
 
     @Override
@@ -47,5 +56,7 @@ public abstract class AbstractHashMapStorage implements IStorage {
         
         return false;
     }
+
+    abstract public void flush();
 
 }

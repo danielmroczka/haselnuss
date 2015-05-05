@@ -21,8 +21,6 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
 
     protected final String filename;
     
-    private boolean autoCommit;
-    
     public SimpleFileMapStorage(String dir, String name) {
         this.filename = dir + File.separator + name;
         load();

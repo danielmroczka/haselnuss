@@ -13,16 +13,19 @@ import org.junit.Test;
  */
 public class SimpleFileMapStorageTest {
 
-    private IStorage storage;
+    private IFileStorage storage;
 
     @Before
     public void before() {
         storage = new SimpleFileMapStorage("target", "testcase1");
+        storage.clean();
+        storage.flush();
     }
 
     @After
     public void after() {
         storage.clean();
+        storage.flush();
     }
 
     @Test
@@ -33,6 +36,7 @@ public class SimpleFileMapStorageTest {
     @Test
     public void shouldAdd() {
         storage.put("key1", "value1");
+        storage.flush();
         assertEquals(1, storage.size());
     }
 
@@ -40,6 +44,7 @@ public class SimpleFileMapStorageTest {
     public void shouldAddTwoKeys() {
         storage.put("1", "stringValue");
         storage.put(1, "intvalue");
+        storage.flush();
         assertEquals(2, storage.size());
     }
 

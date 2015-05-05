@@ -19,4 +19,8 @@ public class InMemoryStorage extends AbstractHashMapStorage implements IStorage 
         
     }
 
+    @Override
+    public void flush() {
+    }
+
 }
