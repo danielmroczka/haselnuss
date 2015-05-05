@@ -2,6 +2,7 @@ package com.labs.dm.jkvdb.server.tcp;
 
 import com.labs.dm.jkvdb.Consts;
 import static com.labs.dm.jkvdb.Consts.CONFIG_FILENAME;
+import com.labs.dm.jkvdb.Utils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +43,7 @@ public class TcpServer {
     public void runServer() throws IOException, ClassNotFoundException {
         serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
         System.out.println("Server is listening on port: " + serverSocket.getLocalPort());
-
+        System.out.println("PID: " + Utils.pid());
         while (true) {
             Socket connectionSocket = serverSocket.accept();
             onAccept(connectionSocket);
