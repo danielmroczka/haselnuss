@@ -1,4 +1,5 @@
-# jkvdb [![Build Status](https://travis-ci.org/danielmroczka/jkvdb.png?branch=master)](https://travis-ci.org/danielmroczka/jkvdb) [![Coverage Status](https://coveralls.io/repos/danielmroczka/jkvdb/badge.png?branch=master)](https://coveralls.io/r/danielmroczka/jkvdb?branch=master)
+# jkvdb [![Build Status](https://travis-ci.org/danielmroczka/jkvdb.png?branch=master)](https://travis-ci.org/danielmroczka/jkvdb) [![Coverage Status](https://coveralls.io/repos/danielmroczka/jkvdb/badge.svg?branch=master)](https://coveralls.io/r/danielmroczka/jkvdb?branch=master)
+
 
 Java Key Value Database
 
