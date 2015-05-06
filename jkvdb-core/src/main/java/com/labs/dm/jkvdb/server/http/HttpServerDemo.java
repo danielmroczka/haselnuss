@@ -24,6 +24,8 @@ import java.util.concurrent.Executors;
  */
 public class HttpServerDemo {
 
+    private HttpServer server;
+    
     public static void main(String[] args) throws IOException {
         new HttpServerDemo().start();
     }
@@ -35,7 +37,7 @@ public class HttpServerDemo {
         storage.flush();
 
         InetSocketAddress addr = new InetSocketAddress(8080);
-        HttpServer server = HttpServer.create(addr, 0);
+        server = HttpServer.create(addr, 0);
 
         server.createContext("/", new MyHandler());
         server.createContext("/admin", new AdminHandler());
@@ -46,6 +48,12 @@ public class HttpServerDemo {
         System.out.println("Server is listening on port 8080");
         System.out.println("Usage: http://localhost:8080/rest/key");
         System.out.println("PID: " + Utils.pid());
+    }
+    
+    public void stop() {
+        if (server != null) {
+            server.stop(0);
+        }
     }
 
 }

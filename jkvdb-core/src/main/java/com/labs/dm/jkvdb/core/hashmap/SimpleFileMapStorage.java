@@ -34,6 +34,9 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
 
     @Override
     public void flush() {
+        if (autoCommit) {
+            System.out.println("Autocommit is set to true there is no need to execute flush method");
+        }
         try (FileOutputStream fos = new FileOutputStream(filename)) {
             try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                 oos.writeObject(map);
