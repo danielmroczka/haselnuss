@@ -1,2 +1,2 @@
 language: java
-script: mvn clean test jacoco:report coveralls:report
+script: mvn -pl jkvdb-core clean test jacoco:report coveralls:report
