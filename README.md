@@ -1,7 +1,6 @@
-# jkvdb [![Build Status](https://travis-ci.org/danielmroczka/jkvdb.png?branch=master)](https://travis-ci.org/danielmroczka/jkvdb) [![Coverage Status](https://coveralls.io/repos/danielmroczka/jkvdb/badge.svg?branch=master)](https://coveralls.io/r/danielmroczka/jkvdb?branch=master)
+# jkvdb [![Build Status](https://travis-ci.org/danielmroczka/jkvdb.png?branch=master)](https://travis-ci.org/danielmroczka/jkvdb) [![Build Status](https://circleci.com/gh/danielmroczka/jkvdb.svg?&style=shield&circle-token=5dace7c07a614bebd39dbc08e8928c032899c84c)](https://circleci.com/gh/danielmroczka/jkvdb) [![Coverage Status](https://coveralls.io/repos/danielmroczka/jkvdb/badge.svg?branch=master)](https://coveralls.io/r/danielmroczka/jkvdb?branch=master)
 
-
-Java Key Value Database
+(pure) Java Key Value Database
 
 Simple implementation of key-value database. Base algorithm used is a HashMap.
 Designed working modes are:
