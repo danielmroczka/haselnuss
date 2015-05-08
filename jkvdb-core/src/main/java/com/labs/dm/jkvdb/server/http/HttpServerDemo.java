@@ -28,7 +28,6 @@ public class HttpServerDemo
 
     private HttpServer server;
 
-
     public static void main(String[] args) throws IOException
     {
         new HttpServerDemo().start();
@@ -41,7 +40,7 @@ public class HttpServerDemo
         storage.put("key", "Hello World!");
         storage.flush();
 
-        InetSocketAddress addr = new InetSocketAddress(8080);
+        InetSocketAddress addr = new InetSocketAddress(8081);
         server = HttpServer.create(addr, 0);
 
         server.createContext("/", new MyHandler());
