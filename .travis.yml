@@ -1,2 +1,4 @@
 language: java
 script: mvn -pl jkvdb-core clean test jacoco:report coveralls:report
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
