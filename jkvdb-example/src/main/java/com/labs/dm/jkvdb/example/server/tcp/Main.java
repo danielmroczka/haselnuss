@@ -2,15 +2,17 @@ package com.labs.dm.jkvdb.example.server.tcp;
 
 import com.labs.dm.jkvdb.core.IFileStorage;
 import com.labs.dm.jkvdb.server.tcp.TcpConnection;
+
 import java.io.IOException;
 
 /**
- *
  * @author daniel
  */
-public class Main {
+public class Main
+{
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException
+    {
         TcpConnection conn = new TcpConnection("localhost", 6543);
         conn.connect();
 

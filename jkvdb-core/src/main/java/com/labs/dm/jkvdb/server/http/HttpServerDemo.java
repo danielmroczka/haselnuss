@@ -8,32 +8,34 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
 /**
- *
  * @author daniel
  */
-public class HttpServerDemo {
+public class HttpServerDemo
+{
 
     private HttpServer server;
-    
-    
-    public static void main(String[] args) throws IOException {
+
+
+    public static void main(String[] args) throws IOException
+    {
         new HttpServerDemo().start();
     }
 
     final IFileStorage storage = new SimpleFileMapStorage("rest");
 
-    public void start() throws IOException {
+    public void start() throws IOException
+    {
         storage.put("key", "Hello World!");
         storage.flush();
 
@@ -50,50 +52,63 @@ public class HttpServerDemo {
         System.out.println("Usage: http://localhost:8080/rest/key");
         System.out.println("PID: " + Utils.pid());
     }
-    
-    public void stop() {
-        if (server != null) {
+
+    public void stop()
+    {
+        if (server != null)
+        {
             server.stop(0);
         }
     }
 
 }
 
-class RestHandler implements HttpHandler {
+class RestHandler implements HttpHandler
+{
 
     private final IStorage storage;
 
-    RestHandler(IStorage storage) {
+    RestHandler(IStorage storage)
+    {
         this.storage = storage;
     }
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
+    public void handle(HttpExchange exchange) throws IOException
+    {
         System.out.println("[" + new Date() + "] Request: " + exchange.getRequestURI());
         String requestMethod = exchange.getRequestMethod();
 
-        if ("GET".equalsIgnoreCase(requestMethod)) {
+        if ("GET".equalsIgnoreCase(requestMethod))
+        {
             Headers responseHeaders = exchange.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/plain");
 
-            try (OutputStream responseBody = exchange.getResponseBody()) {
+            try (OutputStream responseBody = exchange.getResponseBody())
+            {
                 String path = exchange.getRequestURI().getPath();//.get.getPath();
                 path = path.substring(exchange.getHttpContext().getPath().length() + 1);
                 Serializable val = storage.get(path);
 
-                if (val != null) {
+                if (val != null)
+                {
                     exchange.sendResponseHeaders(200, 0);
-                } else {
+                }
+                else
+                {
                     exchange.sendResponseHeaders(404, 0);
                 }
 
-                if (val instanceof String) {
+                if (val instanceof String)
+                {
                     byte[] b = ((String) val).getBytes();
                     responseBody.write(b);
                 }
 
             }
-        } else if ("POST".equalsIgnoreCase(requestMethod)) {
+        }
+        else if ("POST".equalsIgnoreCase(requestMethod))
+        {
             Headers responseHeaders = exchange.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/plain");
             exchange.sendResponseHeaders(200, 0);
@@ -102,11 +117,14 @@ class RestHandler implements HttpHandler {
 
             storage.put(path, new Date().toString());
 
-            try (OutputStream responseBody = exchange.getResponseBody()) {
+            try (OutputStream responseBody = exchange.getResponseBody())
+            {
                 responseBody.write("".getBytes());
             }
 
-        } else if ("PUT".equalsIgnoreCase(requestMethod)) {
+        }
+        else if ("PUT".equalsIgnoreCase(requestMethod))
+        {
             Headers responseHeaders = exchange.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/plain");
             exchange.sendResponseHeaders(200, 0);
@@ -115,31 +133,35 @@ class RestHandler implements HttpHandler {
 
             storage.set(path, new Date().toString());
 
-            try (OutputStream responseBody = exchange.getResponseBody()) {
+            try (OutputStream responseBody = exchange.getResponseBody())
+            {
                 responseBody.write("".getBytes());
             }
         }
     }
 }
 
-class MyHandler implements HttpHandler {
+class MyHandler implements HttpHandler
+{
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
+    public void handle(HttpExchange exchange) throws IOException
+    {
 
         String requestMethod = exchange.getRequestMethod();
 
-        if (requestMethod.equalsIgnoreCase("GET")) {
+        if (requestMethod.equalsIgnoreCase("GET"))
+        {
             Headers responseHeaders = exchange.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/plain");
             exchange.sendResponseHeaders(200, 0);
 
-            try (OutputStream responseBody = exchange.getResponseBody()) {
+            try (OutputStream responseBody = exchange.getResponseBody())
+            {
                 Headers requestHeaders = exchange.getRequestHeaders();
                 Set<String> keySet = requestHeaders.keySet();
-                Iterator<String> iter = keySet.iterator();
-                while (iter.hasNext()) {
-                    String key = iter.next();
+                for (String key : keySet)
+                {
                     List values = requestHeaders.get(key);
                     String s = key + " = " + values.toString() + "\n";
                     responseBody.write(s.getBytes());
@@ -150,14 +172,17 @@ class MyHandler implements HttpHandler {
 
 }
 
-class AdminHandler implements HttpHandler {
+class AdminHandler implements HttpHandler
+{
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
+    public void handle(HttpExchange exchange) throws IOException
+    {
         exchange.sendResponseHeaders(200, 0);
         Headers responseHeaders = exchange.getResponseHeaders();
         responseHeaders.set("Content-Type", "text/html");
-        try (OutputStream responseBody = exchange.getResponseBody()) {
+        try (OutputStream responseBody = exchange.getResponseBody())
+        {
 
             java.net.URL url = this.getClass().getResource("/web/admin.html");
             System.out.println(url.toString());
@@ -168,7 +193,8 @@ class AdminHandler implements HttpHandler {
             //String html = Files.readAllLines(path).toString();
             System.out.println(html);
             responseBody.write(html.getBytes());
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             System.err.println(e);
         }
     }

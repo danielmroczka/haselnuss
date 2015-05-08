@@ -4,18 +4,20 @@ import com.labs.dm.jkvdb.core.IFileStorage;
 import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
 
 /**
- *
  * @author daniel
  */
-public class Main {
+public class Main
+{
 
-    static int count = 1000000;
+    static final int count = 1000000;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         long time = System.nanoTime();
         IFileStorage storage = new SimpleFileMapStorage("test1");
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++)
+        {
             storage.put(i, i);
         }
 

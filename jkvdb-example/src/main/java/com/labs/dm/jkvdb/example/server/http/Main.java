@@ -1,10 +1,11 @@
 package com.labs.dm.jkvdb.example.server.http;
 
 /**
- *
- * @author daniel 
+ * @author daniel
  */
-public class Main {
-    public static void main(String[] args) {
+public class Main
+{
+    public static void main(String[] args)
+    {
     }
 }

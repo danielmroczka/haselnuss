@@ -7,7 +7,8 @@ import java.io.Serializable;
  *
  * @author daniel
  */
-public interface IStorage {
+public interface IStorage
+{
 
     /**
      * Create
