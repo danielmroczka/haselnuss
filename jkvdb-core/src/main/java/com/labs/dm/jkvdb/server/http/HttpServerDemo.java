@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author daniel
@@ -66,7 +68,8 @@ public class HttpServerDemo
 class RestHandler implements HttpHandler
 {
 
-    private final IStorage storage;
+    static IStorage storage;
+    private static Logger logger = Logger.getAnonymousLogger();
 
     RestHandler(IStorage storage)
     {
@@ -174,7 +177,7 @@ class MyHandler implements HttpHandler
 
 class AdminHandler implements HttpHandler
 {
-
+    Logger logger = Logger.getAnonymousLogger();
     @Override
     public void handle(HttpExchange exchange) throws IOException
     {
@@ -192,10 +195,11 @@ class AdminHandler implements HttpHandler
             //Path path = Paths.get("admin.html");
             //String html = Files.readAllLines(path).toString();
             System.out.println(html);
+
             responseBody.write(html.getBytes());
         } catch (Exception e)
         {
-            System.err.println(e);
+            logger.log(Level.SEVERE, null, e);
         }
     }
 
