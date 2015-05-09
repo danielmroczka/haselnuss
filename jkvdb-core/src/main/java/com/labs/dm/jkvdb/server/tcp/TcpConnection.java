@@ -33,10 +33,14 @@ public class TcpConnection
     {
         socket = new Socket(host, port);
     }
+    
+    public boolean isConnected() {
+        return (socket != null && socket.isConnected());
+    }
 
     public void close() throws IOException
     {
-        if (socket != null && socket.isConnected())
+        if (isConnected())
         {
             socket.close();
         }

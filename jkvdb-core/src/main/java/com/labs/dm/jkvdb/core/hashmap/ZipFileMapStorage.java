@@ -14,80 +14,59 @@ import java.util.zip.ZipOutputStream;
  *
  * @author daniel
  */
-public class ZipFileMapStorage extends SimpleFileMapStorage
-{
+public class ZipFileMapStorage extends SimpleFileMapStorage {
 
-    public ZipFileMapStorage(String dir, String name)
-    {
+    public ZipFileMapStorage(String dir, String name) {
         super(dir, name);
     }
 
     /**
      * @param name - the name of created storage
      */
-    public ZipFileMapStorage(String name)
-    {
+    public ZipFileMapStorage(String name) {
         super(name);
     }
 
     @Override
-    public void load()
-    {
+    public void load() {
         File file = new File(filename);
-        if (file.exists())
-        {
-            try
-            {
-                try (ZipFile zipFile = new ZipFile(filename))
-                {
+        if (file.exists()) {
+            try (ZipFile zipFile = new ZipFile(filename)) {
 
-                    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-                    while (entries.hasMoreElements())
-                    {
-                        ZipEntry entry = entries.nextElement();
-                        try (InputStream stream = zipFile.getInputStream(entry);
-                             ObjectInputStream input = new ObjectInputStream(stream))
-                        {
-                            map = (Map<Serializable, Serializable>) input.readObject();
-                        }
+                while (entries.hasMoreElements()) {
+                    ZipEntry entry = entries.nextElement();
+                    
+                    try (InputStream stream = zipFile.getInputStream(entry);
+                            ObjectInputStream input = new ObjectInputStream(stream)) {
+                        map = (Map<Serializable, Serializable>) input.readObject();
+                    } catch (IOException | ClassNotFoundException ex) {
+                        Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-            } catch (ClassNotFoundException | IOException ex)
-            {
+            } catch (IOException ex) {
                 Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 file.createNewFile();
-            } catch (IOException ex)
-            {
+            } catch (IOException ex) {
                 Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     @Override
-    public void flush()
-    {
+    public void flush() {
 
-        try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(filename)))
-        {
+        try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(filename))) {
             ZipEntry e = new ZipEntry(filename);
             fos.putNextEntry(e);
-            try (ObjectOutputStream oos = new ObjectOutputStream(fos))
-            {
+            try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                 oos.writeObject(map);
-                //return true;
-            } catch (IOException ex)
-            {
-                Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (IOException ex)
-        {
+            } 
+        } catch (IOException ex) {
             Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

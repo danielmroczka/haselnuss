@@ -11,53 +11,67 @@ import java.util.Date;
 import java.util.Properties;
 
 import static com.labs.dm.jkvdb.Consts.CONFIG_FILENAME;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author daniel
  * @since 28.04.2015
  */
-public class TcpServer
-{
+public class TcpServer {
 
+    private static final Logger logger = Logger.getLogger(TcpServer.class.getSimpleName());
     private final Properties properties;
     private ServerSocket serverSocket;
+    private boolean active;
 
-    public TcpServer()
-    {
+    public TcpServer() {
         this.properties = new Properties();
         loadConfiguration();
     }
 
-    public TcpServer(Properties properties)
-    {
+    public TcpServer(Properties properties) {
         this.properties = properties;
     }
 
-    public static void main(String argv[]) throws Exception
-    {
-        System.out.println("Starting server...");
+    public static void main(String argv[]) throws Exception {
+        logger.info("Starting server...");
         TcpServer server = new TcpServer();
         server.runServer();
     }
 
-    public void runServer() throws IOException, ClassNotFoundException
-    {
+    public void runServer() throws IOException, ClassNotFoundException {
         serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
-        System.out.println("Server is listening on port: " + serverSocket.getLocalPort());
-        System.out.println("PID: " + Utils.pid());
-        while (true)
-        {
-            Socket connectionSocket = serverSocket.accept();
-            onAccept(connectionSocket);
-
-        }
+        logger.log(Level.INFO, "Server is listening on port: {0}", serverSocket.getLocalPort());
+        logger.log(Level.INFO, "PID: {0}", Utils.pid());
+        active = true;
+        new Thread(new Runner()).start();
     }
 
-    private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException
-    {
-        try
-        {
-            System.out.println("onAccept " + connectionSocket.toString());
+    public void stopServer() {
+        active = false;
+    }
+
+    class Runner implements Runnable {
+
+        @Override
+        public void run() {
+            while (active) {
+                try {
+                    Socket connectionSocket = serverSocket.accept();
+                    onAccept(connectionSocket);
+                } catch (IOException | ClassNotFoundException ex) {
+                    Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+
+    }
+
+    private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException {
+        try {
+            logger.log(Level.INFO, "onAccept {0}", connectionSocket.toString());
 
             InputStream is = connectionSocket.getInputStream();
             ObjectInput ois = new ObjectInputStream(is);
@@ -66,28 +80,22 @@ public class TcpServer
             OutputStream os = connectionSocket.getOutputStream();
             ObjectOutput out = new ObjectOutputStream(os);
             out.writeObject(response);
-        } catch (SocketException se)
-        {
-            System.err.println(se);
+        } catch (SocketException se) {
+            logger.severe(se.getLocalizedMessage());
         }
     }
 
-    private Response commandProccess(Command command)
-    {
+    private Response commandProccess(Command command) {
         return new Response(new Date().toString());
     }
 
-    private void loadConfiguration()
-    {
-        try (InputStream input = TcpServer.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME))
-        {
+    private void loadConfiguration() {
+        try (InputStream input = TcpServer.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
             properties.load(input);
-        } catch (FileNotFoundException fnfe)
-        {
-            System.err.println("Configuration file not found.");
-        } catch (IOException ex)
-        {
-            System.err.println(ex);
+        } catch (FileNotFoundException fnfe) {
+            logger.severe("Configuration file not found.");
+        } catch (IOException ex) {
+            logger.severe(ex.getLocalizedMessage());
         }
     }
 

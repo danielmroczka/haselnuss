@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -23,183 +24,154 @@ import java.util.logging.Logger;
 /**
  * @author daniel
  */
-public class HttpServerDemo
-{
-
+public class HttpServerDemo {
+    
+    private static final Logger logger = Logger.getAnonymousLogger();
     private HttpServer server;
-
-    public static void main(String[] args) throws IOException
-    {
+    
+    final IFileStorage storage = new SimpleFileMapStorage("rest");
+    
+    public static void main(String[] args) throws IOException {
         new HttpServerDemo().start();
     }
-
-    final IFileStorage storage = new SimpleFileMapStorage("rest");
-
-    public void start() throws IOException
-    {
+    
+    public void start() throws IOException {
         storage.put("key", "Hello World!");
         storage.flush();
-
+        
         InetSocketAddress addr = new InetSocketAddress(8081);
         server = HttpServer.create(addr, 0);
-
+        
         server.createContext("/", new MyHandler());
         server.createContext("/admin", new AdminHandler());
         server.createContext("/rest", new RestHandler(storage));
         server.createContext("/storage", new RestHandler(storage));
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
-        System.out.println("Server is listening on port 8080");
-        System.out.println("Usage: http://localhost:8080/rest/key");
-        System.out.println("PID: " + Utils.pid());
+        logger.info("Server is listening on port 8080");
+        logger.info("Usage: http://localhost:8080/rest/key");
+        logger.log(Level.INFO, "PID: {0}", Utils.pid());
     }
-
-    public void stop()
-    {
-        if (server != null)
-        {
+    
+    public void stop() {
+        if (server != null) {
             server.stop(0);
         }
     }
-
+    
 }
 
-class RestHandler implements HttpHandler
-{
-
-    static IStorage storage;
-    private static Logger logger = Logger.getAnonymousLogger();
-
-    RestHandler(IStorage storage)
-    {
+class RestHandler extends AbstractHttpHandler {
+    
+    private final IStorage storage;
+    private static final Logger logger = Logger.getAnonymousLogger();
+    
+    RestHandler(IStorage storage) {
         this.storage = storage;
     }
-
+    
     @Override
-    public void handle(HttpExchange exchange) throws IOException
-    {
-        System.out.println("[" + new Date() + "] Request: " + exchange.getRequestURI());
-        String requestMethod = exchange.getRequestMethod();
-
-        if ("GET".equalsIgnoreCase(requestMethod))
-        {
-            Headers responseHeaders = exchange.getResponseHeaders();
-            responseHeaders.set("Content-Type", "text/plain");
-
-            try (OutputStream responseBody = exchange.getResponseBody())
-            {
-                String path = exchange.getRequestURI().getPath();//.get.getPath();
-                path = path.substring(exchange.getHttpContext().getPath().length() + 1);
-                Serializable val = storage.get(path);
-
-                if (val != null)
-                {
-                    exchange.sendResponseHeaders(200, 0);
-                }
-                else
-                {
-                    exchange.sendResponseHeaders(404, 0);
-                }
-
-                if (val instanceof String)
-                {
-                    byte[] b = ((String) val).getBytes();
-                    responseBody.write(b);
-                }
-
-            }
-        }
-        else if ("POST".equalsIgnoreCase(requestMethod))
-        {
-            Headers responseHeaders = exchange.getResponseHeaders();
-            responseHeaders.set("Content-Type", "text/plain");
-            exchange.sendResponseHeaders(200, 0);
-            String path = exchange.getRequestURI().getPath();//.get.getPath();
-            path = path.substring(exchange.getHttpContext().getPath().length() + 1);
-
-            storage.put(path, new Date().toString());
-
-            try (OutputStream responseBody = exchange.getResponseBody())
-            {
-                responseBody.write("".getBytes());
-            }
-
-        }
-        else if ("PUT".equalsIgnoreCase(requestMethod))
-        {
-            Headers responseHeaders = exchange.getResponseHeaders();
-            responseHeaders.set("Content-Type", "text/plain");
-            exchange.sendResponseHeaders(200, 0);
+    void onGet(HttpExchange exchange) throws IOException {
+        Headers responseHeaders = exchange.getResponseHeaders();
+        responseHeaders.set("Content-Type", "text/plain");
+        
+        try (OutputStream responseBody = exchange.getResponseBody()) {
             String path = exchange.getRequestURI().getPath();
             path = path.substring(exchange.getHttpContext().getPath().length() + 1);
-
-            storage.set(path, new Date().toString());
-
-            try (OutputStream responseBody = exchange.getResponseBody())
-            {
-                responseBody.write("".getBytes());
+            Serializable val = storage.get(path);
+            
+            if (val != null) {
+                exchange.sendResponseHeaders(200, 0);
+            } else {
+                exchange.sendResponseHeaders(404, 0);
             }
+            
+            if (val instanceof String) {
+                byte[] b = ((String) val).getBytes();
+                responseBody.write(b);
+            }
+            
         }
+    }
+    
+    @Override
+    void onPost(HttpExchange exchange) throws IOException {
+        Headers responseHeaders = exchange.getResponseHeaders();
+        responseHeaders.set("Content-Type", "text/plain");
+        exchange.sendResponseHeaders(200, 0);
+        String path = exchange.getRequestURI().getPath();
+        path = path.substring(exchange.getHttpContext().getPath().length() + 1);
+        
+        storage.put(path, new Date().toString());
+        
+        try (OutputStream responseBody = exchange.getResponseBody()) {
+            responseBody.write("".getBytes());
+        }
+    }
+    
+    @Override
+    void onPut(HttpExchange exchange) throws IOException {
+        Headers responseHeaders = exchange.getResponseHeaders();
+        responseHeaders.set("Content-Type", "text/plain");
+        exchange.sendResponseHeaders(200, 0);
+        String path = exchange.getRequestURI().getPath();
+        path = path.substring(exchange.getHttpContext().getPath().length() + 1);
+        
+        storage.set(path, new Date().toString());
+        
+        try (OutputStream responseBody = exchange.getResponseBody()) {
+            responseBody.write("".getBytes());
+        }
+    }
+    
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        logger.log(Level.INFO, "[{0}] Request: {1}", new Object[]{new Date(), exchange.getRequestURI()});
+        super.handle(exchange);
     }
 }
 
-class MyHandler implements HttpHandler
-{
-
+class MyHandler extends AbstractHttpHandler {
+    
     @Override
-    public void handle(HttpExchange exchange) throws IOException
-    {
-
-        String requestMethod = exchange.getRequestMethod();
-
-        if (requestMethod.equalsIgnoreCase("GET"))
-        {
-            Headers responseHeaders = exchange.getResponseHeaders();
-            responseHeaders.set("Content-Type", "text/plain");
-            exchange.sendResponseHeaders(200, 0);
-
-            try (OutputStream responseBody = exchange.getResponseBody())
-            {
-                Headers requestHeaders = exchange.getRequestHeaders();
-                Set<String> keySet = requestHeaders.keySet();
-                for (String key : keySet)
-                {
-                    List values = requestHeaders.get(key);
-                    String s = key + " = " + values.toString() + "\n";
-                    responseBody.write(s.getBytes());
-                }
+    void onGet(HttpExchange exchange) throws IOException {
+        Headers responseHeaders = exchange.getResponseHeaders();
+        responseHeaders.set("Content-Type", "text/plain");
+        exchange.sendResponseHeaders(200, 0);
+        
+        try (OutputStream responseBody = exchange.getResponseBody()) {
+            Headers requestHeaders = exchange.getRequestHeaders();
+            Set<String> keySet = requestHeaders.keySet();
+            for (String key : keySet) {
+                List values = requestHeaders.get(key);
+                String s = key + " = " + values.toString() + "\n";
+                responseBody.write(s.getBytes());
             }
         }
     }
-
+    
 }
 
-class AdminHandler implements HttpHandler
-{
-    Logger logger = Logger.getAnonymousLogger();
+class AdminHandler extends AbstractHttpHandler {
+    
+    static final Logger logger = Logger.getAnonymousLogger();
+    
     @Override
-    public void handle(HttpExchange exchange) throws IOException
-    {
+    void onGet(HttpExchange exchange) throws IOException {
         exchange.sendResponseHeaders(200, 0);
         Headers responseHeaders = exchange.getResponseHeaders();
         responseHeaders.set("Content-Type", "text/html");
-        try (OutputStream responseBody = exchange.getResponseBody())
-        {
-
-            java.net.URL url = this.getClass().getResource("/web/admin.html");
-            System.out.println(url.toString());
+        try (OutputStream responseBody = exchange.getResponseBody()) {
+            
+            URL url = this.getClass().getResource("/web/admin.html");
+            logger.info(url.toString());
             java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
             String html = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
-            //Path path = Paths.get("admin.html");
-            //String html = Files.readAllLines(path).toString();
-            System.out.println(html);
-
+            logger.info(html);
             responseBody.write(html.getBytes());
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             logger.log(Level.SEVERE, null, e);
         }
     }
-
+    
 }
