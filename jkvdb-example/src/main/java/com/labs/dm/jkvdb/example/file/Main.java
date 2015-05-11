@@ -2,6 +2,7 @@ package com.labs.dm.jkvdb.example.file;
 
 import com.labs.dm.jkvdb.core.IFileStorage;
 import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
+import java.io.IOException;
 
 /**
  * @author daniel
@@ -11,7 +12,7 @@ public class Main
 
     static final int count = 1000000;
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
         long time = System.nanoTime();
         IFileStorage storage = new SimpleFileMapStorage("test1");
