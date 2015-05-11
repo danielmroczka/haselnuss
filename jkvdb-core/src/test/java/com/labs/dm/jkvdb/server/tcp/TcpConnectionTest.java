@@ -1,14 +1,14 @@
 package com.labs.dm.jkvdb.server.tcp;
 
-import com.labs.dm.jkvdb.core.IFileStorage;
-import com.labs.dm.jkvdb.core.IStorage;
-import java.io.IOException;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.net.ConnectException;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -17,9 +17,6 @@ import static org.junit.Assert.*;
 public class TcpConnectionTest {
 
     private static TcpServer server;
-
-    public TcpConnectionTest() {
-    }
 
     @BeforeClass
     public static void setUpClass() throws IOException, ClassNotFoundException {
@@ -32,14 +29,6 @@ public class TcpConnectionTest {
         server.stopServer();
     }
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void test() throws IOException {
         try (TcpConnection conn = new TcpConnection("localhost", 6543)) {
@@ -47,4 +36,15 @@ public class TcpConnectionTest {
             assertTrue(conn.isConnected());
         }
     }
+
+    @Test(expected = ConnectException.class)
+    public void testDifferentPort() throws IOException {
+        try (TcpConnection conn = new TcpConnection("localhost", 12345)) {
+            conn.connect();
+            fail("Should fail");
+        }
+    }
+
 }
+
+

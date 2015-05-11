@@ -6,14 +6,12 @@ import com.labs.dm.jkvdb.core.IStorage;
 import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -27,9 +25,8 @@ import java.util.logging.Logger;
 public class HttpServerDemo {
     
     private static final Logger logger = Logger.getLogger(HttpServerDemo.class.getSimpleName());
-    private HttpServer server;
-    
     private final IFileStorage storage = new SimpleFileMapStorage("rest");
+    private HttpServer server;
     
     public static void main(String[] args) throws IOException {
         new HttpServerDemo().start();
@@ -64,9 +61,9 @@ public class HttpServerDemo {
 
 class RestHandler extends AbstractHttpHandler {
     
-    private final IStorage storage;
     private static final Logger logger = Logger.getAnonymousLogger();
-    
+    private final IStorage storage;
+
     RestHandler(IStorage storage) {
         this.storage = storage;
     }
@@ -160,19 +157,7 @@ class AdminHandler extends AbstractHttpHandler {
     @Override
     void onGet(HttpExchange exchange) throws IOException {
         exchange.sendResponseHeaders(200, 0);
-        Headers responseHeaders = exchange.getResponseHeaders();
-        responseHeaders.set("Content-Type", "text/html");
-        try (OutputStream responseBody = exchange.getResponseBody()) {
-            
-            URL url = this.getClass().getResource("/web/admin.html");
-            logger.info(url.toString());
-            java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-            String html = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-            logger.info(html);
-            responseBody.write(html.getBytes());
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, null, e);
-        }
+        renderPage(exchange, "admin");
     }
     
 }

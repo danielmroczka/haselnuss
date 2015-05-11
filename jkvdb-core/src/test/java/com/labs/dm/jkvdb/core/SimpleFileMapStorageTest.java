@@ -1,10 +1,11 @@
 package com.labs.dm.jkvdb.core;
 
 import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
-import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

@@ -9,10 +9,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Date;
 import java.util.Properties;
-
-import static com.labs.dm.jkvdb.Consts.CONFIG_FILENAME;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.labs.dm.jkvdb.Consts.CONFIG_FILENAME;
 
 /**
  * @author daniel
@@ -58,35 +58,10 @@ public class TcpServer {
         }
     }
 
-    class Runner implements Runnable {
-
-        @Override
-        public void run() {
-            try {
-                while (active) {
-                    try {
-                        Socket connectionSocket = serverSocket.accept();
-                        onAccept(connectionSocket);
-                    } catch (java.net.SocketException se) {
-                        Logger.getLogger(TcpServer.class.getSimpleName()).severe(se.getMessage());
-                    } catch (IOException | ClassNotFoundException ex) {
-                        Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                }
-
-                serverSocket.close();
-            } catch (IOException ex) {
-                Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    }
-
     private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException {
         try {
             logger.log(Level.INFO, "onAccept {0} clients: {1}", new Object[]{connectionSocket.toString(), ++instances});
-            
+
             InputStream is = connectionSocket.getInputStream();
             ObjectInput ois = new ObjectInputStream(is);
             Command command = (Command) ois.readObject();
@@ -111,6 +86,31 @@ public class TcpServer {
         } catch (IOException ex) {
             logger.severe(ex.getLocalizedMessage());
         }
+    }
+
+    class Runner implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                while (active) {
+                    try {
+                        Socket connectionSocket = serverSocket.accept();
+                        onAccept(connectionSocket);
+                    } catch (java.net.SocketException se) {
+                        Logger.getLogger(TcpServer.class.getSimpleName()).severe(se.getMessage());
+                    } catch (IOException | ClassNotFoundException ex) {
+                        Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+
+                serverSocket.close();
+            } catch (IOException ex) {
+                Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
 
 }

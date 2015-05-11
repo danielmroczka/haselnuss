@@ -1,14 +1,12 @@
 package com.labs.dm.jkvdb.server.tcp;
 
 import com.labs.dm.jkvdb.Consts;
+import org.junit.*;
+
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  *

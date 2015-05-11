@@ -10,8 +10,7 @@ import java.net.Socket;
 /**
  * @author daniel
  */
-public class TcpConnection implements AutoCloseable
-{
+public class TcpConnection implements AutoCloseable {
 
     private final String host;
     private final int port;
@@ -24,38 +23,34 @@ public class TcpConnection implements AutoCloseable
      *
      * @param url
      */
-    public TcpConnection(String url)
-    {
-        host = "localhost";
-        port = 1234;
+    public TcpConnection(String url) {
+        this("localhost", 1234);
     }
 
-    public TcpConnection(String host, int port)
-    {
+    public TcpConnection(String host, int port) {
+        if (host == null || host.isEmpty() || port <= 0) {
+            throw new IllegalArgumentException("Incorrect input values");
+        }
         this.host = host;
         this.port = port;
     }
 
-    public void connect() throws IOException
-    {
+    public void connect() throws IOException {
         socket = new Socket(host, port);
     }
-    
+
     public boolean isConnected() {
         return (socket != null && socket.isConnected());
     }
 
     @Override
-    public void close() throws IOException
-    {
-        if (isConnected())
-        {
+    public void close() throws IOException {
+        if (isConnected()) {
             socket.close();
         }
     }
 
-    public Response executeCommand(Command command) throws IOException, ClassNotFoundException
-    {
+    public Response executeCommand(Command command) throws IOException, ClassNotFoundException {
         checkConnection();
 
         ObjectOutput ois = new ObjectOutputStream(socket.getOutputStream());
@@ -67,22 +62,18 @@ public class TcpConnection implements AutoCloseable
         return response;
     }
 
-    public IFileStorage getFileStorage(String name)
-    {
+    public IFileStorage getFileStorage(String name) {
         IFileStorage storage = new SimpleFileMapStorage(name);
         return storage;
     }
 
-    public IStorage getInMemoryStorage(String name)
-    {
+    public IStorage getInMemoryStorage(String name) {
         IFileStorage storage = new SimpleFileMapStorage(name);
         return storage;
     }
 
-    private void checkConnection()
-    {
-        if (!isConnected())
-        {
+    private void checkConnection() {
+        if (!isConnected()) {
             throw new RuntimeException("Not connected to " + host);
         }
     }

@@ -12,7 +12,7 @@ public interface IFileStorage extends IStorage
      * Saves data in memory into the file
      * @throws java.io.IOException
      */
-    void flush() throws IOException;;
+    void flush() throws IOException;
 
     /**
      * Loads data from file
