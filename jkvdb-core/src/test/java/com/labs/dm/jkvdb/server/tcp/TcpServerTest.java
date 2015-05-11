@@ -40,10 +40,10 @@ public class TcpServerTest {
         TcpServer instance = new TcpServer();
         instance.runServer();
         
-        TcpConnection connection = new TcpConnection("localhost", 6543);
-        connection.connect();
-        assertTrue(connection.isConnected());
-        connection.close();
+        try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
+            connection.connect();
+            assertTrue(connection.isConnected());
+        }
         TimeUnit.MILLISECONDS.sleep(10);
         instance.stopServer();
     }
@@ -55,10 +55,10 @@ public class TcpServerTest {
         TcpServer instance = new TcpServer(properties);
         instance.runServer();
         
-        TcpConnection connection = new TcpConnection("localhost", 9876);
-        connection.connect();
-        assertTrue(connection.isConnected());
-        connection.close();
+        try (TcpConnection connection = new TcpConnection("localhost", 9876)) {
+            connection.connect();
+            assertTrue(connection.isConnected());
+        }
         TimeUnit.MILLISECONDS.sleep(10);
         instance.stopServer();
     }    
@@ -70,10 +70,10 @@ public class TcpServerTest {
         TcpServer instance = new TcpServer(properties);
         instance.runServer();
         
-        TcpConnection connection = new TcpConnection("localhost", Integer.valueOf(Consts.TCP_DEFAULT_PORT));
-        connection.connect();
-        assertTrue(connection.isConnected());
-        connection.close();
+        try (TcpConnection connection = new TcpConnection("localhost", Integer.valueOf(Consts.TCP_DEFAULT_PORT))) {
+            connection.connect();
+            assertTrue(connection.isConnected());
+        }
         TimeUnit.MILLISECONDS.sleep(10);
         instance.stopServer();
     }     

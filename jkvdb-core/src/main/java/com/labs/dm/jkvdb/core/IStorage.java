@@ -43,6 +43,11 @@ public interface IStorage
      */
     void remove(Serializable key);
 
+    /**
+     * Returns the size of storage
+     * 
+     * @return 
+     */
     int size();
 
     /**

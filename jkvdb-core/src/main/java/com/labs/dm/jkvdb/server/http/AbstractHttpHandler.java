@@ -15,19 +15,25 @@ public abstract class AbstractHttpHandler implements HttpHandler {
         String requestMethod = he.getRequestMethod();
         if (requestMethod != null) {
             switch (requestMethod.toLowerCase()) {
-                case "get": {
+                case "get":
                     onGet(he);
                     break;
-                }
 
-                case "post": {
+                case "post":
                     onPost(he);
                     break;
-                }
 
-                default: {
+                case "put":
+                    onPut(he);
+                    break;
+
+                case "delete":
+                    onDelete(he);
+                    break;
+
+                default:
                     throw new IllegalArgumentException("Unsupported request type");
-                }
+
             }
         }
     }
@@ -41,6 +47,10 @@ public abstract class AbstractHttpHandler implements HttpHandler {
     }
 
     void onPut(HttpExchange he) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    void onDelete(HttpExchange he) {
         throw new UnsupportedOperationException();
     }
 

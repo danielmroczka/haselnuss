@@ -10,13 +10,20 @@ import java.net.Socket;
 /**
  * @author daniel
  */
-public class TcpConnection
+public class TcpConnection implements AutoCloseable
 {
 
     private final String host;
     private final int port;
     private Socket socket;
 
+    /**
+     * Expected format of incoming url parameter:
+     *
+     * jkvdb:host:port
+     *
+     * @param url
+     */
     public TcpConnection(String url)
     {
         host = "localhost";
@@ -38,6 +45,7 @@ public class TcpConnection
         return (socket != null && socket.isConnected());
     }
 
+    @Override
     public void close() throws IOException
     {
         if (isConnected())
@@ -73,7 +81,7 @@ public class TcpConnection
 
     private void checkConnection()
     {
-        if (socket == null || !socket.isConnected())
+        if (!isConnected())
         {
             throw new RuntimeException("Not connected to " + host);
         }

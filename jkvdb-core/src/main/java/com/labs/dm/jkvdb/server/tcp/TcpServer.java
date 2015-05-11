@@ -23,7 +23,8 @@ public class TcpServer {
     private static final Logger logger = Logger.getLogger(TcpServer.class.getSimpleName());
     private final Properties properties;
     private ServerSocket serverSocket;
-    private boolean active;
+    volatile private boolean active;
+    private int instances;
 
     public TcpServer() {
         this.properties = new Properties();
@@ -50,20 +51,33 @@ public class TcpServer {
 
     public void stopServer() {
         active = false;
+        try {
+            serverSocket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     class Runner implements Runnable {
 
         @Override
         public void run() {
-            while (active) {
-                try {
-                    Socket connectionSocket = serverSocket.accept();
-                    onAccept(connectionSocket);
-                } catch (IOException | ClassNotFoundException ex) {
-                    Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                while (active) {
+                    try {
+                        Socket connectionSocket = serverSocket.accept();
+                        onAccept(connectionSocket);
+                    } catch (java.net.SocketException se) {
+                        Logger.getLogger(TcpServer.class.getSimpleName()).severe(se.getMessage());
+                    } catch (IOException | ClassNotFoundException ex) {
+                        Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                 }
 
+                serverSocket.close();
+            } catch (IOException ex) {
+                Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -71,8 +85,8 @@ public class TcpServer {
 
     private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException {
         try {
-            logger.log(Level.INFO, "onAccept {0}", connectionSocket.toString());
-
+            logger.log(Level.INFO, "onAccept {0} clients: {1}", new Object[]{connectionSocket.toString(), ++instances});
+            
             InputStream is = connectionSocket.getInputStream();
             ObjectInput ois = new ObjectInputStream(is);
             Command command = (Command) ois.readObject();

@@ -1,6 +1,7 @@
 package com.labs.dm.jkvdb.core;
 
 import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
+import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ public class SimpleFileMapStorageTest
     private IFileStorage storage;
 
     @Before
-    public void before()
+    public void before() throws IOException
     {
         storage = new SimpleFileMapStorage("target", "testcase1");
         storage.clean();
@@ -25,7 +26,7 @@ public class SimpleFileMapStorageTest
     }
 
     @After
-    public void after()
+    public void after() throws IOException
     {
         storage.clean();
         storage.flush();
@@ -38,7 +39,7 @@ public class SimpleFileMapStorageTest
     }
 
     @Test
-    public void shouldAdd()
+    public void shouldAdd() throws IOException
     {
         storage.put("key1", "value1");
         storage.flush();
@@ -66,12 +67,27 @@ public class SimpleFileMapStorageTest
     }
 
     @Test
-    public void shouldAddTwoKeys()
+    public void shouldAddTwoKeys() throws IOException
     {
         storage.put("1", "stringValue");
         storage.put(1, "intvalue");
         storage.flush();
         assertEquals(2, storage.size());
+    }
+    
+    @Test
+    public void wrongFilePath() throws IOException {
+        IFileStorage storage = new SimpleFileMapStorage("xyz://on-existig", "xyz://on-existig");
+        storage.flush();
+    }
+    
+    //@Test
+    public void raceConditionTest() {
+        IFileStorage[] array = new IFileStorage[10];
+        for (IFileStorage item:array) {
+            storage = new SimpleFileMapStorage("target", "testcase1");
+        }
+        //private IFileStorage storage = new SimpleFileMapStorage("target", "testcase1");
     }
 
     //@Test

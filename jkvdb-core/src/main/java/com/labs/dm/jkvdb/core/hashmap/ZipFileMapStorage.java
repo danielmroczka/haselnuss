@@ -37,7 +37,7 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
 
                 while (entries.hasMoreElements()) {
                     ZipEntry entry = entries.nextElement();
-                    
+
                     try (InputStream stream = zipFile.getInputStream(entry);
                             ObjectInputStream input = new ObjectInputStream(stream)) {
                         map = (Map<Serializable, Serializable>) input.readObject();
@@ -60,12 +60,11 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
     @Override
     public void flush() {
 
-        try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(filename))) {
+        try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(filename));
+                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             ZipEntry e = new ZipEntry(filename);
             fos.putNextEntry(e);
-            try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(map);
-            } 
+            oos.writeObject(map);
         } catch (IOException ex) {
             Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
         }

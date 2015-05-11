@@ -26,10 +26,10 @@ import java.util.logging.Logger;
  */
 public class HttpServerDemo {
     
-    private static final Logger logger = Logger.getAnonymousLogger();
+    private static final Logger logger = Logger.getLogger(HttpServerDemo.class.getSimpleName());
     private HttpServer server;
     
-    final IFileStorage storage = new SimpleFileMapStorage("rest");
+    private final IFileStorage storage = new SimpleFileMapStorage("rest");
     
     public static void main(String[] args) throws IOException {
         new HttpServerDemo().start();
@@ -48,6 +48,7 @@ public class HttpServerDemo {
         server.createContext("/storage", new RestHandler(storage));
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
+        
         logger.info("Server is listening on port 8080");
         logger.info("Usage: http://localhost:8080/rest/key");
         logger.log(Level.INFO, "PID: {0}", Utils.pid());
