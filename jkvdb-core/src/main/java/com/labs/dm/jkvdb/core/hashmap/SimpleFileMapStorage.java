@@ -12,6 +12,7 @@ import java.util.logging.Logger;
  */
 public class SimpleFileMapStorage extends AbstractHashMapStorage implements Serializable, IFileStorage {
 
+    private static final Logger logger = Logger.getLogger(SimpleFileMapStorage.class.getSimpleName());
     protected final String filename;
 
     public SimpleFileMapStorage(String dir, String name) {
@@ -26,12 +27,12 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
     @Override
     public void flush() {
         if (autoCommit) {
-            System.out.println("Autocommit is set to true there is no need to execute flush method");
+            logger.warning("Autocommit is set to true there is no need to execute flush method");
         }
         try (FileOutputStream fos = new FileOutputStream(filename); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(map);
         } catch (IOException ex) {
-            Logger.getLogger(SimpleFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -42,13 +43,13 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
             try (FileInputStream fis = new FileInputStream(filename); ObjectInputStream ois = new ObjectInputStream(fis)) {
                 map = (Map<Serializable, Serializable>) ois.readObject();
             } catch (IOException | ClassNotFoundException ex) {
-                Logger.getLogger(SimpleFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         } else {
             try {
                 file.createNewFile();
             } catch (IOException ex) {
-                Logger.getLogger(SimpleFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }
     }
