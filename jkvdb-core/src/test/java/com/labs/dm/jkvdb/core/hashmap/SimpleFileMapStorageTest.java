@@ -1,6 +1,7 @@
-package com.labs.dm.jkvdb.core;
+package com.labs.dm.jkvdb.core.hashmap;
 
-import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
+import com.labs.dm.jkvdb.core.IFileStorage;
+import com.labs.dm.jkvdb.core.IStorage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,8 +9,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.Serializable;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author daniel
@@ -91,6 +91,15 @@ public class SimpleFileMapStorageTest
         Serializable val = storage2.get("123");
         assertEquals("abc", val);
         storage2.remove("123");
+    }
+
+    @Test
+    public void shouldRemove() throws IOException {
+        storage.put(123, "value");
+        storage.remove(123);
+        Serializable val = storage.get(123);
+
+        assertNull(val);
     }
 
     @Test
