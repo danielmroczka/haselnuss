@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -70,15 +71,31 @@ public class SimpleFileMapStorageTest
     @Test
     public void shouldAddTwoKeys() throws IOException
     {
+        assertEquals(0, storage.size());
         storage.put("1", "stringValue");
         storage.put(1, "intvalue");
         storage.flush();
         assertEquals(2, storage.size());
     }
-    
+
+    @Test
+    public void shouldFlush() throws IOException {
+        IFileStorage storage1 = new SimpleFileMapStorage("target", "flush1");
+        storage1.setAutoCommit(true);
+        storage1.remove("123");
+        assertEquals(null, storage1.get("123"));
+        storage1.put("123", "abc");
+
+        IFileStorage storage2 = new SimpleFileMapStorage("target", "flush1");
+        storage2.setAutoCommit(true);
+        Serializable val = storage2.get("123");
+        assertEquals("abc", val);
+        storage2.remove("123");
+    }
+
     @Test
     public void wrongFilePath() throws IOException {
-        IFileStorage storage = new SimpleFileMapStorage("xyz://on-existig", "xyz://on-existig");
+        IFileStorage storage = new SimpleFileMapStorage("xyz://non-existing", "xyz://non-existing");
         storage.flush();
     }
     
