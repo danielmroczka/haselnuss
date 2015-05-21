@@ -1,6 +1,6 @@
 package com.labs.dm.jkvdb;
 
-import com.labs.dm.jkvdb.server.http.HttpServerDemo;
+import com.labs.dm.jkvdb.server.http.RestServer;
 import com.labs.dm.jkvdb.server.tcp.TcpServer;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class Main
                                 }
                                 case "http":
                                 {
-                                    HttpServerDemo server = new HttpServerDemo();
+                                    RestServer server = new RestServer();
                                     server.start();
                                     break;
                                 }

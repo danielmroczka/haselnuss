@@ -22,14 +22,14 @@ import java.util.logging.Logger;
 /**
  * @author daniel
  */
-public class HttpServerDemo {
+public class RestServer {
     
-    private static final Logger logger = Logger.getLogger(HttpServerDemo.class.getSimpleName());
+    private static final Logger logger = Logger.getLogger(RestServer.class.getSimpleName());
     private final IFileStorage storage = new SimpleFileMapStorage("rest");
     private HttpServer server;
     
     public static void main(String[] args) throws IOException {
-        new HttpServerDemo().start();
+        new RestServer().start();
     }
     
     public void start() throws IOException {

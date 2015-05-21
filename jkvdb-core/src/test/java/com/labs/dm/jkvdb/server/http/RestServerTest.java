@@ -14,12 +14,12 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author daniel
  */
-public class HttpServerDemoTest
+public class RestServerTest
 {
 
-    private static final HttpServerDemo server = new HttpServerDemo();
+    private static final RestServer server = new RestServer();
 
-    public HttpServerDemoTest()
+    public RestServerTest()
     {
     }
 
