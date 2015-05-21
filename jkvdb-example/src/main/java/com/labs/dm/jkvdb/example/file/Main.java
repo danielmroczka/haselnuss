@@ -20,7 +20,7 @@ public class Main
 
         for (int i = 0; i < COUNT; i++)
         {
-            storage.put(i, i);
+            storage.put(i, i%10);
         }
         time = System.nanoTime() - time;
         System.out.println("put in   \t" + time/1e6 + " [ms] \t" + COUNT / (time / 1e9) + " op/s");
@@ -34,5 +34,8 @@ public class Main
         storage.load();
         time = System.nanoTime() - time;
         System.out.println("load in \t" + time / 1e6 + " [ms] \t" + COUNT / (time / 1e9) + " op/s");
+
+        System.out.println(storage.get(95));
+
     }
 }

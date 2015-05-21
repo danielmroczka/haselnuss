@@ -26,7 +26,6 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
 
     @Override
     public void flush() {
-        System.out.println("Flush started");
         if (autoCommit) {
             logger.warning("Autocommit is set to true there is no need to execute flush method");
         }
@@ -56,13 +55,10 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-        System.out.println("Flush ended");
-
     }
 
     @Override
     public void load() {
-        System.out.println("load started");
         File file = new File(filename);
         if (file.exists()) {
             try (FileInputStream fis = new FileInputStream(filename); ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -77,7 +73,6 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
                 logger.log(Level.SEVERE, null, ex);
             }
         }
-        System.out.println("load ended");
     }
 
     @Override
