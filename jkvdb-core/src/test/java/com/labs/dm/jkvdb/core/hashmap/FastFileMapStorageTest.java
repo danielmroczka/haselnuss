@@ -14,13 +14,13 @@ import static org.junit.Assert.*;
 /**
  * Created by daniel on 2015-05-21.
  */
-public class SuperFastFileMapStorageTest {
+public class FastFileMapStorageTest
+{
     private IFileStorage storage;
 
     @Before
     public void before() throws IOException {
-        storage = new SuperFastFileMapStorage("target", "testcase1");
-        //storage.load();
+        storage = new FastFileMapStorage("target", "testcase1");
         storage.clean();
         storage.flush();
     }
@@ -48,7 +48,7 @@ public class SuperFastFileMapStorageTest {
         storage.setAutoCommit(true);
         storage.put("key1", "value1");
 
-        storage = new SuperFastFileMapStorage("target", "testcase1");
+        storage = new FastFileMapStorage("target", "testcase1");
         storage.load();
         assertEquals(1, storage.size());
     }
@@ -58,7 +58,7 @@ public class SuperFastFileMapStorageTest {
         storage.setAutoCommit(false);
         storage.put("key1", "value1");
 
-        storage = new SuperFastFileMapStorage("target", "testcase1");
+        storage = new FastFileMapStorage("target", "testcase1");
         assertEquals(0, storage.size());
     }
 
@@ -73,14 +73,14 @@ public class SuperFastFileMapStorageTest {
 
     @Test
     public void shouldFlush() throws IOException {
-        IFileStorage storage1 = new SuperFastFileMapStorage("target", "ssflush1");
+        IFileStorage storage1 = new FastFileMapStorage("target", "ssflush1");
         storage1.load();
         storage1.setAutoCommit(true);
         storage1.remove("123");
         assertEquals(null, storage1.get("123"));
         storage1.put("123", "abc");
 
-        IFileStorage storage2 = new SuperFastFileMapStorage("target", "ssflush1");
+        IFileStorage storage2 = new FastFileMapStorage("target", "ssflush1");
         storage2.load();
         storage2.setAutoCommit(true);
         Serializable val = storage2.get("123");
@@ -99,7 +99,7 @@ public class SuperFastFileMapStorageTest {
 
     @Test
     public void wrongFilePath() throws IOException {
-        IFileStorage storage = new SuperFastFileMapStorage("xyz://non-existing", "xyz://non-existing");
+        IFileStorage storage = new FastFileMapStorage("xyz://non-existing", "xyz://non-existing");
         storage.flush();
     }
 
@@ -107,7 +107,7 @@ public class SuperFastFileMapStorageTest {
     public void raceConditionTest() {
         IFileStorage[] array = new IFileStorage[10];
         for (IFileStorage item : array) {
-            storage = new SuperFastFileMapStorage("target", "testcase1");
+            storage = new FastFileMapStorage("target", "testcase1");
         }
         //private IFileStorage storage = new SimpleFileMapStorage("target", "testcase1");
     }
@@ -115,7 +115,7 @@ public class SuperFastFileMapStorageTest {
     //@Test
     public void benchmark() {
         long time = System.currentTimeMillis();
-        IStorage storage = new SuperFastFileMapStorage("target", "testcase2");
+        IStorage storage = new FastFileMapStorage("target", "testcase2");
         for (int i = 0; i < 1000000; i++) {
             //      storage.add(i, "a");
         }

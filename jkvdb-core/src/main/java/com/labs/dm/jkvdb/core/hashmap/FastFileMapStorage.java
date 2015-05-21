@@ -8,18 +8,23 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
+ * Fast FileMapStorage implementation
+ *
  * Created by daniel on 2015-05-20.
  */
-public class SuperFastFileMapStorage extends AbstractHashMapStorage implements Serializable, IFileStorage {
-    private static final Logger logger = Logger.getLogger(SuperFastFileMapStorage.class.getSimpleName());
-    private static  final int BUFFER_SIZE = 64000;
+public class FastFileMapStorage extends AbstractHashMapStorage implements Serializable, IFileStorage {
+
+    private static final Logger logger = Logger.getLogger(FastFileMapStorage.class.getSimpleName());
+
+    private static final int BUFFER_SIZE = 8192;
+
     protected final String filename;
 
-    public SuperFastFileMapStorage(String dir, String name) {
+    public FastFileMapStorage(String dir, String name) {
         this.filename = dir + File.separator + name;
     }
 
-    public SuperFastFileMapStorage(String name) {
+    public FastFileMapStorage(String name) {
         this("target", name);
     }
 
