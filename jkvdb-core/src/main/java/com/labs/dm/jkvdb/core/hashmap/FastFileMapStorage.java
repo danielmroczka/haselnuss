@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.zip.*;
 
 /**
  * Fast FileMapStorage implementation
@@ -32,7 +33,7 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
     public void flush() {
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(
-                 (new FileOutputStream(new RandomAccessFile(filename, "rw").getFD())), BUFFER_SIZE))) {
+                 new DeflaterOutputStream(new FileOutputStream(new RandomAccessFile(filename, "rw").getFD())), BUFFER_SIZE))) {
 
             oos.writeInt(map.size());
 
@@ -51,7 +52,7 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
     public void load() {
 
         try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(
-              (new FileInputStream(new RandomAccessFile(filename, "r").getFD())), BUFFER_SIZE))) {
+             new InflaterInputStream(new FileInputStream(new RandomAccessFile(filename, "r").getFD())), BUFFER_SIZE))) {
 
             int size = ois.readInt();
             map = new HashMap<>(size);
