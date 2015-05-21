@@ -16,5 +16,8 @@ public class InMemoryStorageTest {
         storage.put(123, "abc");
         assertEquals("abc", storage.get(123));
         assertNull(storage.get(1));
+        storage.remove(123);
+        assertNull(storage.get(123));
+
     }
 }
