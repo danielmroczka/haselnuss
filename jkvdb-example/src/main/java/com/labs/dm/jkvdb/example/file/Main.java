@@ -16,7 +16,7 @@ public class Main
     public static void main(String[] args) throws IOException
     {
         long time = System.nanoTime();
-        IFileStorage storage = DBManager.createFileMapDatabase("test111");
+        IFileStorage storage = DBManager.getInstance().createFileMapDatabase("test111");
 
         for (int i = 0; i < COUNT; i++)
         {

@@ -13,7 +13,7 @@ public class Main
     {
         final int COUNT = 1000000;
         long time = System.nanoTime();
-        IStorage storage = DBManager.createInMemoryDatabase("test1");
+        IStorage storage = DBManager.getInstance().createInMemoryDatabase("test1");
 
         for (int i = 0; i < COUNT; i++)
         {

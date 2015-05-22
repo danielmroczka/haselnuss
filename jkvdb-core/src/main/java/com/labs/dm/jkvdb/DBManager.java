@@ -1,6 +1,7 @@
 package com.labs.dm.jkvdb;
 
 import com.labs.dm.jkvdb.core.IFileStorage;
+import com.labs.dm.jkvdb.core.IStorage;
 import com.labs.dm.jkvdb.core.hashmap.FastFileMapStorage;
 import com.labs.dm.jkvdb.core.hashmap.InMemoryStorage;
 
@@ -16,19 +17,27 @@ import static com.labs.dm.jkvdb.Consts.CONFIG_FILENAME;
  * Created by daniel on 2015-05-13.
  */
 public class DBManager {
-
+    private static DBManager instance;
     private static final Logger logger = Logger.getLogger(DBManager.class.getSimpleName());
     private Properties properties;
 
     private DBManager() {
-
+        //loadConfiguration();
     }
 
-    public static InMemoryStorage createInMemoryDatabase(String name) {
+    public static synchronized DBManager getInstance() {
+        if (instance == null) {
+            instance = new DBManager();
+        }
+
+        return instance;
+    }
+
+    public IStorage createInMemoryDatabase(String name) {
         return new InMemoryStorage(name);
     }
 
-    public static IFileStorage createFileMapDatabase(String name) {
+    public IFileStorage createFileMapDatabase(String name) {
         return new FastFileMapStorage(name);
     }
 
