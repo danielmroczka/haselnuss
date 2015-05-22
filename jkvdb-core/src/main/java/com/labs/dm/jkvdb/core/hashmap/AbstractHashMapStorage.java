@@ -14,7 +14,7 @@ public abstract class AbstractHashMapStorage implements IStorage
 
     protected boolean autoCommit;
 
-    protected Map<Serializable, Serializable> map = new HashMap<>(1000);
+    protected Map<Serializable, Serializable> map = new HashMap<>();
 
     @Override
     public boolean put(Serializable key, Serializable value)

@@ -1,7 +1,7 @@
 package com.labs.dm.jkvdb.example.file;
 
+import com.labs.dm.jkvdb.DBManager;
 import com.labs.dm.jkvdb.core.IFileStorage;
-import com.labs.dm.jkvdb.core.hashmap.FastFileMapStorage;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ public class Main
     public static void main(String[] args) throws IOException
     {
         long time = System.nanoTime();
-        IFileStorage storage = new FastFileMapStorage(".", "test5");
+        IFileStorage storage = DBManager.createFileMapDatabase("test111");
 
         for (int i = 0; i < COUNT; i++)
         {

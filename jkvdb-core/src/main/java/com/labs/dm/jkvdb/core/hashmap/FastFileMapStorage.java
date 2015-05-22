@@ -6,7 +6,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.zip.*;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
 /**
  * Fast FileMapStorage implementation
@@ -17,7 +18,7 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
 
     private static final Logger logger = Logger.getLogger(FastFileMapStorage.class.getSimpleName());
 
-    private static final int BUFFER_SIZE = 8192;
+    private static final int BUFFER_SIZE = 64000;
 
     protected final String filename;
 
@@ -26,7 +27,7 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
     }
 
     public FastFileMapStorage(String name) {
-        this("target", name);
+        this(".", name);
     }
 
     @Override
@@ -36,7 +37,6 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
                  new DeflaterOutputStream(new FileOutputStream(new RandomAccessFile(filename, "rw").getFD())), BUFFER_SIZE))) {
 
             oos.writeInt(map.size());
-
             for (Map.Entry<Serializable, Serializable> entry : map.entrySet()) {
                 oos.writeObject(entry.getKey());
                 oos.writeObject(entry.getValue());
@@ -53,7 +53,6 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
 
         try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(
              new InflaterInputStream(new FileInputStream(new RandomAccessFile(filename, "r").getFD())), BUFFER_SIZE))) {
-
             int size = ois.readInt();
             map = new HashMap<>(size);
 
@@ -72,4 +71,5 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
     public void setAutoCommit(boolean value) {
         autoCommit = value;
     }
+
 }
