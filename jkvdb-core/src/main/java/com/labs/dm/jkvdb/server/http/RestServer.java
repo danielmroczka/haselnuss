@@ -2,19 +2,14 @@ package com.labs.dm.jkvdb.server.http;
 
 import com.labs.dm.jkvdb.Utils;
 import com.labs.dm.jkvdb.core.IFileStorage;
-import com.labs.dm.jkvdb.core.IStorage;
-import com.labs.dm.jkvdb.core.hashmap.SimpleFileMapStorage;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
+import com.labs.dm.jkvdb.core.hashmap.FastFileMapStorage;
+import com.labs.dm.jkvdb.server.http.handlers.AdminHandler;
+import com.labs.dm.jkvdb.server.http.handlers.MyHandler;
+import com.labs.dm.jkvdb.server.http.handlers.RestHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
 import java.net.InetSocketAddress;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +20,7 @@ import java.util.logging.Logger;
 public class RestServer {
     
     private static final Logger logger = Logger.getLogger(RestServer.class.getSimpleName());
-    private final IFileStorage storage = new SimpleFileMapStorage("rest");
+    private final IFileStorage storage = new FastFileMapStorage("rest");
     private HttpServer server;
     
     public static void main(String[] args) throws IOException {
@@ -38,7 +33,6 @@ public class RestServer {
         
         InetSocketAddress addr = new InetSocketAddress(8081);
         server = HttpServer.create(addr, 0);
-        
         server.createContext("/", new MyHandler());
         server.createContext("/admin", new AdminHandler());
         server.createContext("/rest", new RestHandler(storage));
@@ -59,105 +53,3 @@ public class RestServer {
     
 }
 
-class RestHandler extends AbstractHttpHandler {
-    
-    private static final Logger logger = Logger.getAnonymousLogger();
-    private final IStorage storage;
-
-    RestHandler(IStorage storage) {
-        this.storage = storage;
-    }
-    
-    @Override
-    void onGet(HttpExchange exchange) throws IOException {
-        Headers responseHeaders = exchange.getResponseHeaders();
-        responseHeaders.set("Content-Type", "text/plain");
-        
-        try (OutputStream responseBody = exchange.getResponseBody()) {
-            String path = exchange.getRequestURI().getPath();
-            path = path.substring(exchange.getHttpContext().getPath().length() + 1);
-            Serializable val = storage.get(path);
-            
-            if (val != null) {
-                exchange.sendResponseHeaders(200, 0);
-            } else {
-                exchange.sendResponseHeaders(404, 0);
-            }
-            
-            if (val instanceof String) {
-                byte[] b = ((String) val).getBytes();
-                responseBody.write(b);
-            }
-            
-        }
-    }
-    
-    @Override
-    void onPost(HttpExchange exchange) throws IOException {
-        Headers responseHeaders = exchange.getResponseHeaders();
-        responseHeaders.set("Content-Type", "text/plain");
-        exchange.sendResponseHeaders(200, 0);
-        String path = exchange.getRequestURI().getPath();
-        path = path.substring(exchange.getHttpContext().getPath().length() + 1);
-        
-        storage.put(path, new Date().toString());
-        
-        try (OutputStream responseBody = exchange.getResponseBody()) {
-            responseBody.write("".getBytes());
-        }
-    }
-    
-    @Override
-    void onPut(HttpExchange exchange) throws IOException {
-        Headers responseHeaders = exchange.getResponseHeaders();
-        responseHeaders.set("Content-Type", "text/plain");
-        exchange.sendResponseHeaders(200, 0);
-        String path = exchange.getRequestURI().getPath();
-        path = path.substring(exchange.getHttpContext().getPath().length() + 1);
-        
-        storage.set(path, new Date().toString());
-        
-        try (OutputStream responseBody = exchange.getResponseBody()) {
-            responseBody.write("".getBytes());
-        }
-    }
-    
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        logger.log(Level.INFO, "[{0}] Request: {1}", new Object[]{new Date(), exchange.getRequestURI()});
-        super.handle(exchange);
-    }
-}
-
-class MyHandler extends AbstractHttpHandler {
-    
-    @Override
-    void onGet(HttpExchange exchange) throws IOException {
-        Headers responseHeaders = exchange.getResponseHeaders();
-        responseHeaders.set("Content-Type", "text/plain");
-        exchange.sendResponseHeaders(200, 0);
-        
-        try (OutputStream responseBody = exchange.getResponseBody()) {
-            Headers requestHeaders = exchange.getRequestHeaders();
-            Set<String> keySet = requestHeaders.keySet();
-            for (String key : keySet) {
-                List values = requestHeaders.get(key);
-                String s = key + " = " + values.toString() + "\n";
-                responseBody.write(s.getBytes());
-            }
-        }
-    }
-    
-}
-
-class AdminHandler extends AbstractHttpHandler {
-    
-    static final Logger logger = Logger.getAnonymousLogger();
-    
-    @Override
-    void onGet(HttpExchange exchange) throws IOException {
-        exchange.sendResponseHeaders(200, 0);
-        renderPage(exchange, "admin");
-    }
-    
-}

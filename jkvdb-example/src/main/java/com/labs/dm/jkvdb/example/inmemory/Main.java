@@ -1,6 +1,6 @@
 package com.labs.dm.jkvdb.example.inmemory;
 
-import com.labs.dm.jkvdb.DBManager;
+import com.labs.dm.jkvdb.InstanceManager;
 import com.labs.dm.jkvdb.core.IStorage;
 
 /**
@@ -13,7 +13,7 @@ public class Main
     {
         final int COUNT = 1000000;
         long time = System.nanoTime();
-        IStorage storage = DBManager.getInstance().createInMemoryDatabase("test1");
+        IStorage storage = InstanceManager.createInMemoryDatabase("test1");
 
         for (int i = 0; i < COUNT; i++)
         {

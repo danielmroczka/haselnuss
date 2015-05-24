@@ -8,6 +8,8 @@ import com.labs.dm.jkvdb.core.hashmap.InMemoryStorage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -16,33 +18,30 @@ import static com.labs.dm.jkvdb.Consts.CONFIG_FILENAME;
 /**
  * Created by daniel on 2015-05-13.
  */
-public class DBManager {
-    private static DBManager instance;
-    private static final Logger logger = Logger.getLogger(DBManager.class.getSimpleName());
+public class InstanceManager {
+    private static final Logger logger = Logger.getLogger(InstanceManager.class.getSimpleName());
+    private static Map<String, IStorage> map = new HashMap<>();
     private Properties properties;
 
-    private DBManager() {
-        //loadConfiguration();
-    }
-
-    public static synchronized DBManager getInstance() {
-        if (instance == null) {
-            instance = new DBManager();
-        }
-
-        return instance;
-    }
-
-    public IStorage createInMemoryDatabase(String name) {
+    public static IStorage createInMemoryDatabase(String name) {
         return new InMemoryStorage(name);
     }
 
-    public IFileStorage createFileMapDatabase(String name) {
+    public static IStorage createSingletonInMemoryDatabase(String name) {
+        if (map.containsKey(name)) {
+            return map.get(name);
+        }
+        IStorage storage = createInMemoryDatabase(name);
+        map.put(name, storage);
+        return storage;
+    }
+
+    public static IFileStorage createFileMapDatabase(String name) {
         return new FastFileMapStorage(name);
     }
 
     private void loadConfiguration() {
-        try (InputStream input = DBManager.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
+        try (InputStream input = InstanceManager.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
             properties.load(input);
         } catch (FileNotFoundException fnfe) {
             logger.severe("Configuration file not found.");

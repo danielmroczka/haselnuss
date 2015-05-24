@@ -1,6 +1,6 @@
 package com.labs.dm.jkvdb.example.file;
 
-import com.labs.dm.jkvdb.DBManager;
+import com.labs.dm.jkvdb.InstanceManager;
 import com.labs.dm.jkvdb.core.IFileStorage;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class Main
     public static void main(String[] args) throws IOException
     {
         long time = System.nanoTime();
-        IFileStorage storage = DBManager.getInstance().createFileMapDatabase("test111");
+        IFileStorage storage = InstanceManager.createFileMapDatabase("test111");
 
         for (int i = 0; i < COUNT; i++)
         {

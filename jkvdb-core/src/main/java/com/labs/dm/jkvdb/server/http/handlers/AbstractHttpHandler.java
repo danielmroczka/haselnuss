@@ -1,4 +1,4 @@
-package com.labs.dm.jkvdb.server.http;
+package com.labs.dm.jkvdb.server.http.handlers;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -10,14 +10,15 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
-
-import static com.labs.dm.jkvdb.server.http.AdminHandler.logger;
+import java.util.logging.Logger;
 
 /**
  *
  * @author daniel
  */
 public abstract class AbstractHttpHandler implements HttpHandler {
+
+    private static final Logger logger = Logger.getAnonymousLogger();
 
     @Override
     public void handle(HttpExchange he) throws IOException {
@@ -47,23 +48,23 @@ public abstract class AbstractHttpHandler implements HttpHandler {
         }
     }
 
-    void onGet(HttpExchange he) throws IOException {
+    public void onGet(HttpExchange he) throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    void onPost(HttpExchange he) throws IOException {
+    public void onPost(HttpExchange he) throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    void onPut(HttpExchange he) throws IOException {
+    public void onPut(HttpExchange he) throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    void onDelete(HttpExchange he) {
+    public void onDelete(HttpExchange he) {
         throw new UnsupportedOperationException();
     }
 
-    void renderPage(HttpExchange exchange, String resource) {
+    public void renderPage(HttpExchange exchange, String resource) {
         Headers responseHeaders = exchange.getResponseHeaders();
         responseHeaders.set("Content-Type", "text/html");
 

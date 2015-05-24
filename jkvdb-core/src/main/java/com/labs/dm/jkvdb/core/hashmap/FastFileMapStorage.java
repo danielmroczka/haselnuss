@@ -18,7 +18,7 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
 
     private static final Logger logger = Logger.getLogger(FastFileMapStorage.class.getSimpleName());
 
-    private static final int BUFFER_SIZE = 64000;
+    private static final int BUFFER_SIZE = 256000;
 
     protected final String filename;
 
@@ -57,9 +57,9 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
             map = new HashMap<>(size);
 
             for (int item = 0; item < size; item++) {
-                Serializable key = (Serializable) ois.readObject();
-                Serializable val = (Serializable) ois.readObject();
-                map.put(key, val);
+                //Serializable key = (Serializable) ois.readObject();
+                //Serializable val = (Serializable) ois.readObject();
+                map.put((Serializable) ois.readObject(), (Serializable) ois.readObject());
             }
 
         } catch (IOException | ClassNotFoundException e1) {

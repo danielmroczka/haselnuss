@@ -1,10 +1,13 @@
 package com.labs.dm.jkvdb.server.http;
 
+import com.labs.dm.jkvdb.server.http.handlers.AbstractHttpHandler;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import org.junit.Test;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +44,7 @@ public class AbstractHttpHandlerTest {
     public class AbstractHttpHandlerImpl extends AbstractHttpHandler {
 
         @Override
-        void onGet(HttpExchange he) throws IOException {
+        public void onGet(HttpExchange he) throws IOException {
 
         }
 
