@@ -4,7 +4,7 @@ import com.labs.dm.haselnuss.Utils;
 import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.core.hashmap.FastFileMapStorage;
 import com.labs.dm.haselnuss.server.http.handlers.AdminHandler;
-import com.labs.dm.haselnuss.server.http.handlers.MyHandler;
+import com.labs.dm.haselnuss.server.http.handlers.MainHandler;
 import com.labs.dm.haselnuss.server.http.handlers.RestHandler;
 import com.sun.net.httpserver.HttpServer;
 
@@ -33,7 +33,7 @@ public class RestServer {
         
         InetSocketAddress addr = new InetSocketAddress(8081);
         server = HttpServer.create(addr, 0);
-        server.createContext("/", new MyHandler());
+        server.createContext("/", new MainHandler());
         server.createContext("/admin", new AdminHandler());
         server.createContext("/rest", new RestHandler(storage));
         server.createContext("/storage", new RestHandler(storage));
