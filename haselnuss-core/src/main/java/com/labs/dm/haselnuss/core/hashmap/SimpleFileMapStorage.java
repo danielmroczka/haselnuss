@@ -73,6 +73,7 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
                 logger.log(Level.SEVERE, null, ex);
             }
         }
+        loaded = true;
     }
 
     @Override

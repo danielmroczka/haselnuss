@@ -22,4 +22,6 @@ public interface IFileStorage extends IStorage {
      */
     void load() throws IOException;
 
+    boolean loaded();
+
 }

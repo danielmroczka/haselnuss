@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class AdminHandler extends AbstractHttpHandler {
 
-    static final Logger logger = Logger.getAnonymousLogger();
+    static final Logger logger = Logger.getLogger(AdminHandler.class.getSimpleName());
 
     @Override
     public void onGet(HttpExchange exchange) throws IOException {

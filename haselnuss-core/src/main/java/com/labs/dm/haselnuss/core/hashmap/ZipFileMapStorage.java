@@ -55,6 +55,7 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
                 Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        loaded = true;
     }
 
     @Override

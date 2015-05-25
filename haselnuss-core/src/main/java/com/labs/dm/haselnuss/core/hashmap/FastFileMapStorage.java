@@ -65,6 +65,7 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
         } catch (IOException | ClassNotFoundException e1) {
             logger.severe(e1.getMessage());
         }
+        loaded = true;
     }
 
     @Override

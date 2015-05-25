@@ -17,17 +17,16 @@ import static org.mockito.Mockito.when;
 public class AbstractHttpHandlerTest {
 
     private final HttpExchange mockHttpExchange = mock(HttpExchange.class);
+    private AbstractHttpHandler instance = new AbstractHttpHandlerImpl();
 
     @Test
     public void testRenderPage() throws IOException {
-        AbstractHttpHandler instance = new AbstractHttpHandlerImpl();
         when(mockHttpExchange.getRequestMethod()).thenReturn("get");
         instance.handle(mockHttpExchange);
     }
 
     @Test
     public void testRenderPage2() throws IOException {
-        AbstractHttpHandler instance = new AbstractHttpHandlerImpl();
         when(mockHttpExchange.getResponseHeaders()).thenReturn(new Headers());
         when(mockHttpExchange.getResponseBody()).thenReturn(new OutputStream() {
 

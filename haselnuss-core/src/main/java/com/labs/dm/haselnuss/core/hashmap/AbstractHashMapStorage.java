@@ -12,6 +12,7 @@ import java.util.Map;
 public abstract class AbstractHashMapStorage implements IStorage {
 
     protected boolean autoCommit;
+    protected boolean loaded;
 
     protected Map<Serializable, Serializable> map = new HashMap<>();
 
@@ -59,4 +60,7 @@ public abstract class AbstractHashMapStorage implements IStorage {
 
     abstract public void flush();
 
+    public boolean loaded() {
+        return loaded;
+    }
 }

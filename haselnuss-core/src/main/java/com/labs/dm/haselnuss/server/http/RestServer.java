@@ -1,8 +1,7 @@
 package com.labs.dm.haselnuss.server.http;
 
 import com.labs.dm.haselnuss.Utils;
-import com.labs.dm.haselnuss.core.IFileStorage;
-import com.labs.dm.haselnuss.core.hashmap.FastFileMapStorage;
+import com.labs.dm.haselnuss.server.ConnectionPool;
 import com.labs.dm.haselnuss.server.http.handlers.AdminHandler;
 import com.labs.dm.haselnuss.server.http.handlers.MainHandler;
 import com.labs.dm.haselnuss.server.http.handlers.RestHandler;
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
 public class RestServer {
 
     private static final Logger logger = Logger.getLogger(RestServer.class.getSimpleName());
-    private final IFileStorage storage = new FastFileMapStorage("rest");
+    private final ConnectionPool pool = new ConnectionPool();
     private HttpServer server;
     private int port;
 
@@ -33,15 +32,12 @@ public class RestServer {
     }
 
     public void start() throws IOException {
-        storage.put("key", "Hello World!");
-        storage.flush();
-
         InetSocketAddress addr = new InetSocketAddress(port);
         server = HttpServer.create(addr, 0);
         server.createContext("/", new MainHandler());
         server.createContext("/admin", new AdminHandler());
-        server.createContext("/rest", new RestHandler(storage));
-        server.createContext("/storage", new RestHandler(storage));
+        server.createContext("/rest", new RestHandler(pool));
+        server.createContext("/storage", new RestHandler(pool));
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
 
@@ -54,6 +50,7 @@ public class RestServer {
         if (server != null) {
             server.stop(0);
         }
+
     }
 
 }
