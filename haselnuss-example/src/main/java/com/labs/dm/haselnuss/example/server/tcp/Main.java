@@ -8,11 +8,9 @@ import java.io.IOException;
 /**
  * @author daniel
  */
-public class Main
-{
+public class Main {
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException
-    {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         TcpConnection conn = new TcpConnection("localhost", 6543);
         conn.connect();
 

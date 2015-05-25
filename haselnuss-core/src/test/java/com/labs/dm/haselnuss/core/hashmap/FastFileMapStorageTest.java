@@ -14,8 +14,7 @@ import static org.junit.Assert.*;
 /**
  * Created by daniel on 2015-05-21.
  */
-public class FastFileMapStorageTest
-{
+public class FastFileMapStorageTest {
     private IFileStorage storage;
 
     @Before

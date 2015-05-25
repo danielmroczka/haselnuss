@@ -39,7 +39,7 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
                     ZipEntry entry = entries.nextElement();
 
                     try (InputStream stream = zipFile.getInputStream(entry);
-                            ObjectInputStream input = new ObjectInputStream(stream)) {
+                         ObjectInputStream input = new ObjectInputStream(stream)) {
                         map = (Map<Serializable, Serializable>) input.readObject();
                     } catch (IOException | ClassNotFoundException ex) {
                         Logger.getLogger(ZipFileMapStorage.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,7 +61,7 @@ public class ZipFileMapStorage extends SimpleFileMapStorage {
     public void flush() {
 
         try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(filename));
-                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             ZipEntry e = new ZipEntry(filename);
             fos.putNextEntry(e);
             oos.writeObject(map);

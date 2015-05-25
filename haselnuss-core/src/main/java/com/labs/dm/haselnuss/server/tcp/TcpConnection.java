@@ -18,7 +18,7 @@ public class TcpConnection implements AutoCloseable {
 
     /**
      * Expected format of incoming url parameter:
-     *
+     * <p>
      * haselnuss:host:port
      *
      * @param url

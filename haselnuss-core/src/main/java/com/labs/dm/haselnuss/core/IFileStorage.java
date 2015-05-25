@@ -5,8 +5,7 @@ import java.io.IOException;
 /**
  * @author daniel
  */
-public interface IFileStorage extends IStorage
-{
+public interface IFileStorage extends IStorage {
 
     /**
      * Saves data in memory into the file

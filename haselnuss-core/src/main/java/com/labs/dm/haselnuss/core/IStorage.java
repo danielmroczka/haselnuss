@@ -7,8 +7,7 @@ import java.io.Serializable;
  *
  * @author daniel
  */
-public interface IStorage
-{
+public interface IStorage {
 
     /**
      * Create
@@ -45,8 +44,8 @@ public interface IStorage
 
     /**
      * Returns the size of storage
-     * 
-     * @return 
+     *
+     * @return
      */
     int size();
 

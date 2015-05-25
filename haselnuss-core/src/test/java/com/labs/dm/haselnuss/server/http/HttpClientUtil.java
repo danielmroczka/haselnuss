@@ -9,26 +9,21 @@ import java.net.URL;
 /**
  * @author daniel
  */
-public class HttpClientUtil
-{
+public class HttpClientUtil {
 
-    public static HttpURLConnection httpURLConnection(String url, String method) throws IOException
-    {
+    public static HttpURLConnection httpURLConnection(String url, String method) throws IOException {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod(method);
         return con;
     }
 
-    public static String responseBody(HttpURLConnection con) throws IOException
-    {
+    public static String responseBody(HttpURLConnection con) throws IOException {
         StringBuilder response;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())))
-        {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
             String inputLine;
             response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null)
-            {
+            while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
         }

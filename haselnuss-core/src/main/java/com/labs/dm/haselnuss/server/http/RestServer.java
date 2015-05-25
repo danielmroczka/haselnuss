@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * @author daniel
  */
 public class RestServer {
-    
+
     private static final Logger logger = Logger.getLogger(RestServer.class.getSimpleName());
     private final IFileStorage storage = new FastFileMapStorage("rest");
     private HttpServer server;
@@ -31,7 +31,7 @@ public class RestServer {
     public static void main(String[] args) throws IOException {
         new RestServer(8081).start();
     }
-    
+
     public void start() throws IOException {
         storage.put("key", "Hello World!");
         storage.flush();
@@ -49,12 +49,12 @@ public class RestServer {
         logger.info("Usage: http://localhost:" + port + "/rest/key");
         logger.log(Level.INFO, "PID: {0}", Utils.pid());
     }
-    
+
     public void stop() {
         if (server != null) {
             server.stop(0);
         }
     }
-    
+
 }
 

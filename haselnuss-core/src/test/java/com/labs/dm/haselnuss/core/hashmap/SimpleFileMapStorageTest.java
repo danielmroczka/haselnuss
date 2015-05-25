@@ -14,43 +14,37 @@ import static org.junit.Assert.*;
 /**
  * @author daniel
  */
-public class SimpleFileMapStorageTest
-{
+public class SimpleFileMapStorageTest {
 
     private IFileStorage storage;
 
     @Before
-    public void before() throws IOException
-    {
+    public void before() throws IOException {
         storage = new SimpleFileMapStorage("target", "testcase1");
         storage.clean();
         storage.flush();
     }
 
     @After
-    public void after() throws IOException
-    {
+    public void after() throws IOException {
         storage.clean();
         storage.flush();
     }
 
     @Test
-    public void shouldNewStorageBeEmpty()
-    {
+    public void shouldNewStorageBeEmpty() {
         assertTrue(storage.size() == 0);
     }
 
     @Test
-    public void shouldAdd() throws IOException
-    {
+    public void shouldAdd() throws IOException {
         storage.put("key1", "value1");
         storage.flush();
         assertEquals(1, storage.size());
     }
 
     @Test
-    public void shouldFlushIfAutoCommit()
-    {
+    public void shouldFlushIfAutoCommit() {
         storage.setAutoCommit(true);
         storage.put("key1", "value1");
 
@@ -59,8 +53,7 @@ public class SimpleFileMapStorageTest
     }
 
     @Test
-    public void shouldNotFlushIfNoAutoCommit()
-    {
+    public void shouldNotFlushIfNoAutoCommit() {
         storage.setAutoCommit(false);
         storage.put("key1", "value1");
 
@@ -69,8 +62,7 @@ public class SimpleFileMapStorageTest
     }
 
     @Test
-    public void shouldAddTwoKeys() throws IOException
-    {
+    public void shouldAddTwoKeys() throws IOException {
         assertEquals(0, storage.size());
         storage.put("1", "stringValue");
         storage.put(1, "intvalue");
@@ -107,23 +99,21 @@ public class SimpleFileMapStorageTest
         IFileStorage storage = new SimpleFileMapStorage("xyz://non-existing", "xyz://non-existing");
         storage.flush();
     }
-    
+
     //@Test
     public void raceConditionTest() {
         IFileStorage[] array = new IFileStorage[10];
-        for (IFileStorage item:array) {
+        for (IFileStorage item : array) {
             storage = new SimpleFileMapStorage("target", "testcase1");
         }
         //private IFileStorage storage = new SimpleFileMapStorage("target", "testcase1");
     }
 
     //@Test
-    public void benchmark()
-    {
+    public void benchmark() {
         long time = System.currentTimeMillis();
         IStorage storage = new SimpleFileMapStorage("target", "testcase2");
-        for (int i = 0; i < 1000000; i++)
-        {
+        for (int i = 0; i < 1000000; i++) {
             //      storage.add(i, "a");
         }
         //  storage.add(999, "stringValue"+99999, true);

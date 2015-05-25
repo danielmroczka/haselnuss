@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author daniel
  */
 public abstract class AbstractHttpHandler implements HttpHandler {
