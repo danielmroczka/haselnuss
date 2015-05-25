@@ -1,7 +1,7 @@
 package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -12,25 +12,6 @@ import static org.junit.Assert.assertTrue;
  * @author daniel
  */
 public class TcpServerTest {
-
-    public TcpServerTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
 
     @Test
     public void testRunServer() throws Exception {

@@ -47,16 +47,18 @@ public class TcpConnectionTest {
 
     @Test(expected = ConnectException.class)
     public void test2() throws IOException, ClassNotFoundException {
+        server.stopServer();
+
         Properties properties = new Properties();//
         properties.setProperty("tcp.port", "8787");
-        server = new TcpServer(properties);
+        TcpServer server = new TcpServer(properties);
         server.runServer();
         server.stopServer();
         try (TcpConnection conn = new TcpConnection("localhost", 8787)) {
             conn.connect();
 
         }
-        fail();
+
 
     }
 
