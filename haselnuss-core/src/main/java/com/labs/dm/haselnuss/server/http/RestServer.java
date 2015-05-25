@@ -14,10 +14,6 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-<<<<<<<HEAD:haselnuss-core/src/main/java/com/labs/dm/haselnuss/server/http/RestServer.java
-        =======
-        >>>>>>>a7f158c20e40e602f7af3ace9c623b3a9812acac:haselnuss-core/src/main/java/com/labs/dm/haselnuss/server/http/RestServer.java
-
 /**
  * @author daniel
  */
