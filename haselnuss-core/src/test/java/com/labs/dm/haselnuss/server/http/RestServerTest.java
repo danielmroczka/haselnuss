@@ -14,56 +14,40 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author daniel
  */
-public class RestServerTest
-{
+public class RestServerTest {
+    private static final int port = 9090;
 
-    private static final RestServer server = new RestServer();
+    private static final RestServer server = new RestServer(port);
 
-    public RestServerTest()
-    {
+    public RestServerTest() {
     }
 
     @BeforeClass
-    public static void setUpClass() throws IOException
-    {
+    public static void setUpClass() throws IOException {
         server.start();
     }
 
     @AfterClass
-    public static void tearDownClass()
-    {
+    public static void tearDownClass() {
         server.stop();
     }
 
     @Test
-    public void testMain() throws Exception
-    {
+    public void testMain() throws Exception {
         assertNotNull(server);
     }
 
     @Test
-    public void main() throws IOException
-    {
-        HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:8081", "GET");
+    public void main() throws IOException {
+        HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:" + port, "GET");
         assertEquals(200, con.getResponseCode());
 
         assertNotNull(HttpClientUtil.responseBody(con));
     }
 
     @Test
-    public void admin() throws IOException
-    {
-        HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:8081/admin", "GET");
-        assertEquals(200, con.getResponseCode());
-
-        assertNotNull(HttpClientUtil.responseBody(con));
-    }
-
-    @Test
-    @Ignore
-    public void storage() throws IOException
-    {
-        HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:8081/storage", "GET");
+    public void admin() throws IOException {
+        HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/admin", "GET");
         assertEquals(200, con.getResponseCode());
 
         assertNotNull(HttpClientUtil.responseBody(con));
@@ -71,9 +55,17 @@ public class RestServerTest
 
     @Test
     @Ignore
-    public void rest() throws IOException
-    {
-        HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:8081/rest", "GET");
+    public void storage() throws IOException {
+        HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/storage", "GET");
+        assertEquals(200, con.getResponseCode());
+
+        assertNotNull(HttpClientUtil.responseBody(con));
+    }
+
+    @Test
+    @Ignore
+    public void rest() throws IOException {
+        HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/rest", "GET");
         assertEquals(200, con.getResponseCode());
 
         assertNotNull(HttpClientUtil.responseBody(con));

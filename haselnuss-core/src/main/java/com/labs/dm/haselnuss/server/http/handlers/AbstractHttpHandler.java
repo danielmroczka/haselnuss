@@ -71,10 +71,8 @@ public abstract class AbstractHttpHandler implements HttpHandler {
         try (OutputStream responseBody = exchange.getResponseBody()) {
 
             URL url = this.getClass().getResource(getPrefix() + resource + getSuffix());
-            logger.info(url.toString());
             Path resPath = Paths.get(url.toURI());
             String html = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-            logger.info(html);
             responseBody.write(html.getBytes());
         } catch (Exception e) {
             logger.log(Level.SEVERE, null, e);

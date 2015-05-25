@@ -38,7 +38,7 @@ public class Main
                                 }
                                 case "http":
                                 {
-                                    RestServer server = new RestServer();
+                                    RestServer server = new RestServer(8081);
                                     server.start();
                                     break;
                                 }

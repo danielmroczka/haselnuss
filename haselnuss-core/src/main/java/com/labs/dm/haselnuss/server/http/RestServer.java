@@ -22,16 +22,21 @@ public class RestServer {
     private static final Logger logger = Logger.getLogger(RestServer.class.getSimpleName());
     private final IFileStorage storage = new FastFileMapStorage("rest");
     private HttpServer server;
-    
+    private int port;
+
+    public RestServer(int port) {
+        this.port = port;
+    }
+
     public static void main(String[] args) throws IOException {
-        new RestServer().start();
+        new RestServer(8081).start();
     }
     
     public void start() throws IOException {
         storage.put("key", "Hello World!");
         storage.flush();
-        
-        InetSocketAddress addr = new InetSocketAddress(8081);
+
+        InetSocketAddress addr = new InetSocketAddress(port);
         server = HttpServer.create(addr, 0);
         server.createContext("/", new MainHandler());
         server.createContext("/admin", new AdminHandler());
@@ -39,9 +44,9 @@ public class RestServer {
         server.createContext("/storage", new RestHandler(storage));
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
-        
-        logger.info("Server is listening on port 8080");
-        logger.info("Usage: http://localhost:8080/rest/key");
+
+        logger.info("Server is listening on port " + port);
+        logger.info("Usage: http://localhost:" + port + "/rest/key");
         logger.log(Level.INFO, "PID: {0}", Utils.pid());
     }
     
