@@ -4,8 +4,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -86,4 +85,30 @@ public abstract class AbstractHttpHandler implements HttpHandler {
         return ".html";
     }
 
+    protected String decodeInputStream(InputStream in) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        StringBuilder sb = new StringBuilder();
+        String read = br.readLine();
+
+        while (read != null) {
+            sb.append(read);
+            read = br.readLine();
+        }
+
+        br.close();
+        return sb.toString();
+    }
+
+    protected String[] decodeURL(HttpExchange he) {
+        String path = he.getRequestURI().getPath();
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+        String[] paths = path.split("/");
+        if (paths.length < 3) {
+            throw new IllegalArgumentException("Rest URL is invalid");
+        }
+
+        return paths;
+    }
 }

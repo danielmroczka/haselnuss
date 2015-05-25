@@ -4,7 +4,9 @@ import com.labs.dm.haselnuss.server.ConnectionPool;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +56,7 @@ public class RestHandler extends AbstractHttpHandler {
         String[] paths = decodeURL(exchange);
         String storage = paths[1];
         String key = paths[2];
-        String value = decodeInputStream(exchange);
+        String value = decodeInputStream(exchange.getRequestBody());
         pool.get(storage).put(key, value);
         exchange.sendResponseHeaders(200, 0);
 
@@ -72,7 +74,7 @@ public class RestHandler extends AbstractHttpHandler {
         String[] paths = decodeURL(exchange);
         String storage = paths[1];
         String key = paths[2];
-        String value = decodeInputStream(exchange);
+        String value = decodeInputStream(exchange.getRequestBody());
         pool.get(storage).set(key, value);
         exchange.sendResponseHeaders(200, 0);
 
@@ -89,31 +91,5 @@ public class RestHandler extends AbstractHttpHandler {
         super.handle(exchange);
     }
 
-    private String decodeInputStream(HttpExchange he) throws IOException {
-        InputStream in = he.getRequestBody();
-        InputStreamReader is = new InputStreamReader(in);
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br = new BufferedReader(is);
-        String read = br.readLine();
 
-        while (read != null) {
-            sb.append(read);
-            read = br.readLine();
-        }
-
-        return sb.toString();
-    }
-
-    private String[] decodeURL(HttpExchange he) {
-        String path = he.getRequestURI().getPath();
-        if (path.startsWith("/")) {
-            path = path.substring(1);
-        }
-        String[] paths = path.split("/");
-        if (paths.length < 3) {
-            throw new IllegalArgumentException("Rest URL is invalid");
-        }
-
-        return paths;
-    }
 }

@@ -51,11 +51,6 @@ public class TcpServer {
 
     public void stopServer() {
         active = false;
-        try {
-            serverSocket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException {
