@@ -2,6 +2,7 @@ package com.labs.dm.haselnuss.server.tcp;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class TcpConnectionTest {
         }
     }
 
+    @Ignore
     @Test(expected = ConnectException.class)
     public void test2() throws IOException, ClassNotFoundException {
         server.stopServer();
