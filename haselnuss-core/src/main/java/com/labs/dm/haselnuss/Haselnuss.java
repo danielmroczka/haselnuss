@@ -1,7 +1,13 @@
 package com.labs.dm.haselnuss;
 
 /**
- * Created by daniel on 2015-05-26.
+ * @author daniel
+ * @since 26.05.2015
  */
 public class Haselnuss {
+
+    public static HaselnussInstance createHaselnussInstance() {
+        return new HaselnussInstance();
+    }
+
 }

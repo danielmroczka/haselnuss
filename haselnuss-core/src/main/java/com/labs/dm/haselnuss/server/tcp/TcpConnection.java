@@ -2,7 +2,7 @@ package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.core.IStorage;
-import com.labs.dm.haselnuss.core.hashmap.SimpleFileMapStorage;
+import com.labs.dm.haselnuss.core.hashmap.FastFileMapStorage;
 
 import java.io.*;
 import java.net.Socket;
@@ -62,13 +62,14 @@ public class TcpConnection implements AutoCloseable {
         return response;
     }
 
-    public IFileStorage getFileStorage(String name) {
-        IFileStorage storage = new SimpleFileMapStorage(name);
+    public IFileStorage getFileStorage(String name) throws IOException {
+        IFileStorage storage = new FastFileMapStorage(name);
+        storage.load();
         return storage;
     }
 
     public IStorage getInMemoryStorage(String name) {
-        IFileStorage storage = new SimpleFileMapStorage(name);
+        IFileStorage storage = new FastFileMapStorage(name);
         return storage;
     }
 

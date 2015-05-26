@@ -3,6 +3,7 @@ package com.labs.dm.haselnuss.core.hashmap;
 import com.labs.dm.haselnuss.core.IStorage;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,16 @@ public abstract class AbstractHashMapStorage implements IStorage {
     @Override
     public Serializable get(Serializable key) {
         return map.get(key);
+    }
+
+    @Override
+    public Collection<Serializable> getAll() {
+        return map.values();
+    }
+
+    @Override
+    public Collection<Serializable> getKeys() {
+        return map.keySet();
     }
 
     @Override

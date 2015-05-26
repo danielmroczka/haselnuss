@@ -1,6 +1,7 @@
 package com.labs.dm.haselnuss.core;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * General purpose Storage Interface
@@ -25,6 +26,10 @@ public interface IStorage {
      * @return
      */
     Serializable get(Serializable key);
+
+    Collection<Serializable> getAll();
+
+    Collection<Serializable> getKeys();
 
     /**
      * Update

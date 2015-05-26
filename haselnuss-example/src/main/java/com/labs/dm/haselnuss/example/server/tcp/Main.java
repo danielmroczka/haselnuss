@@ -19,5 +19,6 @@ public class Main {
         storage.put("port", "8080");
         storage.flush();
         System.out.println(storage.get("port"));
+        conn.close();
     }
 }

@@ -23,7 +23,7 @@ public class TcpServer {
     private static final Logger logger = Logger.getLogger(TcpServer.class.getSimpleName());
     private final Properties properties;
     private ServerSocket serverSocket;
-    volatile private boolean active;
+    private volatile boolean active;
     private int instances;
 
     public TcpServer() {
@@ -48,8 +48,8 @@ public class TcpServer {
 
     public void runServer() throws IOException, ClassNotFoundException {
         serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
-        logger.log(Level.INFO, "Server is listening on port: {0}", serverSocket.getLocalPort());
-        logger.log(Level.INFO, "PID: {0}", Utils.pid());
+        logger.log(Level.INFO, "Server is listening on port: " + serverSocket.getLocalPort());
+        logger.log(Level.INFO, "PID: " + Utils.pid());
         active = true;
         new Thread(new Runner()).start();
     }
