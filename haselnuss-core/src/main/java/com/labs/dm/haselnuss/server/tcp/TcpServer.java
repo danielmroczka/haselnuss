@@ -35,6 +35,11 @@ public class TcpServer {
         this.properties = properties;
     }
 
+    public TcpServer(int port) {
+        this.properties = new Properties();
+        properties.setProperty("tcp.port", String.valueOf(port));
+    }
+
     public static void main(String argv[]) throws Exception {
         logger.info("Starting server...");
         TcpServer server = new TcpServer();
@@ -51,6 +56,11 @@ public class TcpServer {
 
     public void stopServer() {
         active = false;
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException {
