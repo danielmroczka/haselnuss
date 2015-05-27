@@ -1,6 +1,6 @@
 package com.labs.dm.haselnuss.example.inmemory;
 
-import com.labs.dm.haselnuss.InstanceManager;
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IStorage;
 
 /**
@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         final int COUNT = 1000000;
         long time = System.nanoTime();
-        IStorage storage = InstanceManager.createInMemoryDatabase("test1");
+        IStorage storage = Haselnuss.createHaselnussInstance().createInMemoryDatabase("test1");
 
         for (int i = 0; i < COUNT; i++) {
             storage.put(i, i);

@@ -1,6 +1,6 @@
 package com.labs.dm.haselnuss.example.file;
 
-import com.labs.dm.haselnuss.InstanceManager;
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IFileStorage;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         long time = System.nanoTime();
-        IFileStorage storage = InstanceManager.createFileMapDatabase("test111");
+        IFileStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("test111");
 
         for (int i = 0; i < COUNT; i++) {
             storage.put(i, "abcdefghijklmnoprtstuwxyz" + i);
