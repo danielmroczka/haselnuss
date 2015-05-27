@@ -69,6 +69,12 @@ public abstract class AbstractHashMapStorage implements IStorage {
         return false;
     }
 
+    @Override
+    public void close() {
+        flush();
+        map = null;
+    }
+
     abstract public void flush();
 
     public boolean loaded() {
