@@ -5,17 +5,22 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
-public class InstanceManagerTest {
+/**
+ * Created by daniel on 2015-05-27.
+ */
+public class HaselnussInstanceTest {
+
+    private HaselnussInstance instance = Haselnuss.createHaselnussInstance();
 
     @Test
     public void testCreateInMemoryDatabase() throws Exception {
-        IStorage storage = InstanceManager.createInMemoryDatabase("test");
+        IStorage storage = instance.createInMemoryDatabase("test");
         assertNotNull(storage);
     }
 
     @Test
     public void testCreateFileMapDatabase() throws Exception {
-        IStorage storage = InstanceManager.createFileMapDatabase("test");
+        IStorage storage = instance.createFileMapDatabase("test");
         assertNotNull(storage);
     }
 }
