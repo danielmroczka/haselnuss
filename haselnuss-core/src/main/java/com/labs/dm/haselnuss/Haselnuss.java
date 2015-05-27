@@ -1,6 +1,7 @@
 package com.labs.dm.haselnuss;
 
-import java.util.Properties;
+import com.labs.dm.haselnuss.core.factory.HaselnussInstance;
+import com.labs.dm.haselnuss.core.factory.HaselnussInstanceFactory;
 
 /**
  * @author daniel
@@ -9,11 +10,6 @@ import java.util.Properties;
 public class Haselnuss {
 
     public static HaselnussInstance createHaselnussInstance() {
-        return new HaselnussInstance();
+        return HaselnussInstanceFactory.newHaselnussInstance();
     }
-
-    public static HaselnussInstance createHaselnussInstance(Properties properties) {
-        return new HaselnussInstance();
-    }
-
 }

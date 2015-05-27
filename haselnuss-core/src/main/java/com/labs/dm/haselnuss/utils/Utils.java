@@ -1,4 +1,4 @@
-package com.labs.dm.haselnuss;
+package com.labs.dm.haselnuss.utils;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;

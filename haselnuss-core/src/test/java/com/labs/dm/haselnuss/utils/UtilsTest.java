@@ -1,5 +1,6 @@
-package com.labs.dm.haselnuss;
+package com.labs.dm.haselnuss.utils;
 
+import com.labs.dm.haselnuss.utils.Utils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

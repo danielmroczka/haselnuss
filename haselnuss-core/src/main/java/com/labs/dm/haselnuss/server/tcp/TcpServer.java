@@ -1,7 +1,7 @@
 package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
-import com.labs.dm.haselnuss.Utils;
+import com.labs.dm.haselnuss.utils.Utils;
 
 import java.io.*;
 import java.net.ServerSocket;

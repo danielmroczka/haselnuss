@@ -1,6 +1,6 @@
 package com.labs.dm.haselnuss.server.http;
 
-import com.labs.dm.haselnuss.Utils;
+import com.labs.dm.haselnuss.utils.Utils;
 import com.labs.dm.haselnuss.server.ConnectionPool;
 import com.labs.dm.haselnuss.server.http.handlers.AdminHandler;
 import com.labs.dm.haselnuss.server.http.handlers.MainHandler;

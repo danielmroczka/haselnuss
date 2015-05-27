@@ -1,4 +1,4 @@
-package com.labs.dm.haselnuss;
+package com.labs.dm.haselnuss.core.factory;
 
 import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.core.IStorage;
