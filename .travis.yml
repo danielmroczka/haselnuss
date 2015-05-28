@@ -2,3 +2,20 @@ language: java
 script: mvn -pl haselnuss-core clean test jacoco:report coveralls:report
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  
+  
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "OkgW1SIn+NYHtz2sy3hUSeo2XYQOf6t7VevCEPnOwfmjHz9rvUo327xtLdVL5U1KNT+dMgI310D9K196YfVqFNXbh/aOsVY0174/FOpY5gSSbQhQ5eUw0ZqH8PEHo+Y1k50+RsQzWQXsf2dHrNRy1eFo+no+oJQgi3tIIORoKOs="
+
+addons:
+  coverity_scan:
+    project:
+      name: "danielmroczka/haselnuss"
+      description: "Build submitted via Travis CI"
+    notification_email: daniel.mroczka@gmail.com
+    build_command_prepend: "mvn clean"
+    build_command:   "mvn -DskipTests=true compile"
+    branch_pattern: coverity_scan  
