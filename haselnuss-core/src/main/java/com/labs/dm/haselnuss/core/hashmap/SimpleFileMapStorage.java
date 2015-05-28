@@ -30,26 +30,6 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
             logger.warning("Autocommit is set to true there is no need to execute flush method");
         }
 
-/*
-        ObjectOutputStream objectOutputStream = null;
-        try {
-            RandomAccessFile raf = new RandomAccessFile(filename, "rw");
-            FileOutputStream fos = new FileOutputStream(raf.getFD());
-            objectOutputStream = new ObjectOutputStream(fos);
-            objectOutputStream.writeObject(map);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (objectOutputStream != null) {
-                try {
-                    objectOutputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-*/
         try (FileOutputStream fos = new FileOutputStream(filename); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(map);
         } catch (IOException ex) {

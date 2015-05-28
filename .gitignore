@@ -7,8 +7,6 @@ bin
 # Package Files #
 *.class
 *.jar
-*.war
-*.ear
 *.db
 
 hs_err_pid*

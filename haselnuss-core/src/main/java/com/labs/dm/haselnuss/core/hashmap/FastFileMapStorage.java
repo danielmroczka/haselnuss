@@ -5,6 +5,7 @@ import com.labs.dm.haselnuss.core.IFileStorage;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
@@ -50,18 +51,35 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
 
     @Override
     public void load() {
+        File file = new File(filename);
 
-        try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(
-                new InflaterInputStream(new FileInputStream(new RandomAccessFile(filename, "r").getFD())), BUFFER_SIZE))) {
+        if (file.exists()) {
+            load(filename);
+        } else {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Create new file failed", e);
+            }
+        }
+
+    }
+
+    private void load(String filename) {
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new BufferedInputStream(new InflaterInputStream
+                        (new FileInputStream(new RandomAccessFile(filename, "r").getFD())), BUFFER_SIZE))) {
+
             int size = ois.readInt();
             map = new HashMap<>(size);
 
             for (int item = 0; item < size; item++) {
                 map.put((Serializable) ois.readObject(), (Serializable) ois.readObject());
             }
-
-        } catch (IOException | ClassNotFoundException e1) {
-            logger.severe(e1.getMessage());
+        } catch (EOFException eof) {
+            // nop
+        } catch (IOException | ClassNotFoundException ex) {
+            logger.log(Level.SEVERE, "Load failed", ex);
         }
         loaded = true;
     }

@@ -42,7 +42,7 @@
                             <mainClass>com.labs.dm.haselnuss.Main</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <Implementation-Build>${project.artifactId}-${project.version}-r${buildNumber}
+                            <Implementation-Build>${project.artifactId}-${project.version}-r${timestamp}
                             </Implementation-Build>
                         </manifestEntries>
                     </archive>

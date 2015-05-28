@@ -2,6 +2,7 @@ package com.labs.dm.haselnuss.server;
 
 import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.core.hashmap.FastFileMapStorage;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -11,29 +12,42 @@ import static org.junit.Assert.*;
  */
 public class ConnectionPoolTest {
 
+    private ConnectionPool pool;
+
+    @Before
+    public void setUp() {
+        pool = new ConnectionPool();
+    }
+
     @Test
     public void shouldAdd() {
-        ConnectionPool pool = new ConnectionPool();
+        // GIVEN
         IFileStorage storage = new FastFileMapStorage("test");
+        // WHEN
         pool.add("test", storage);
-
+        // THEN
         assertEquals(storage, pool.get("test"));
     }
 
     @Test
     public void empty() {
-        ConnectionPool pool = new ConnectionPool();
+        assertEquals(0, pool.size());
+    }
+
+    @Test
+    public void empty2() {
+        assertNull(pool.get("test"));
+        assertNotNull(pool.create("test"));
         assertNotNull(pool.get("test"));
     }
 
     @Test
     public void shouldRemove() {
-        ConnectionPool pool = new ConnectionPool();
         IFileStorage storage = new FastFileMapStorage("test");
         pool.add("test", storage);
         assertEquals(storage, pool.get("test"));
         pool.remove("test");
-        assertNotNull(pool.get("test"));
+        assertNull(pool.get("test"));
         assertNotEquals(storage, pool.get("test"));
     }
 }

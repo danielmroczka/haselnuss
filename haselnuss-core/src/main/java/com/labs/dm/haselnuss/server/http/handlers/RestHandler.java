@@ -1,5 +1,6 @@
 package com.labs.dm.haselnuss.server.http.handlers;
 
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.server.ConnectionPool;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -32,7 +33,7 @@ public class RestHandler extends AbstractHttpHandler {
             String[] paths = decodeURL(exchange);
             String storage = paths[1];
             String key = paths[2];
-            Serializable val = pool.get(storage).get(key);
+            Serializable val = Haselnuss.createHaselnussInstance().createFileMapDatabase(storage).get(key);
 
             if (val != null) {
                 exchange.sendResponseHeaders(200, 0);
