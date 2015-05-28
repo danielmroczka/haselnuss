@@ -2,6 +2,12 @@ language: java
 script: mvn -pl haselnuss-core clean test jacoco:report coveralls:report
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl --form token=y8c11HlDzPbHsBwkg9ptpg \
+  --form email=daniel.mroczka@gmail.com \
+  --form file=@tarball/file/location \
+  --form version="Version" \
+  --form description="Description" \
+  https://scan.coverity.com/builds?project=danielmroczka%2Fhaselnuss)
   
   
 env:
