@@ -1,5 +1,6 @@
 package com.labs.dm.haselnuss.server.http;
 
+import com.labs.dm.haselnuss.utils.HttpClientUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

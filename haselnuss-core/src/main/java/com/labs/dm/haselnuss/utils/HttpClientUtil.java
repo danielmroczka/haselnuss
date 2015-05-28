@@ -1,4 +1,4 @@
-package com.labs.dm.haselnuss.server.http;
+package com.labs.dm.haselnuss.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,14 @@ import java.net.URL;
  */
 public class HttpClientUtil {
 
+    /**
+     *
+     *
+     * @param url
+     * @param method
+     * @return
+     * @throws IOException
+     */
     public static HttpURLConnection httpURLConnection(String url, String method) throws IOException {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -18,9 +26,16 @@ public class HttpClientUtil {
         return con;
     }
 
-    public static String responseBody(HttpURLConnection con) throws IOException {
+    /**
+     *
+     *
+     * @param conn
+     * @return
+     * @throws IOException
+     */
+    public static String responseBody(HttpURLConnection conn) throws IOException {
         StringBuilder response;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             String inputLine;
             response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {

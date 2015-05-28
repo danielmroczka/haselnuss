@@ -1,5 +1,6 @@
 package com.labs.dm.haselnuss.core.hashmap;
 
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.core.IStorage;
 import org.junit.After;
@@ -19,7 +20,7 @@ public class FastFileMapStorageTest {
 
     @Before
     public void before() throws IOException {
-        storage = new FastFileMapStorage("target", "testcase1");
+        storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("testcase1");
         storage.clean();
         storage.flush();
     }
@@ -47,7 +48,7 @@ public class FastFileMapStorageTest {
         storage.setAutoCommit(true);
         storage.put("key1", "value1");
 
-        storage = new FastFileMapStorage("target", "testcase1");
+        storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("testcase1");
         storage.load();
         assertEquals(1, storage.size());
     }
@@ -72,14 +73,14 @@ public class FastFileMapStorageTest {
 
     @Test
     public void shouldFlush() throws IOException {
-        IFileStorage storage1 = new FastFileMapStorage("target", "ssflush1");
+        IFileStorage storage1 = Haselnuss.createHaselnussInstance().createFileMapDatabase("flush");
         storage1.load();
         storage1.setAutoCommit(true);
         storage1.remove("123");
         assertEquals(null, storage1.get("123"));
         storage1.put("123", "abc");
 
-        IFileStorage storage2 = new FastFileMapStorage("target", "ssflush1");
+        IFileStorage storage2 = Haselnuss.createHaselnussInstance().createFileMapDatabase("flush");
         storage2.load();
         storage2.setAutoCommit(true);
         Serializable val = storage2.get("123");
@@ -100,15 +101,6 @@ public class FastFileMapStorageTest {
     public void wrongFilePath() throws IOException {
         IFileStorage storage = new FastFileMapStorage("xyz://non-existing", "xyz://non-existing");
         storage.flush();
-    }
-
-    //@Test
-    public void raceConditionTest() {
-        IFileStorage[] array = new IFileStorage[10];
-        for (IFileStorage item : array) {
-            storage = new FastFileMapStorage("target", "testcase1");
-        }
-        //private IFileStorage storage = new SimpleFileMapStorage("target", "testcase1");
     }
 
     //@Test

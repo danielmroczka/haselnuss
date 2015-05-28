@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class HaselnussInstanceTest {
 
-    private HaselnussInstance instance = Haselnuss.createHaselnussInstance();
+    private final HaselnussInstance instance = Haselnuss.createHaselnussInstance();
 
     @Test
     public void testCreateInMemoryDatabase() throws Exception {

@@ -30,7 +30,7 @@ public class ConnectionPoolTest {
     }
 
     @Test
-    public void empty() {
+    public void shouldNewInstanceBeEmpty() {
         assertEquals(0, pool.size());
     }
 
