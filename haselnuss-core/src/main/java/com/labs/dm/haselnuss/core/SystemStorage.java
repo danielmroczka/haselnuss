@@ -14,4 +14,8 @@ public class SystemStorage {
         system = Haselnuss.createHaselnussInstance().createFileMapDatabase("system");
     }
 
+    public void add(String name) {
+
+    }
+
 }
