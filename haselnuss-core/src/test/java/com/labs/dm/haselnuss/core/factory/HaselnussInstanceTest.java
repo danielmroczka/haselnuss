@@ -2,7 +2,6 @@ package com.labs.dm.haselnuss.core.factory;
 
 import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IStorage;
-import com.labs.dm.haselnuss.core.factory.HaselnussInstance;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;

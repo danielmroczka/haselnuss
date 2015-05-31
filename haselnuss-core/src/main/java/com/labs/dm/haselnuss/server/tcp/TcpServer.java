@@ -74,6 +74,8 @@ public class TcpServer {
             OutputStream os = connectionSocket.getOutputStream();
             ObjectOutput out = new ObjectOutputStream(os);
             out.writeObject(response);
+        } catch (EOFException eof) {
+            logger.fine(eof.getMessage());
         } catch (SocketException se) {
             logger.severe(se.getLocalizedMessage());
         }

@@ -2,7 +2,8 @@ package com.labs.dm.haselnuss.core.factory;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class HaselnussInstanceFactoryTest
 {

@@ -1,10 +1,10 @@
 package com.labs.dm.haselnuss.server.http;
 
-import com.labs.dm.haselnuss.utils.Utils;
 import com.labs.dm.haselnuss.server.ConnectionPool;
 import com.labs.dm.haselnuss.server.http.handlers.AdminHandler;
 import com.labs.dm.haselnuss.server.http.handlers.MainHandler;
 import com.labs.dm.haselnuss.server.http.handlers.RestHandler;
+import com.labs.dm.haselnuss.utils.Utils;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -53,5 +53,8 @@ public class RestServer {
 
     }
 
+    public int getPort() {
+        return port;
+    }
 }
 

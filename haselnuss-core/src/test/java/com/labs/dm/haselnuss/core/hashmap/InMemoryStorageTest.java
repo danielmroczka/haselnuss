@@ -4,8 +4,9 @@ import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IStorage;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.Date;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by daniel on 2015-05-15.
@@ -13,7 +14,7 @@ import static org.junit.Assert.assertNull;
 public class InMemoryStorageTest {
 
     @Test
-    public void simple() {
+    public void simpleMem() {
         IStorage storage = Haselnuss.createHaselnussInstance().createInMemoryDatabase("mem");
         storage.put(123, "abc");
         assertEquals("abc", storage.get(123));
@@ -21,5 +22,24 @@ public class InMemoryStorageTest {
         storage.remove(123);
         assertNull(storage.get(123));
 
+    }
+
+    @Test
+    public void sharedMem() {
+        IStorage storage1 = Haselnuss.createHaselnussInstance().createSharedInMemoryDatabase("shared");
+        IStorage storage2 = Haselnuss.createHaselnussInstance().createSharedInMemoryDatabase("shared");
+        IStorage storage = Haselnuss.createHaselnussInstance().createInMemoryDatabase("mem");
+        assertNotNull(storage1);
+        assertEquals(storage1, storage2);
+        assertNotEquals(storage, storage1);
+    }
+
+    @Test
+    public void sharedMem2() {
+        IStorage storage1 = Haselnuss.createHaselnussInstance().createSharedInMemoryDatabase("shared");
+        IStorage storage2 = Haselnuss.createHaselnussInstance().createSharedInMemoryDatabase("shared");
+
+        storage1.put(123, new Date());
+        assertEquals(storage1.get(123), storage2.get(123));
     }
 }

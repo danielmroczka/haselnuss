@@ -2,7 +2,6 @@ package com.labs.dm.haselnuss.core.hashmap;
 
 import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IStorage;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -22,39 +21,48 @@ public class InMemoryStorageConcurrencyTest
     }
 
     @Test
-    @Ignore
     public void raceConditionTest() throws Exception
     {
         IStorage storage = Haselnuss.createHaselnussInstance().createInMemoryDatabase("thread1");
         storage.put("key", 0);
-        Thread t1 = new Thread(new Counter(storage));
-        Thread t2 = new Thread(new Counter(storage));
-        t1.start();
-        t2.start();
-        t1.join();
-        t2.join();
+        Thread[] t = new Thread[10];
 
-        assertEquals(20000, storage.get("key"));
+        for (int i = 0; i < t.length; i++) {
+            t[i] = new Thread(new Counter(storage));
+            t[i].start();
+
+        }
+
+        for (Thread h : t) {
+            h.join();
+        }
+
+
+        assertEquals(100000, storage.get("key"));
 
         storage.close();
     }
 
-    class Counter implements Runnable
+    private class Counter implements Runnable
     {
+        private IStorage storage;
+
         Counter(IStorage storage)
         {
             this.storage = storage;
         }
-
-        private IStorage storage;
 
         @Override
         public void run()
         {
             for (int i = 0; i < 10000; i++)
             {
-                int val = (int) storage.get("key");
-                storage.put("key", ++val);
+                int val;
+                synchronized (storage) {
+                    val = (int) storage.get("key");
+                    storage.put("key", ++val);
+                }
+
             }
 
         }

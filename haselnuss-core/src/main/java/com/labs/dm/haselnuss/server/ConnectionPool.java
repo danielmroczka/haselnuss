@@ -2,6 +2,7 @@ package com.labs.dm.haselnuss.server;
 
 import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.core.hashmap.FastFileMapStorage;
+import com.labs.dm.haselnuss.server.http.RestServer;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class ConnectionPool {
 
     private Map<String, IFileStorage> map = new HashMap<>();
     private Map<String, Long> lastused = new HashMap<>();
+    private Map<Integer, RestServer> restMap = new HashMap<>();
 
     /**
      * Adds new instance of IFileStorage
@@ -72,6 +74,14 @@ public class ConnectionPool {
         for (IFileStorage storage : map.values()) {
             storage.flush();
         }
+    }
+
+    public RestServer getRestServer(int port) {
+        return restMap.get(port);
+    }
+
+    public void addRestServer(RestServer restServer) {
+        restMap.put(restServer.getPort(), restServer);
     }
 
 }

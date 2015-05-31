@@ -3,7 +3,8 @@ package com.labs.dm.haselnuss;
 import com.labs.dm.haselnuss.core.factory.HaselnussInstance;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class HaselnussTest
 {
