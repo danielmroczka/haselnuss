@@ -8,15 +8,15 @@ import java.io.Serializable;
 public class Command implements Serializable {
 
     private final CommandType type;
-    private final int value;
+    private final Serializable key;
 
-    public Command(CommandType type, int value) {
+    public Command(CommandType type, Serializable key) {
         this.type = type;
-        this.value = value;
+        this.key = key;
     }
 
-    public int getValue() {
-        return value;
+    public Serializable getKey() {
+        return key;
     }
 
     public enum CommandType {

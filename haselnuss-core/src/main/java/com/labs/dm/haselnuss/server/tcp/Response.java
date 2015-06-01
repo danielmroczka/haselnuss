@@ -7,14 +7,15 @@ import java.io.Serializable;
  */
 public class Response implements Serializable {
 
-    private final String value;
+    private final Serializable value;
 
-    public Response(String value) {
+    public Response(Serializable value) {
         this.value = value;
     }
 
-    public String getValue() {
+    public Serializable getValue() {
         return value;
     }
+
 
 }

@@ -1,13 +1,14 @@
 package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
+import com.labs.dm.haselnuss.Haselnuss;
+import com.labs.dm.haselnuss.core.IStorage;
 import com.labs.dm.haselnuss.utils.Utils;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,6 +64,10 @@ public class TcpServer {
         }
     }
 
+    public Response request(Command command) {
+        return new Response("ABC123");
+    }
+
     private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException {
         try {
             logger.log(Level.INFO, "onAccept {0} clients: {1}", new Object[]{connectionSocket.toString(), ++instances});
@@ -82,7 +87,9 @@ public class TcpServer {
     }
 
     private Response commandProccess(Command command) {
-        return new Response(new Date().toString());
+        IStorage storage = Haselnuss.createHaselnussInstance().createSharedInMemoryDatabase("tcp");
+        Response response = new Response(storage.get(command.getKey()));
+        return response;
     }
 
     private void loadConfiguration() {
