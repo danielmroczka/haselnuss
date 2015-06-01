@@ -1,5 +1,8 @@
 package com.labs.dm.haselnuss.server.tcp;
 
+import com.labs.dm.haselnuss.server.tcp.command.Command;
+import com.labs.dm.haselnuss.server.tcp.command.Response;
+
 import java.io.*;
 import java.net.Socket;
 

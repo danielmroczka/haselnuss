@@ -1,4 +1,4 @@
-package com.labs.dm.haselnuss.server.tcp;
+package com.labs.dm.haselnuss.server.tcp.command;
 
 import java.io.Serializable;
 

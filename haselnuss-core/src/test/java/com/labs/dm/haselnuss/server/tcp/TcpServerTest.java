@@ -1,8 +1,11 @@
 package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
+import com.labs.dm.haselnuss.server.tcp.command.Command;
+import com.labs.dm.haselnuss.server.tcp.command.Response;
 import org.junit.Test;
 
+import java.net.BindException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +26,7 @@ public class TcpServerTest {
             assertTrue(connection.isConnected());
         }
         TimeUnit.MILLISECONDS.sleep(10);
-        instance.stopServer();
+        instance.close();
     }
 
     @Test
@@ -38,7 +41,7 @@ public class TcpServerTest {
             assertTrue(connection.isConnected());
         }
         TimeUnit.MILLISECONDS.sleep(10);
-        instance.stopServer();
+        instance.close();
     }
 
     @Test
@@ -53,11 +56,10 @@ public class TcpServerTest {
             assertTrue(connection.isConnected());
         }
         TimeUnit.MILLISECONDS.sleep(10);
-        instance.stopServer();
+        instance.close();
     }
 
     @Test
-    //@Ignore
     public void simpleCommand() throws Exception {
         TcpServer instance = new TcpServer();
         instance.runServer();
@@ -67,11 +69,10 @@ public class TcpServerTest {
             connection.executeCommand(new Command(Command.CommandType.GET, "key123"));
         }
 
-        instance.stopServer();
+        instance.close();
     }
 
     @Test
-    //@Ignore
     public void testCommand() throws Exception {
         TcpServer instance = new TcpServer();
         instance.runServer();
@@ -94,6 +95,20 @@ public class TcpServerTest {
             assertTrue(connection.isConnected());
         }
         TimeUnit.MILLISECONDS.sleep(10);
-        instance.stopServer();
+        instance.close();
+    }
+
+    @Test(expected = BindException.class)
+    public void shouldRunOnlyOneInstance() throws Exception {
+        TcpServer instance1 = new TcpServer();
+        TcpServer instance2 = new TcpServer();
+        try {
+            instance1.runServer();
+            instance2.runServer();
+        } finally {
+            instance1.close();
+            instance2.close();
+        }
+
     }
 }

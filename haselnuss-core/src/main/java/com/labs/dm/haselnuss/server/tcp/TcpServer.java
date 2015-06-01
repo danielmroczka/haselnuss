@@ -1,8 +1,9 @@
 package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
-import com.labs.dm.haselnuss.Haselnuss;
-import com.labs.dm.haselnuss.core.IStorage;
+import com.labs.dm.haselnuss.server.tcp.command.Command;
+import com.labs.dm.haselnuss.server.tcp.command.Response;
+import com.labs.dm.haselnuss.server.tcp.command.TcpCommandProcess;
 import com.labs.dm.haselnuss.utils.Utils;
 
 import java.io.*;
@@ -19,10 +20,11 @@ import static com.labs.dm.haselnuss.Consts.CONFIG_FILENAME;
  * @author daniel
  * @since 28.04.2015
  */
-public class TcpServer {
+public class TcpServer implements AutoCloseable {
 
     private static final Logger logger = Logger.getLogger(TcpServer.class.getSimpleName());
     private final Properties properties;
+    private final TcpCommandProcess tcpCommandProcess = new TcpCommandProcess();
     private ServerSocket serverSocket;
     private volatile boolean active;
     private int instances;
@@ -48,9 +50,7 @@ public class TcpServer {
     }
 
     public void runServer() throws IOException {
-
         serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
-
         logger.log(Level.INFO, "Server is listening on port: " + serverSocket.getLocalPort());
         logger.log(Level.INFO, "PID: " + Utils.pid());
         active = true;
@@ -65,14 +65,13 @@ public class TcpServer {
 
             @Override
             public void run() {
-                while (active && socket.isConnected()) {
+                while (active) {
                     try {
                         InputStream is = socket.getInputStream();
                         if (is.available() > 0) {
-
                             ObjectInput ois = new ObjectInputStream(is);
                             Command command = (Command) ois.readObject();
-                            Response response = commandProcess(command);
+                            Response response = tcpCommandProcess.commandProcess(command);
                             OutputStream os = socket.getOutputStream();
                             ObjectOutput out = new ObjectOutputStream(os);
                             out.writeObject(response);
@@ -86,51 +85,6 @@ public class TcpServer {
         read.start();
     }
 
-    public void stopServer() {
-
-        if (serverSocket != null) {
-            try {
-                serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        active = false;
-
-    }
-
-    private Response commandProcess(Command command) {
-        logger.info("onCommandProcess: type=" + command.getType() + ", key=" + command.getKey());
-
-        IStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("tcp");
-        Response response;
-
-        switch (command.getType()) {
-            case GET: {
-                response = new Response(storage.get(command.getKey()));
-                break;
-            }
-
-            case PUT: {
-                storage.put(command.getKey(), command.getValue());
-                response = new Response("");
-                break;
-            }
-
-            case DELETE: {
-                storage.remove(command.getKey());
-                response = new Response("");
-                break;
-            }
-
-            default: {
-                throw new IllegalArgumentException();
-            }
-        }
-
-        return response;
-    }
-
     private void loadConfiguration() {
         try (InputStream input = TcpServer.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
             properties.load(input);
@@ -141,12 +95,20 @@ public class TcpServer {
         }
     }
 
+    @Override
+    public void close() throws IOException {
+        active = false;
+        if (serverSocket != null) {
+            serverSocket.close();
+        }
+    }
+
     private class ServerThread implements Runnable {
 
         @Override
         public void run() {
 
-            while (active && !serverSocket.isClosed()) {
+            while (active) {
 
                 try {
                     Socket socket = serverSocket.accept();
@@ -156,7 +118,6 @@ public class TcpServer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
