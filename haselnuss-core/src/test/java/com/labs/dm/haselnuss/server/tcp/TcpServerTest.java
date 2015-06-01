@@ -58,6 +58,7 @@ public class TcpServerTest {
     }
 
     @Test
+    @Ignore
     public void simpleCommand() throws Exception {
         TcpServer instance = new TcpServer();
         instance.runServer();
