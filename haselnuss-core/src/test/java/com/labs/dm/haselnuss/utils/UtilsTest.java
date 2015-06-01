@@ -21,7 +21,7 @@ public class UtilsTest {
     public void shouldAlwaysReturnTheSamePID() throws Exception {
         int reference = Utils.pid();
 
-        for (int i=0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             assertEquals(reference, Utils.pid());
         }
     }

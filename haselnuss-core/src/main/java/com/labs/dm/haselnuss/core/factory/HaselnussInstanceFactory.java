@@ -8,17 +8,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author daniel
  * @since 27.05.2015
  */
-public class HaselnussInstanceFactory
-{
+public class HaselnussInstanceFactory {
     private static final AtomicInteger SEQ_ID_GEN = new AtomicInteger();
-
-    private HaselnussInstanceFactory() {}
-
     private static final ConcurrentMap<String, HaselnussInstance> INSTANCE_MAP
             = new ConcurrentHashMap<>(5);
 
-    public static HaselnussInstance newHaselnussInstance()
-    {
+    private HaselnussInstanceFactory() {
+    }
+
+    public static HaselnussInstance newHaselnussInstance() {
         if (!INSTANCE_MAP.containsKey("FOO")) {
             INSTANCE_MAP.put("FOO", new HaselnussInstance());
         }

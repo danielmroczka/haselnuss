@@ -6,11 +6,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class HaselnussTest
-{
+public class HaselnussTest {
     @Test
-    public void shouldCreateHaselnussInstance() throws Exception
-    {
+    public void shouldCreateHaselnussInstance() throws Exception {
         //GIVEN
         //WHEN
         HaselnussInstance instance = Haselnuss.createHaselnussInstance();
@@ -19,8 +17,7 @@ public class HaselnussTest
     }
 
     @Test
-    public void shouldCreateTheSameInstance() throws Exception
-    {
+    public void shouldCreateTheSameInstance() throws Exception {
         //GIVEN
         //WHEN
         HaselnussInstance instance1 = Haselnuss.createHaselnussInstance();

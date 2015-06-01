@@ -8,8 +8,10 @@ import java.io.Serializable;
 public class Response implements Serializable {
 
     private final Serializable value;
+    private final int status;
 
     public Response(Serializable value) {
+        status = 0;
         this.value = value;
     }
 
@@ -18,4 +20,7 @@ public class Response implements Serializable {
     }
 
 
+    public int getStatus() {
+        return status;
+    }
 }

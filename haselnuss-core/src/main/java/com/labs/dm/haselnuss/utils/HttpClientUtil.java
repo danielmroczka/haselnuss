@@ -12,8 +12,6 @@ import java.net.URL;
 public class HttpClientUtil {
 
     /**
-     *
-     *
      * @param url
      * @param method
      * @return
@@ -27,8 +25,6 @@ public class HttpClientUtil {
     }
 
     /**
-     *
-     *
      * @param conn
      * @return
      * @throws IOException

@@ -1,9 +1,5 @@
 package com.labs.dm.haselnuss.server.tcp;
 
-import com.labs.dm.haselnuss.Haselnuss;
-import com.labs.dm.haselnuss.core.IFileStorage;
-import com.labs.dm.haselnuss.core.IStorage;
-
 import java.io.*;
 import java.net.Socket;
 
@@ -55,20 +51,12 @@ public class TcpConnection implements AutoCloseable {
 
         ObjectOutput ois = new ObjectOutputStream(socket.getOutputStream());
         ois.writeObject(command);
+        //ois.close();
 
         ObjectInput oi = new ObjectInputStream(socket.getInputStream());
-
-        return (Response) oi.readObject();
-    }
-
-    public IFileStorage getFileStorage(String name) throws IOException {
-        IFileStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase(name);
-        storage.load();
-        return storage;
-    }
-
-    public IStorage getInMemoryStorage(String name) {
-        return Haselnuss.createHaselnussInstance().createInMemoryDatabase(name);
+        Response response = (Response) oi.readObject();
+        //oi.close();
+        return response;
     }
 
     private void checkConnection() {

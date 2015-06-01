@@ -64,10 +64,6 @@ public class TcpServer {
         }
     }
 
-    public Response request(Command command) {
-        return new Response("ABC123");
-    }
-
     private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException {
         try {
             logger.log(Level.INFO, "onAccept {0} clients: {1}", new Object[]{connectionSocket.toString(), ++instances});
@@ -87,8 +83,34 @@ public class TcpServer {
     }
 
     private Response commandProccess(Command command) {
-        IStorage storage = Haselnuss.createHaselnussInstance().createSharedInMemoryDatabase("tcp");
-        Response response = new Response(storage.get(command.getKey()));
+        logger.info("onCommandProccess: type=" + command.getType() + ", key=" + command.getKey());
+
+        IStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("tcp");
+        Response response = null;
+
+        switch (command.getType()) {
+            case GET: {
+                response = new Response(storage.get(command.getKey()));
+                break;
+            }
+
+            case PUT: {
+                storage.put(command.getKey(), command.getValue());
+                response = new Response("");
+                break;
+            }
+
+            case DELETE: {
+                storage.remove(command.getKey());
+                response = new Response("");
+                break;
+            }
+
+            default: {
+                throw new IllegalArgumentException();
+            }
+        }
+
         return response;
     }
 

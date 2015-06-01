@@ -6,18 +6,15 @@ import java.net.HttpURLConnection;
 
 import static org.junit.Assert.assertNotNull;
 
-public class HttpClientUtilTest
-{
+public class HttpClientUtilTest {
 
     @Test
-    public void testHttpURLConnection() throws Exception
-    {
+    public void testHttpURLConnection() throws Exception {
         assertNotNull(HttpClientUtil.httpURLConnection("http://127.0.0.1", "GET"));
     }
 
     @Test
-    public void testResponseBody() throws Exception
-    {
+    public void testResponseBody() throws Exception {
         HttpURLConnection conn = HttpClientUtil.httpURLConnection("http://www.google.com", "GET");
         assertNotNull(HttpClientUtil.responseBody(conn));
     }

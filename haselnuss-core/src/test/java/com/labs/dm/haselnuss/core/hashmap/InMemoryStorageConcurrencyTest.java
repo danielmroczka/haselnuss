@@ -9,10 +9,8 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by daniel on 2015-05-28.
  */
-public class InMemoryStorageConcurrencyTest
-{
-    public static void main(String[] args)
-    {
+public class InMemoryStorageConcurrencyTest {
+    public static void main(String[] args) {
         IStorage storage1 = Haselnuss.createHaselnussInstance().createInMemoryDatabase("test");
         IStorage storage2 = Haselnuss.createHaselnussInstance().createInMemoryDatabase("test");
 
@@ -21,8 +19,7 @@ public class InMemoryStorageConcurrencyTest
     }
 
     @Test
-    public void raceConditionTest() throws Exception
-    {
+    public void raceConditionTest() throws Exception {
         IStorage storage = Haselnuss.createHaselnussInstance().createInMemoryDatabase("thread1");
         storage.put("key", 0);
         Thread[] t = new Thread[10];
@@ -43,20 +40,16 @@ public class InMemoryStorageConcurrencyTest
         storage.close();
     }
 
-    private class Counter implements Runnable
-    {
+    private class Counter implements Runnable {
         private IStorage storage;
 
-        Counter(IStorage storage)
-        {
+        Counter(IStorage storage) {
             this.storage = storage;
         }
 
         @Override
-        public void run()
-        {
-            for (int i = 0; i < 10000; i++)
-            {
+        public void run() {
+            for (int i = 0; i < 10000; i++) {
                 int val;
                 synchronized (storage) {
                     val = (int) storage.get("key");
