@@ -14,7 +14,6 @@ public class UtilsTest {
     public void checksValidRange() throws Exception {
         int pid = Utils.pid();
         assertTrue(pid >= 1024);
-        assertTrue(pid <= 65536);
     }
 
     @Test

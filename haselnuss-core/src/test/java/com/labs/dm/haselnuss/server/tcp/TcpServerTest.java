@@ -1,7 +1,6 @@
 package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Properties;
@@ -58,7 +57,7 @@ public class TcpServerTest {
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void simpleCommand() throws Exception {
         TcpServer instance = new TcpServer();
         instance.runServer();
@@ -67,10 +66,12 @@ public class TcpServerTest {
             connection.connect();
             connection.executeCommand(new Command(Command.CommandType.GET, "key123"));
         }
+
+        instance.stopServer();
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void testCommand() throws Exception {
         TcpServer instance = new TcpServer();
         instance.runServer();

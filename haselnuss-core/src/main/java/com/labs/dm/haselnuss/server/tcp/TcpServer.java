@@ -47,46 +47,63 @@ public class TcpServer {
         server.runServer();
     }
 
-    public void runServer() throws IOException, ClassNotFoundException {
+    public void runServer() throws IOException {
+
         serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
+
         logger.log(Level.INFO, "Server is listening on port: " + serverSocket.getLocalPort());
         logger.log(Level.INFO, "PID: " + Utils.pid());
         active = true;
-        new Thread(new Runner()).start();
+
+        new Thread(new ServerThread()).start();
+    }
+
+    private void createReadThread(final Socket socket) {
+        logger.log(Level.INFO, "onAccept {0} clients: {1}", new Object[]{socket.toString(), ++instances});
+
+        Thread read = new Thread() {
+
+            @Override
+            public void run() {
+                while (active && socket.isConnected()) {
+                    try {
+                        InputStream is = socket.getInputStream();
+                        if (is.available() > 0) {
+
+                            ObjectInput ois = new ObjectInputStream(is);
+                            Command command = (Command) ois.readObject();
+                            Response response = commandProcess(command);
+                            OutputStream os = socket.getOutputStream();
+                            ObjectOutput out = new ObjectOutputStream(os);
+                            out.writeObject(response);
+                        }
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        read.start();
     }
 
     public void stopServer() {
+
+        if (serverSocket != null) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         active = false;
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
-    private void onAccept(Socket connectionSocket) throws IOException, ClassNotFoundException {
-        try {
-            logger.log(Level.INFO, "onAccept {0} clients: {1}", new Object[]{connectionSocket.toString(), ++instances});
-
-            InputStream is = connectionSocket.getInputStream();
-            ObjectInput ois = new ObjectInputStream(is);
-            Command command = (Command) ois.readObject();
-            Response response = commandProccess(command);
-            OutputStream os = connectionSocket.getOutputStream();
-            ObjectOutput out = new ObjectOutputStream(os);
-            out.writeObject(response);
-        } catch (EOFException eof) {
-            logger.fine(eof.getMessage());
-        } catch (SocketException se) {
-            logger.severe(se.getLocalizedMessage());
-        }
-    }
-
-    private Response commandProccess(Command command) {
-        logger.info("onCommandProccess: type=" + command.getType() + ", key=" + command.getKey());
+    private Response commandProcess(Command command) {
+        logger.info("onCommandProcess: type=" + command.getType() + ", key=" + command.getKey());
 
         IStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("tcp");
-        Response response = null;
+        Response response;
 
         switch (command.getType()) {
             case GET: {
@@ -124,29 +141,23 @@ public class TcpServer {
         }
     }
 
-    class Runner implements Runnable {
+    private class ServerThread implements Runnable {
 
         @Override
         public void run() {
-            try {
-                while (active) {
-                    try {
-                        Socket connectionSocket = serverSocket.accept();
-                        onAccept(connectionSocket);
-                    } catch (java.net.SocketException se) {
-                        Logger.getLogger(TcpServer.class.getSimpleName()).severe(se.getMessage());
-                    } catch (IOException | ClassNotFoundException ex) {
-                        Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
-                    }
 
+            while (active && !serverSocket.isClosed()) {
+
+                try {
+                    Socket socket = serverSocket.accept();
+                    createReadThread(socket);
+                } catch (SocketException se) {
+                    logger.finest(se.getMessage());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
-                serverSocket.close();
-            } catch (IOException ex) {
-                Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
-
 }

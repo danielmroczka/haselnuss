@@ -10,6 +10,7 @@ public class Command implements Serializable {
     private final CommandType type;
     private final Serializable key;
     private final Serializable value;
+
     public Command(CommandType type, Serializable key) {
         this.type = type;
         this.key = key;
