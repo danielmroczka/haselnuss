@@ -19,11 +19,11 @@ import static org.junit.Assert.assertNotNull;
 public class RestServerTest {
     private static final int port = 9090;
 
-    private static final RestServer server = Haselnuss.createHaselnussInstance().createRestServer(9090);
+    private static final RestServer server = Haselnuss.newInstance().createRestServer(9090);
 
     @BeforeClass
     public static void setUpClass() throws IOException {
-        IFileStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("test");
+        IFileStorage storage = Haselnuss.newInstance().createFileMapDatabase("test");
         storage.load();
         storage.put("key", "restservertest");
         storage.flush();

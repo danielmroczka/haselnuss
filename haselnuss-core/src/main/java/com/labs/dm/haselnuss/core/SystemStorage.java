@@ -11,7 +11,7 @@ public class SystemStorage {
     private IFileStorage system;
 
     public void init() throws IOException {
-        system = Haselnuss.createHaselnussInstance().createFileMapDatabase("system");
+        system = Haselnuss.newInstance().createFileMapDatabase("system");
     }
 
     public void add(String name) {

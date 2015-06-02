@@ -46,7 +46,7 @@ public class TcpServer implements AutoCloseable {
 
     public static void main(String argv[]) throws Exception {
         logger.info("Starting server...");
-        TcpServer server = Haselnuss.createHaselnussInstance().createTcpServer();
+        TcpServer server = Haselnuss.newInstance().createTcpServer();
         server.runServer();
     }
 

@@ -31,7 +31,7 @@ public class RestHandler extends AbstractHttpHandler {
             String[] paths = decodeURL(exchange);
             String storage = paths[1];
             String key = paths[2];
-            Serializable val = Haselnuss.createHaselnussInstance().createFileMapDatabase(storage).get(key);
+            Serializable val = Haselnuss.newInstance().createFileMapDatabase(storage).get(key);
 
             if (val != null) {
                 exchange.sendResponseHeaders(200, 0);
@@ -56,7 +56,7 @@ public class RestHandler extends AbstractHttpHandler {
         String storage = paths[1];
         String key = paths[2];
         String value = decodeInputStream(exchange.getRequestBody());
-        IFileStorage s = Haselnuss.createHaselnussInstance().createFileMapDatabase(storage);
+        IFileStorage s = Haselnuss.newInstance().createFileMapDatabase(storage);
         s.put(key, value);
         exchange.sendResponseHeaders(200, 0);
 
@@ -75,7 +75,7 @@ public class RestHandler extends AbstractHttpHandler {
         String storage = paths[1];
         String key = paths[2];
         String value = decodeInputStream(exchange.getRequestBody());
-        IFileStorage s = Haselnuss.createHaselnussInstance().createFileMapDatabase(storage);
+        IFileStorage s = Haselnuss.newInstance().createFileMapDatabase(storage);
         s.set(key, value);
         exchange.sendResponseHeaders(200, 0);
 

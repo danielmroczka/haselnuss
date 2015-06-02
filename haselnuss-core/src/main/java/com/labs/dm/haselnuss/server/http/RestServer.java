@@ -27,7 +27,7 @@ public class RestServer {
     }
 
     public static void main(String[] args) throws IOException {
-        Haselnuss.createHaselnussInstance().createRestServer(8081).start();
+        Haselnuss.newInstance().createRestServer(8081).start();
     }
 
     public void start() throws IOException {

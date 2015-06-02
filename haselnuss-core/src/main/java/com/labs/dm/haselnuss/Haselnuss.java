@@ -9,7 +9,12 @@ import com.labs.dm.haselnuss.core.factory.HaselnussInstanceFactory;
  */
  public final class Haselnuss {
 
-    public static HaselnussInstance createHaselnussInstance() {
+    /**
+     * Creates new instance or returns existed one
+     *
+     * @return
+     */
+    public static HaselnussInstance newInstance() {
         return HaselnussInstanceFactory.newHaselnussInstance();
     }
 }

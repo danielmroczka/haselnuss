@@ -11,8 +11,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class InMemoryStorageConcurrencyTest {
     public static void main(String[] args) {
-        IStorage storage1 = Haselnuss.createHaselnussInstance().createInMemoryDatabase("test");
-        IStorage storage2 = Haselnuss.createHaselnussInstance().createInMemoryDatabase("test");
+        IStorage storage1 = Haselnuss.newInstance().createInMemoryDatabase("test");
+        IStorage storage2 = Haselnuss.newInstance().createInMemoryDatabase("test");
 
         storage1.put(123, "abc");
         System.out.println(storage2.get(123));
@@ -20,7 +20,7 @@ public class InMemoryStorageConcurrencyTest {
 
     @Test
     public void raceConditionTest() throws Exception {
-        IStorage storage = Haselnuss.createHaselnussInstance().createInMemoryDatabase("thread1");
+        IStorage storage = Haselnuss.newInstance().createInMemoryDatabase("thread1");
         storage.put("key", 0);
         Thread[] t = new Thread[10];
 

@@ -11,7 +11,7 @@ public class HaselnussTest {
     public void shouldCreateHaselnussInstance() throws Exception {
         //GIVEN
         //WHEN
-        HaselnussInstance instance = Haselnuss.createHaselnussInstance();
+        HaselnussInstance instance = Haselnuss.newInstance();
         //THEN
         assertNotNull(instance);
     }
@@ -20,8 +20,8 @@ public class HaselnussTest {
     public void shouldCreateTheSameInstance() throws Exception {
         //GIVEN
         //WHEN
-        HaselnussInstance instance1 = Haselnuss.createHaselnussInstance();
-        HaselnussInstance instance2 = Haselnuss.createHaselnussInstance();
+        HaselnussInstance instance1 = Haselnuss.newInstance();
+        HaselnussInstance instance2 = Haselnuss.newInstance();
         //THEN
         assertEquals(instance1, instance2);
     }

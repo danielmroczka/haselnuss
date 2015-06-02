@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class HaselnussInstanceTest {
 
-    private final HaselnussInstance instance = Haselnuss.createHaselnussInstance();
+    private final HaselnussInstance instance = Haselnuss.newInstance();
 
     @Test
     public void testCreateInMemoryDatabase() throws Exception {

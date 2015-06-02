@@ -12,7 +12,7 @@ public class TcpCommandProcess {
     public Response commandProcess(Command command) {
         logger.info("onCommandProcess: type=" + command.getType() + ", key=" + command.getKey());
 
-        IStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("tcp");
+        IStorage storage = Haselnuss.newInstance().createFileMapDatabase("tcp");
         Response response;
 
         switch (command.getType()) {

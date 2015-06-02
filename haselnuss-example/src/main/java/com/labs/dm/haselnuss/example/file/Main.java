@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         long time = System.nanoTime();
-        IFileStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("test111");
+        IFileStorage storage = Haselnuss.newInstance().createFileMapDatabase("test111");
 
         for (int i = 0; i < COUNT; i++) {
             storage.put(i, "abcdefghijklmnoprtstuwxyz" + i);

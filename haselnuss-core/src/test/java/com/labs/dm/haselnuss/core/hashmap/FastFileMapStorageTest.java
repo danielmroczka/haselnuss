@@ -20,7 +20,7 @@ public class FastFileMapStorageTest {
 
     @Before
     public void before() throws IOException {
-        storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("testcase1");
+        storage = Haselnuss.newInstance().createFileMapDatabase("testcase1");
         storage.clean();
         storage.flush();
     }
@@ -48,7 +48,7 @@ public class FastFileMapStorageTest {
         storage.setAutoCommit(true);
         storage.put("key1", "value1");
 
-        storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("testcase1");
+        storage = Haselnuss.newInstance().createFileMapDatabase("testcase1");
         storage.load();
         assertEquals(1, storage.size());
     }
@@ -73,14 +73,14 @@ public class FastFileMapStorageTest {
 
     @Test
     public void shouldFlush() throws IOException {
-        IFileStorage storage1 = Haselnuss.createHaselnussInstance().createFileMapDatabase("flush");
+        IFileStorage storage1 = Haselnuss.newInstance().createFileMapDatabase("flush");
         storage1.load();
         storage1.setAutoCommit(true);
         storage1.remove("123");
         assertEquals(null, storage1.get("123"));
         storage1.put("123", "abc");
 
-        IFileStorage storage2 = Haselnuss.createHaselnussInstance().createFileMapDatabase("flush");
+        IFileStorage storage2 = Haselnuss.newInstance().createFileMapDatabase("flush");
         storage2.load();
         storage2.setAutoCommit(true);
         Serializable val = storage2.get("123");

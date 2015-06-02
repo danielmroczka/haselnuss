@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public class Main {
     public static void main(String[] args) throws IOException {
-        IFileStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("dupa");
+        IFileStorage storage = Haselnuss.newInstance().createFileMapDatabase("dupa");
         storage.load();
         storage.put(100, "value1");
         storage.put(101, "value2");
