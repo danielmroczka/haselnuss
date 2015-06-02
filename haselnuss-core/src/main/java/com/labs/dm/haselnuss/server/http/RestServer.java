@@ -43,8 +43,8 @@ public class RestServer {
         server.start();
 
         logger.info("Server is listening on port " + port);
-        logger.info("Usage: http://localhost:" + port + "/rest/key");
-        logger.log(Level.INFO, "PID: {0}", Utils.pid());
+        logger.info("Usage: http://localhost:" + port + "/rest/storage/key");
+        logger.log(Level.INFO, "PID: " + Utils.pid());
     }
 
     public void stop() {

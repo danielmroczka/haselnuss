@@ -1,6 +1,7 @@
 package com.labs.dm.haselnuss.server.http;
 
 import com.labs.dm.haselnuss.Haselnuss;
+import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.utils.HttpClientUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -22,6 +23,11 @@ public class RestServerTest {
 
     @BeforeClass
     public static void setUpClass() throws IOException {
+        IFileStorage storage = Haselnuss.createHaselnussInstance().createFileMapDatabase("test");
+        storage.load();
+        storage.put("key", "restservertest");
+        storage.flush();
+        storage.close();
         server.start();
     }
 
@@ -70,7 +76,8 @@ public class RestServerTest {
     @Test
     public void shouldGet() throws Exception {
         HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/rest/test/key", "GET");
-        //assertEquals(200, con.getResponseCode());
+        // HttpClientUtil.responseBody(con);
+        // assertEquals(200, con.getResponseCode());
         assertNotNull(con);
     }
 
