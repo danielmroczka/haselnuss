@@ -64,7 +64,9 @@ public class RestHandler extends AbstractHttpHandler {
             responseBody.write("POST OK".getBytes());
         }
         logger.info("Insert " + key + ", " + s.get(key));
-        s.flush();
+        if (s != null) {
+            s.flush();
+        }
     }
 
     @Override

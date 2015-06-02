@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         TcpConnection conn = new TcpConnection("localhost", 6543);
         conn.connect();
-        //conn.executeCommand(new Command(Command.CommandType.PUT, "key1", "abc"));
+        conn.executeCommand(new Command(Command.CommandType.PUT, "key1", "abc"));
         Response r = conn.executeCommand(new Command(Command.CommandType.GET, "key1"));
         System.out.println(r.getValue());
         conn.close();

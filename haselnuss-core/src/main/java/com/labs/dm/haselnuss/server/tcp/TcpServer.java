@@ -63,7 +63,7 @@ public class TcpServer implements AutoCloseable {
     private void createReadThread(final Socket socket) {
         logger.log(Level.INFO, "onAccept {0} clients: {1}", new Object[]{socket.toString(), ++instances});
 
-        Thread read = new Thread() {
+        new Thread() {
 
             @Override
             public void run() {
@@ -74,27 +74,16 @@ public class TcpServer implements AutoCloseable {
                             ObjectInput ois = new ObjectInputStream(is);
                             Command command = (Command) ois.readObject();
                             Response response = tcpCommandProcess.commandProcess(command);
-                            OutputStream os = socket.getOutputStream();
-                            ObjectOutput out = new ObjectOutputStream(os);
+                            ObjectOutput out = new ObjectOutputStream(socket.getOutputStream());
                             out.writeObject(response);
                         }
+
                     } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
+                        logger.log(Level.SEVERE, "", e);
                     }
                 }
             }
-        };
-        read.start();
-    }
-
-    private void loadConfiguration() {
-        try (InputStream input = TcpServer.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
-            properties.load(input);
-        } catch (FileNotFoundException fnfe) {
-            logger.severe("Configuration file not found.");
-        } catch (IOException ex) {
-            logger.severe(ex.getLocalizedMessage());
-        }
+        }.start();
     }
 
     @Override
@@ -105,6 +94,16 @@ public class TcpServer implements AutoCloseable {
             serverSocket.close();
         }
         logger.info("Server stopped");
+    }
+
+    private void loadConfiguration() {
+        try (InputStream input = TcpServer.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
+            properties.load(input);
+        } catch (FileNotFoundException fnfe) {
+            logger.severe("Configuration file not found.");
+        } catch (IOException ex) {
+            logger.severe(ex.getLocalizedMessage());
+        }
     }
 
     private class ServerThread implements Runnable {
