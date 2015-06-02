@@ -1,6 +1,7 @@
 package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.server.tcp.command.Command;
 import com.labs.dm.haselnuss.server.tcp.command.Response;
 import com.labs.dm.haselnuss.server.tcp.command.TcpCommandProcess;
@@ -45,7 +46,7 @@ public class TcpServer implements AutoCloseable {
 
     public static void main(String argv[]) throws Exception {
         logger.info("Starting server...");
-        TcpServer server = new TcpServer();
+        TcpServer server = Haselnuss.createHaselnussInstance().createTcpServer();
         server.runServer();
     }
 

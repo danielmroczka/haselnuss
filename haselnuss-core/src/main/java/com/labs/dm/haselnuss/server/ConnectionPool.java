@@ -1,6 +1,7 @@
 package com.labs.dm.haselnuss.server;
 
 import com.labs.dm.haselnuss.core.IFileStorage;
+import com.labs.dm.haselnuss.core.IStorage;
 import com.labs.dm.haselnuss.core.hashmap.FastFileMapStorage;
 import com.labs.dm.haselnuss.server.http.RestServer;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 public class ConnectionPool {
 
     private Map<String, IFileStorage> map = new HashMap<>();
+    private Map<String, IStorage> mem = new HashMap<>();
     private Map<String, Long> lastused = new HashMap<>();
     private Map<Integer, RestServer> restMap = new HashMap<>();
 
@@ -25,6 +27,10 @@ public class ConnectionPool {
      */
     public synchronized void add(String name, IFileStorage storage) {
         map.put(name, storage);
+        lastused.put(name, System.currentTimeMillis());
+    }
+    public synchronized void addMem(String name, IStorage storage) {
+        mem.put(name, storage);
         lastused.put(name, System.currentTimeMillis());
     }
 
@@ -40,6 +46,13 @@ public class ConnectionPool {
         return map.get(name);
     }
 
+    public IStorage getMem(String name) {
+        lastused.put(name, System.currentTimeMillis());
+        return mem.get(name);
+    }
+    public boolean contains(String name) {
+        return map.containsKey(name) || mem.containsKey(name);
+    }
     /**
      * Gets IFileStorage instance from the pool if exists.
      * Otherwise creates a new instance and add into the pool

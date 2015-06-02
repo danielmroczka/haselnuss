@@ -5,6 +5,7 @@ import com.labs.dm.haselnuss.server.tcp.command.Command;
 import com.labs.dm.haselnuss.server.tcp.command.Response;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.BindException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -104,6 +105,46 @@ public class TcpServerTest {
             instance1.runServer();
             instance2.runServer();
         }
+    }
 
+    @Test
+    public void loadTest() throws Exception
+    {
+        TcpServer instance = new TcpServer(6543);
+        instance.runServer();
+        Thread[] threads = new Thread[10];
+        for (int i=0; i<threads.length;i++) {
+            threads[i] = new Thread(new Worker());
+            threads[i].start();
+        }
+        for (int i=0; i<threads.length;i++) {
+            threads[i].join();
+        }
+        instance.close();
+    }
+
+    private class Worker implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            for (int i = 0; i < 1; i++)
+            {
+
+                    try (TcpConnection connection = new TcpConnection("localhost", 6543))
+                    {
+                        connection.connect();
+                        connection.executeCommand(new Command(Command.CommandType.PUT, "key123", "val123"));
+                        Response r = connection.executeCommand(new Command(Command.CommandType.GET, "key123"));
+                        System.out.println(r.getValue());
+                        assertEquals(0, r.getStatus());
+                        assertEquals("val123", r.getValue());
+                    } catch (ClassNotFoundException | IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+            }
+        }
     }
 }

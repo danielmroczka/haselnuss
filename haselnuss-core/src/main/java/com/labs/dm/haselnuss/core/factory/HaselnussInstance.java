@@ -5,6 +5,7 @@ import com.labs.dm.haselnuss.core.IStorage;
 import com.labs.dm.haselnuss.core.hashmap.InMemoryStorage;
 import com.labs.dm.haselnuss.server.ConnectionPool;
 import com.labs.dm.haselnuss.server.http.RestServer;
+import com.labs.dm.haselnuss.server.tcp.TcpServer;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,9 +27,7 @@ public class HaselnussInstance {
 
     private static final Logger logger = Logger.getLogger(HaselnussInstance.class.getSimpleName());
     private final ConnectionPool pool = new ConnectionPool();
-    private Properties properties = new Properties();
-    private Map<String, IStorage> inMemoryStorageMap = new HashMap<>();
-    private Map<String, IFileStorage> fileStorageMap = new HashMap<>();
+    private final Properties properties = new Properties();
 
     public HaselnussInstance() {
         loadConfiguration();
@@ -44,10 +43,10 @@ public class HaselnussInstance {
     }
 
     public IStorage createSharedInMemoryDatabase(String name) {
-        if (!inMemoryStorageMap.containsKey(name)) {
-            inMemoryStorageMap.put(name, createInMemoryDatabase(name));
+        if (!pool.contains(name)) {
+            pool.addMem(name, createInMemoryDatabase(name));
         }
-        return inMemoryStorageMap.get(name);
+        return pool.getMem(name);
     }
 
     public IStorage createInMemoryDatabase(String name) {
@@ -83,5 +82,13 @@ public class HaselnussInstance {
         }
     }
 
+    public TcpServer createTcpServer(int port) {
+        return new TcpServer(port);
+    }
 
+    public TcpServer createTcpServer()
+    {
+        int port = (int) properties.get("tcp.port");
+        return createTcpServer(port);
+    }
 }
