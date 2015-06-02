@@ -66,6 +66,7 @@ public class HaselnussInstance {
     private void loadConfiguration() {
         try (InputStream input = HaselnussInstance.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
             properties.load(input);
+            logger.info("Loaded settings from file: " + CONFIG_FILENAME);
         } catch (FileNotFoundException fnfe) {
             logger.severe("Configuration file not found.");
         } catch (IOException ex) {

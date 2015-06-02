@@ -72,7 +72,7 @@ public abstract class AbstractHashMapStorage implements IStorage {
     @Override
     public void close() {
         flush();
-        map = null;
+        //map = null;
     }
 
     abstract public void flush();

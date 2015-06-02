@@ -1,7 +1,7 @@
 package com.labs.dm.haselnuss.server.http.handlers;
 
 import com.labs.dm.haselnuss.Haselnuss;
-import com.labs.dm.haselnuss.server.ConnectionPool;
+import com.labs.dm.haselnuss.core.IFileStorage;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -18,10 +18,8 @@ import java.util.logging.Logger;
 public class RestHandler extends AbstractHttpHandler {
 
     private static final Logger logger = Logger.getLogger(RestHandler.class.getSimpleName());
-    private final ConnectionPool pool;
 
-    public RestHandler(ConnectionPool storage) {
-        this.pool = storage;
+    public RestHandler() {
     }
 
     @Override
@@ -58,14 +56,15 @@ public class RestHandler extends AbstractHttpHandler {
         String storage = paths[1];
         String key = paths[2];
         String value = decodeInputStream(exchange.getRequestBody());
-        pool.get(storage).put(key, value);
+        IFileStorage s = Haselnuss.createHaselnussInstance().createFileMapDatabase(storage);
+        s.put(key, value);
         exchange.sendResponseHeaders(200, 0);
 
         try (OutputStream responseBody = exchange.getResponseBody()) {
             responseBody.write("POST OK".getBytes());
         }
-        logger.info("Insert " + key + ", " + pool.get("test").get(key));
-        pool.get(storage).flush();
+        logger.info("Insert " + key + ", " + s.get(key));
+        s.flush();
     }
 
     @Override
@@ -76,14 +75,15 @@ public class RestHandler extends AbstractHttpHandler {
         String storage = paths[1];
         String key = paths[2];
         String value = decodeInputStream(exchange.getRequestBody());
-        pool.get(storage).set(key, value);
+        IFileStorage s = Haselnuss.createHaselnussInstance().createFileMapDatabase(storage);
+        s.set(key, value);
         exchange.sendResponseHeaders(200, 0);
 
         try (OutputStream responseBody = exchange.getResponseBody()) {
             responseBody.write("PUT OK".getBytes());
         }
 
-        pool.get(storage).flush();
+        s.flush();
     }
 
     @Override

@@ -68,26 +68,26 @@ public class RestServerTest {
     @Test
     public void shouldPost() throws Exception {
         HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/rest/test/key", "POST");
-        //HttpClientUtil.responseBody(con);
-        //assertEquals(200, con.getResponseCode());
+        HttpClientUtil.responseBody(con);
+        assertEquals(200, con.getResponseCode());
         assertNotNull(con);
     }
 
     @Test
     public void shouldGet() throws Exception {
         HttpURLConnection con = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/rest/test/key", "GET");
-        // HttpClientUtil.responseBody(con);
-        // assertEquals(200, con.getResponseCode());
+        HttpClientUtil.responseBody(con);
+        assertEquals(200, con.getResponseCode());
         assertNotNull(con);
     }
 
     @Test
     public void rest() throws IOException {
         HttpURLConnection con1 = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/rest/test/key", "POST");
-        //HttpURLConnection con2 = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/rest/test/key", "GET");
-        // assertEquals(200, con1.getResponseCode());
-        //assertEquals(200, con2.getResponseCode());
+        HttpURLConnection con2 = HttpClientUtil.httpURLConnection("http://localhost:" + port + "/rest/test/key", "GET");
+        assertEquals(200, con1.getResponseCode());
+        assertEquals(200, con2.getResponseCode());
 
-        //assertNotNull(HttpClientUtil.responseBody(con2));
+        assertNotNull(HttpClientUtil.responseBody(con2));
     }
 }
