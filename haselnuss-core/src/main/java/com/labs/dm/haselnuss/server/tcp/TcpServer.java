@@ -45,12 +45,13 @@ public class TcpServer implements AutoCloseable {
     }
 
     public static void main(String argv[]) throws Exception {
-        logger.info("Starting server...");
+
         TcpServer server = Haselnuss.newInstance().createTcpServer();
         server.runServer();
     }
 
     public void runServer() throws IOException {
+        logger.info("Starting server...");
         serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
         logger.log(Level.INFO, "Server is listening on port: " + serverSocket.getLocalPort());
         logger.log(Level.INFO, "PID: " + Utils.pid());
@@ -98,10 +99,12 @@ public class TcpServer implements AutoCloseable {
 
     @Override
     public void close() throws IOException {
+        logger.info("Stopping server...");
         active = false;
         if (serverSocket != null) {
             serverSocket.close();
         }
+        logger.info("Server stopped");
     }
 
     private class ServerThread implements Runnable {
