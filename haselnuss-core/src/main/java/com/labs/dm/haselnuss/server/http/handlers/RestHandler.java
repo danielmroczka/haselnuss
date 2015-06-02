@@ -51,6 +51,7 @@ public class RestHandler extends AbstractHttpHandler {
 
     @Override
     public void onPost(HttpExchange exchange) throws IOException {
+        logger.info("onPost");
         Headers responseHeaders = exchange.getResponseHeaders();
         responseHeaders.set("Content-Type", "text/plain");
 

@@ -1,5 +1,6 @@
 package com.labs.dm.haselnuss.server.http;
 
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.server.ConnectionPool;
 import com.labs.dm.haselnuss.server.http.handlers.AdminHandler;
 import com.labs.dm.haselnuss.server.http.handlers.MainHandler;
@@ -28,7 +29,7 @@ public class RestServer {
     }
 
     public static void main(String[] args) throws IOException {
-        new RestServer(8081).start();
+        Haselnuss.createHaselnussInstance().createRestServer(8081).start();
     }
 
     public void start() throws IOException {
