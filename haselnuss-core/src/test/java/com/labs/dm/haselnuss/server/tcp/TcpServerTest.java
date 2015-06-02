@@ -100,14 +100,9 @@ public class TcpServerTest {
 
     @Test(expected = BindException.class)
     public void shouldRunOnlyOneInstance() throws Exception {
-        TcpServer instance1 = new TcpServer();
-        TcpServer instance2 = new TcpServer();
-        try {
+        try (TcpServer instance1 = new TcpServer(); TcpServer instance2 = new TcpServer()) {
             instance1.runServer();
             instance2.runServer();
-        } finally {
-            instance1.close();
-            instance2.close();
         }
 
     }
