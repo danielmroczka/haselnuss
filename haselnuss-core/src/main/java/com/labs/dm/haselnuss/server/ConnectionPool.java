@@ -29,6 +29,7 @@ public class ConnectionPool {
         map.put(name, storage);
         lastused.put(name, System.currentTimeMillis());
     }
+
     public synchronized void addMem(String name, IStorage storage) {
         mem.put(name, storage);
         lastused.put(name, System.currentTimeMillis());
@@ -50,9 +51,11 @@ public class ConnectionPool {
         lastused.put(name, System.currentTimeMillis());
         return mem.get(name);
     }
+
     public boolean contains(String name) {
         return map.containsKey(name) || mem.containsKey(name);
     }
+
     /**
      * Gets IFileStorage instance from the pool if exists.
      * Otherwise creates a new instance and add into the pool

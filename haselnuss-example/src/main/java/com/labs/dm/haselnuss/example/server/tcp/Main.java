@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        TcpConnection conn = new TcpConnection("localhost", 6543);
+        TcpConnection conn = new TcpConnection("192.168.43.24", 6543);
         conn.connect();
         conn.executeCommand(new Command(Command.CommandType.PUT, "key1", "abc"));
         Response r = conn.executeCommand(new Command(Command.CommandType.GET, "key1"));

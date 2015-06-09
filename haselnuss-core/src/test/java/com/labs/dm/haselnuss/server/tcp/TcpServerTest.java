@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.BindException;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -21,8 +20,7 @@ public class TcpServerTest {
     TcpServer instance;
 
     @After
-    public void tearDown() throws Exception
-    {
+    public void tearDown() throws Exception {
         if (instance != null) {
             instance.close();
         }
@@ -110,38 +108,32 @@ public class TcpServerTest {
     }
 
     @Test
-    public void loadTest() throws Exception
-    {
+    public void loadTest() throws Exception {
         instance = new TcpServer(6543);
         instance.runServer();
         Thread[] threads = new Thread[10];
-        for (int i=0; i<threads.length;i++) {
+        for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(new Worker());
             threads[i].start();
         }
-        for (int i=0; i<threads.length;i++) {
+        for (int i = 0; i < threads.length; i++) {
             threads[i].join();
         }
     }
 
-    private class Worker implements Runnable
-    {
+    private class Worker implements Runnable {
         @Override
-        public void run()
-        {
-            for (int i = 0; i < 1; i++)
-            {
+        public void run() {
+            for (int i = 0; i < 1; i++) {
 
-                try (TcpConnection connection = new TcpConnection("localhost", 6543))
-                {
+                try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
                     connection.connect();
                     connection.executeCommand(new Command(Command.CommandType.PUT, "key123", "val123"));
                     Response r = connection.executeCommand(new Command(Command.CommandType.GET, "key123"));
                     System.out.println(r.getValue());
                     assertEquals(0, r.getStatus());
                     assertEquals("val123", r.getValue());
-                } catch (ClassNotFoundException | IOException e)
-                {
+                } catch (ClassNotFoundException | IOException e) {
                     e.printStackTrace();
                 }
 

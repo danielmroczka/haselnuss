@@ -7,7 +7,7 @@ import com.labs.dm.haselnuss.core.factory.HaselnussInstanceFactory;
  * @author daniel
  * @since 26.05.2015
  */
- public final class Haselnuss {
+public final class Haselnuss {
 
     /**
      * Creates new instance or returns existed one

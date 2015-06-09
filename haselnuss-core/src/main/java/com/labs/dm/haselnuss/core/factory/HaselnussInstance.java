@@ -84,8 +84,7 @@ public class HaselnussInstance {
         return new TcpServer(port);
     }
 
-    public TcpServer createTcpServer()
-    {
+    public TcpServer createTcpServer() {
         int port = (int) properties.get("tcp.port");
         return createTcpServer(port);
     }
