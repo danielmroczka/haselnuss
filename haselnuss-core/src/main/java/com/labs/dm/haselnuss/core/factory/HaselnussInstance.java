@@ -32,6 +32,10 @@ public class HaselnussInstance {
         initLog();
     }
 
+    public Properties getProperties() {
+        return properties;
+    }
+
     public IFileStorage createFileMapDatabase(String name) {
         return pool.create(name);
     }

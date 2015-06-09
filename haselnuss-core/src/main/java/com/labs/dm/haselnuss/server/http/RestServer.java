@@ -9,6 +9,7 @@ import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.URI;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +44,10 @@ public class RestServer {
         logger.info("Server is listening on port " + port);
         logger.info("Usage: http://localhost:" + port + "/rest/storage/key");
         logger.log(Level.INFO, "PID: " + Utils.pid());
+
+        if (Haselnuss.newInstance().getProperties().getProperty("http.start.browser").equals("Y")) {
+            Utils.openWebpage(URI.create("http://localhost:" + port));
+        }
     }
 
     public void stop() {
