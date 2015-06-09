@@ -1,7 +1,9 @@
 package com.labs.dm.haselnuss.core.hashmap;
 
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IStorage;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -79,5 +81,24 @@ public abstract class AbstractHashMapStorage implements IStorage {
 
     public boolean loaded() {
         return loaded;
+    }
+
+    protected String ensureDirCreated() {
+        File dir = new File(new File("").getAbsolutePath() + File.separator + Haselnuss.newInstance().getProperties().getProperty("data.dir"));
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        return dir.getAbsolutePath();
+    }
+
+    protected String ensureDirCreated(String path) {
+        String d = new File(".").getAbsolutePath() + File.separator + path;
+        File dir = new File(d);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        return dir.getAbsolutePath();
     }
 }

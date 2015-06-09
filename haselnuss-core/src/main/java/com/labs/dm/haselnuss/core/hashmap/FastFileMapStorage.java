@@ -1,6 +1,5 @@
 package com.labs.dm.haselnuss.core.hashmap;
 
-import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IFileStorage;
 
 import java.io.*;
@@ -25,17 +24,11 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
     protected final String filename;
 
     public FastFileMapStorage(String dir, String name) {
-        this.filename = new File(".").getAbsolutePath() + File.separator + dir + File.separator + name;
+        this.filename = ensureDirCreated(dir) + File.separator + name;
     }
 
     public FastFileMapStorage(String name) {
-        File dir = new File(new File("").getAbsolutePath() + File.separator + Haselnuss.newInstance().getProperties().getProperty("data.dir"));
-        if (!dir.exists()) {
-
-            dir.mkdir();
-
-        }
-        this.filename = dir.getPath() + File.separator + name;
+        this.filename = ensureDirCreated() + File.separator + name;
     }
 
     @Override
