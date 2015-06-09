@@ -1,7 +1,0 @@
-machine:
-  java:
-    version: oraclejdk7
-
-dependencies:
-  pre:
-    - mvn install    

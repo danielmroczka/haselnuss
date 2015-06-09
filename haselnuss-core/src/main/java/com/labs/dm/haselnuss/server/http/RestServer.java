@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -32,6 +31,7 @@ public class RestServer {
     }
 
     public void start() throws IOException {
+        long time = System.currentTimeMillis();
         InetSocketAddress addr = new InetSocketAddress(port);
         server = HttpServer.create(addr, 0);
         server.createContext("/", new MainHandler());
@@ -43,7 +43,9 @@ public class RestServer {
 
         logger.info("Server is listening on port " + port);
         logger.info("Usage: http://localhost:" + port + "/rest/storage/key");
-        logger.log(Level.INFO, "PID: " + Utils.pid());
+        logger.info("Admin URL: http://localhost:" + port + "/admin");
+        logger.info("PID: " + Utils.pid());
+        logger.info("Server started in: " + (System.currentTimeMillis() - time) + " ms");
 
         if (Haselnuss.newInstance().getProperties().getProperty("http.start.browser").equals("Y")) {
             Utils.openWebpage(URI.create("http://localhost:" + port));

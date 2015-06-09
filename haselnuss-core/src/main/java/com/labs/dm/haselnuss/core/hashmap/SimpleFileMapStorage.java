@@ -1,5 +1,6 @@
 package com.labs.dm.haselnuss.core.hashmap;
 
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IFileStorage;
 
 import java.io.*;
@@ -21,7 +22,16 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
     }
 
     public SimpleFileMapStorage(String name) {
-        this("target", name);
+        File dir = new File(Haselnuss.newInstance().getProperties().getProperty("data.dir"));
+        if (dir.exists()) {
+            try {
+                dir.createNewFile();
+            } catch (IOException e) {
+                logger.severe(e.getMessage());
+            }
+        }
+        this.filename = dir.getName() + File.separator + name;
+        load();
     }
 
     @Override
