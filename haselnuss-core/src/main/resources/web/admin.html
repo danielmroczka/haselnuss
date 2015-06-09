@@ -23,8 +23,8 @@
                             $('#res').html(data);
                         },
                         error: function (e) {
-                            $('#res').html('';
-                                    console.log(e.message);
+                            $('#res').html('');
+                            console.log(e.message);
                             $('#log').html(e.message);
                         }
                     });
@@ -56,9 +56,11 @@
     </script>
 </head>
 <body class="container">
-<h3>Haselnuss Admin Page</h3>
+<div class="row">
 
+    <div class="col-sm-12 col-md-10 col-md-offset-1">
 <div class="form-inline">
+    <h3>Haselnuss Admin Page</h3>
     <input type="text" class="form-control" id="storage"
            placeholder="Enter Storage Name">
     <input type="text" class="form-control" id="keyField"
@@ -67,9 +69,9 @@
     <button id="btnPost" class="btn btn-primary">POST</button>
 </div>
 <textarea id="res" class="form-control"></textarea>
-
+    </div>
 <div id="log">...</div>
-
+</div>
 <footer></footer>
 </body>
 </html>
