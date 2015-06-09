@@ -9,10 +9,11 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" rel="stylesheet"
           type="text/css"/>
-    <link href="css/style.css" rel="stylesheet" type="text/css">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
     <script>
             $(document).ready(function () {
                 $("#btnGet").click(function () {
@@ -20,10 +21,11 @@
                     $.ajax({
                         url: '/rest/' + $("#storage").val() + '/' + $("#keyField").val(),
                         success: function (data) {
-                            $('#res').html(data);
+                            $('#res').text(data);
+                            console.log(data);
                         },
                         error: function (e) {
-                            $('#res').html('');
+                            //$('#res').html('');
                             console.log(e.message);
                             $('#log').html(e.message);
                         }
@@ -41,7 +43,7 @@
                             $('#res').html(data);
                         },
                         error: function (e) {
-                            $('#res').html('');
+                            //$('#res').html('');
                             console.log(e.message);
                             $('#log').html(e.message);
                         }
@@ -55,23 +57,29 @@
 
     </script>
 </head>
-<body class="container">
-<div class="row">
+<body>
+<div class="container">
+    <div role="form">
+        <div class="form-group ccl-xs-6">
+            <h4>Haselnuss Admin Page</h4>
+            <label for="storage">Storage Name:</label>
 
-    <div class="col-sm-12 col-md-10 col-md-offset-1">
-<div class="form-inline">
-    <h3>Haselnuss Admin Page</h3>
     <input type="text" class="form-control" id="storage"
            placeholder="Enter Storage Name">
+
+            <label for="keyField">Key Name:</label>
     <input type="text" class="form-control" id="keyField"
            placeholder="Enter Key Name">
+            <label for="res">Body:</label>
+            <textarea id="res" class="form-control"></textarea>
     <button id="btnGet" class="btn btn-primary">GET</button>
     <button id="btnPost" class="btn btn-primary">POST</button>
+        </div>
 </div>
-<textarea id="res" class="form-control"></textarea>
     </div>
-<div id="log">...</div>
 </div>
+
+<div id="log">...</div>
 <footer></footer>
 </body>
 </html>

@@ -5,3 +5,7 @@ body {
 #log {
     color: red
 }
+
+.margin-bottom {
+    margin-bottom:15px;
+}
