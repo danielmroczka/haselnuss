@@ -41,7 +41,7 @@ public class InMemoryStorageConcurrencyTest {
     }
 
     private class Counter implements Runnable {
-        private IStorage storage;
+        private final IStorage storage;
 
         Counter(IStorage storage) {
             this.storage = storage;

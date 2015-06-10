@@ -25,11 +25,11 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
     protected final String filename;
 
     public FastFileMapStorage(String dir, String name) {
-        this.filename = ensureDirCreated(dir) + File.separator + name + Consts.DB_EXTENSION;
+        this.filename = ensureDirCreated(dir, name);
     }
 
     public FastFileMapStorage(String name) {
-        this.filename = ensureDirCreated() + File.separator + name + Consts.DB_EXTENSION;
+        this.filename = ensureDirCreated(name);
     }
 
     @Override

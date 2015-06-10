@@ -1,5 +1,6 @@
 package com.labs.dm.haselnuss.core.hashmap;
 
+import com.labs.dm.haselnuss.Consts;
 import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IStorage;
 
@@ -83,21 +84,16 @@ public abstract class AbstractHashMapStorage implements IStorage {
         return loaded;
     }
 
-    protected String ensureDirCreated() {
-        File dir = new File(new File("").getAbsolutePath() + File.separator + Haselnuss.newInstance().getProperties().getProperty("data.dir"));
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        return dir.getAbsolutePath();
+    protected String ensureDirCreated(String name) {
+        return ensureDirCreated(Haselnuss.newInstance().getProperties().getProperty("data.dir"), name);
     }
 
-    protected String ensureDirCreated(String path) {
+    protected String ensureDirCreated(String path, String name) {
         File dir = new File(new File("").getAbsolutePath() + File.separator + path);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        return dir.getAbsolutePath();
+        return dir.getAbsolutePath() + File.separator + name + Consts.DB_EXTENSION;
     }
 }

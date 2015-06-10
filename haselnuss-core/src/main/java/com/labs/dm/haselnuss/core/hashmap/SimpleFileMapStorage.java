@@ -17,12 +17,12 @@ public class SimpleFileMapStorage extends AbstractHashMapStorage implements Seri
     protected final String filename;
 
     public SimpleFileMapStorage(String dir, String name) {
-        this.filename = ensureDirCreated(dir) + File.separator + name + Consts.DB_EXTENSION;
+        this.filename = ensureDirCreated(dir, name);
         load();
     }
 
     public SimpleFileMapStorage(String name) {
-        this.filename = ensureDirCreated() + File.separator + name + Consts.DB_EXTENSION;
+        this.filename = ensureDirCreated(name);
         load();
     }
 
