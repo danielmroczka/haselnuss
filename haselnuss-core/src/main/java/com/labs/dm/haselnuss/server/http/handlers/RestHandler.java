@@ -24,6 +24,7 @@ public class RestHandler extends AbstractHttpHandler {
 
     @Override
     public void onGet(HttpExchange exchange) throws IOException {
+        long time = System.currentTimeMillis();
         Headers responseHeaders = exchange.getResponseHeaders();
         responseHeaders.set("Content-Type", "text/plain");
 
@@ -38,7 +39,7 @@ public class RestHandler extends AbstractHttpHandler {
                 if (val instanceof String) {
                     byte[] b = ((String) val).getBytes();
                     responseBody.write(b);
-
+                    logger.info("Read " + b.length + " bytes in " + (System.currentTimeMillis() - time) + " ms.");
                 }
             } else {
                 exchange.sendResponseHeaders(404, 0);
@@ -63,7 +64,7 @@ public class RestHandler extends AbstractHttpHandler {
         try (OutputStream responseBody = exchange.getResponseBody()) {
             responseBody.write("POST OK".getBytes());
         }
-        logger.info("Insert " + key + ", " + s.get(key));
+        logger.info("Insert " + key + ", " + s.get(key) + " size:" + value.length() + " bytes");
         if (s != null) {
             s.flush();
         }

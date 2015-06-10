@@ -3,9 +3,7 @@ package com.labs.dm.haselnuss.utils;
 import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 
 /**
  * @author daniel
@@ -39,6 +37,18 @@ public class Utils {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String ip() {
+        try
+        {
+            return Inet4Address.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }
