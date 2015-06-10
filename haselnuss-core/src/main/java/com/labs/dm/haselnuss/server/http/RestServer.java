@@ -54,7 +54,7 @@ public class RestServer {
 
     public void stop() {
         if (server != null) {
-            server.stop(0);
+            server.stop(30);
         }
 
     }
