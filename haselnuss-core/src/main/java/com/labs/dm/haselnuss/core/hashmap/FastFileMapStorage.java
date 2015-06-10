@@ -1,6 +1,5 @@
 package com.labs.dm.haselnuss.core.hashmap;
 
-import com.labs.dm.haselnuss.Consts;
 import com.labs.dm.haselnuss.core.IFileStorage;
 
 import java.io.*;
@@ -60,7 +59,7 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                logger.log(Level.SEVERE, "Create new file failed", e);
+                logger.log(Level.SEVERE, "Create new file failed " + file, e);
             }
         }
 
