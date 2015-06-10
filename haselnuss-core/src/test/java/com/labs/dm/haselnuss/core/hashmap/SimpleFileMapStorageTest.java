@@ -20,7 +20,7 @@ public class SimpleFileMapStorageTest {
 
     @Before
     public void before() throws IOException {
-        storage = new SimpleFileMapStorage("target", "testcase1");
+        storage = new SimpleFileMapStorage("testcase1");
         storage.clean();
         storage.flush();
     }
@@ -48,7 +48,7 @@ public class SimpleFileMapStorageTest {
         storage.setAutoCommit(true);
         storage.put("key1", "value1");
 
-        storage = new SimpleFileMapStorage("target", "testcase1");
+        storage = new SimpleFileMapStorage("testcase1");
         assertEquals(1, storage.size());
     }
 
@@ -57,7 +57,7 @@ public class SimpleFileMapStorageTest {
         storage.setAutoCommit(false);
         storage.put("key1", "value1");
 
-        storage = new SimpleFileMapStorage("target", "testcase1");
+        storage = new SimpleFileMapStorage("testcase1");
         assertEquals(0, storage.size());
     }
 
@@ -72,13 +72,13 @@ public class SimpleFileMapStorageTest {
 
     @Test
     public void shouldFlush() throws IOException {
-        IFileStorage storage1 = new SimpleFileMapStorage("target", "flush1");
+        IFileStorage storage1 = new SimpleFileMapStorage("flush1");
         storage1.setAutoCommit(true);
         storage1.remove("123");
         assertEquals(null, storage1.get("123"));
         storage1.put("123", "abc");
 
-        IFileStorage storage2 = new SimpleFileMapStorage("target", "flush1");
+        IFileStorage storage2 = new SimpleFileMapStorage("flush1");
         storage2.setAutoCommit(true);
         Serializable val = storage2.get("123");
         assertEquals("abc", val);
@@ -104,7 +104,7 @@ public class SimpleFileMapStorageTest {
     public void raceConditionTest() {
         IFileStorage[] array = new IFileStorage[10];
         for (IFileStorage item : array) {
-            storage = new SimpleFileMapStorage("target", "testcase1");
+            storage = new SimpleFileMapStorage("testcase1");
         }
         //private IFileStorage storage = new SimpleFileMapStorage("target", "testcase1");
     }
@@ -112,7 +112,7 @@ public class SimpleFileMapStorageTest {
     //@Test
     public void benchmark() {
         long time = System.currentTimeMillis();
-        IStorage storage = new SimpleFileMapStorage("target", "testcase2");
+        IStorage storage = new SimpleFileMapStorage("testcase2");
         for (int i = 0; i < 1000000; i++) {
             //      storage.add(i, "a");
         }

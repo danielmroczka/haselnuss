@@ -58,7 +58,7 @@ public class FastFileMapStorageTest {
         storage.setAutoCommit(false);
         storage.put("key1", "value1");
 
-        storage = new FastFileMapStorage("target", "testcase1");
+        storage = new FastFileMapStorage("testcase1");
         assertEquals(0, storage.size());
     }
 
@@ -106,7 +106,7 @@ public class FastFileMapStorageTest {
     //@Test
     public void benchmark() {
         long time = System.currentTimeMillis();
-        IStorage storage = new FastFileMapStorage("target", "testcase2");
+        IStorage storage = new FastFileMapStorage("testcase2");
         for (int i = 0; i < 1000000; i++) {
             //      storage.add(i, "a");
         }

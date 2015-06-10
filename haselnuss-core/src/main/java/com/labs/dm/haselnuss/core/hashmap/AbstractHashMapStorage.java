@@ -93,10 +93,9 @@ public abstract class AbstractHashMapStorage implements IStorage {
     }
 
     protected String ensureDirCreated(String path) {
-        String d = new File(".").getAbsolutePath() + File.separator + path;
-        File dir = new File(d);
+        File dir = new File(new File("").getAbsolutePath() + File.separator + path);
         if (!dir.exists()) {
-            dir.mkdir();
+            dir.mkdirs();
         }
 
         return dir.getAbsolutePath();

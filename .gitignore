@@ -8,6 +8,7 @@ bin
 *.class
 *.jar
 *.db
+*.hdb
 
 hs_err_pid*
 

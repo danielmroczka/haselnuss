@@ -25,11 +25,16 @@
     </licenses>
 
     <scm>
-        <connection>scm:svn:http://127.0.0.1/dummy</connection>
-        <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
+        <connection>scm:git:https://github.com/danielmroczka/haselnuss.git</connection>
+        <developerConnection>scm:git:https://github.com/danielmroczka/haselnuss.git</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/danielmroczka/haselnuss.git</url>
+        <url>http://github.com/danielmroczka/haselnuss</url>
     </scm>
+
+    <issueManagement>
+        <url>http://github.com/danielmroczka/haselnuss/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
 
     <build>
         <plugins>
