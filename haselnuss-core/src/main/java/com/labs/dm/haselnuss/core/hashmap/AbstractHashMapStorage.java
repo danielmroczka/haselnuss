@@ -86,7 +86,7 @@ public abstract class AbstractHashMapStorage implements IStorage {
     protected String ensureDirCreated() {
         File dir = new File(new File("").getAbsolutePath() + File.separator + Haselnuss.newInstance().getProperties().getProperty("data.dir"));
         if (!dir.exists()) {
-            dir.mkdir();
+            dir.mkdirs();
         }
 
         return dir.getAbsolutePath();
