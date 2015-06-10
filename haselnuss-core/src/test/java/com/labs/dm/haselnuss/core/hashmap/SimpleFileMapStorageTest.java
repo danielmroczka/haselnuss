@@ -21,6 +21,7 @@ public class SimpleFileMapStorageTest {
     @Before
     public void before() throws IOException {
         storage = new SimpleFileMapStorage("testcase1");
+        storage.load();
         storage.clean();
         storage.flush();
     }
@@ -44,20 +45,24 @@ public class SimpleFileMapStorageTest {
     }
 
     @Test
-    public void shouldFlushIfAutoCommit() {
+    public void shouldFlushIfAutoCommit() throws IOException
+    {
         storage.setAutoCommit(true);
         storage.put("key1", "value1");
 
         storage = new SimpleFileMapStorage("testcase1");
+        storage.load();
         assertEquals(1, storage.size());
     }
 
     @Test
-    public void shouldNotFlushIfNoAutoCommit() {
+    public void shouldNotFlushIfNoAutoCommit() throws IOException
+    {
         storage.setAutoCommit(false);
         storage.put("key1", "value1");
 
         storage = new SimpleFileMapStorage("testcase1");
+        storage.load();
         assertEquals(0, storage.size());
     }
 
@@ -73,12 +78,14 @@ public class SimpleFileMapStorageTest {
     @Test
     public void shouldFlush() throws IOException {
         IFileStorage storage1 = new SimpleFileMapStorage("flush1");
+        storage1.load();
         storage1.setAutoCommit(true);
         storage1.remove("123");
         assertEquals(null, storage1.get("123"));
         storage1.put("123", "abc");
 
         IFileStorage storage2 = new SimpleFileMapStorage("flush1");
+        storage2.load();
         storage2.setAutoCommit(true);
         Serializable val = storage2.get("123");
         assertEquals("abc", val);
