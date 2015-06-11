@@ -64,7 +64,7 @@ public class HaselnussInstance {
     }
 
     public RestServer createRestServer() {
-        int port = (int) properties.get("http.port");
+        int port = Integer.parseInt(properties.getProperty("http.port"));
         return createRestServer(port);
     }
 
