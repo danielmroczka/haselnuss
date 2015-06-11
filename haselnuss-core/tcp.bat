@@ -1,1 +1,1 @@
-java -jar target/haselnuss-core.jar tcp
+java -jar target/haselnuss-core.jar -server tcp
