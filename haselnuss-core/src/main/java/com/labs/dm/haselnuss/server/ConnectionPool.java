@@ -6,18 +6,16 @@ import com.labs.dm.haselnuss.core.hashmap.FastFileMapStorage;
 import com.labs.dm.haselnuss.server.http.RestServer;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by daniel on 2015-05-25.
  */
 public class ConnectionPool {
-
-    private Map<String, IFileStorage> map = new HashMap<>();
-    private Map<String, IStorage> mem = new HashMap<>();
-    private Map<String, Long> lastused = new HashMap<>();
-    private Map<Integer, RestServer> restMap = new HashMap<>();
+    private Map<String, IFileStorage> map = new WeakHashMap<>();
+    private Map<String, IStorage> mem = new WeakHashMap<>();
+    private Map<String, Long> lastused = new WeakHashMap<>();
+    private Map<Integer, RestServer> restMap = new WeakHashMap<>();
 
     /**
      * Adds new instance of IFileStorage
@@ -78,8 +76,12 @@ public class ConnectionPool {
     }
 
     public void remove(String name) {
-        map.remove(name);
-        lastused.remove(name);
+        IFileStorage fs = map.remove(name);
+        fs = null;
+        IStorage ms = mem.remove(name);
+        ms = null;
+        Long lu = lastused.remove(name);
+        lu = null;
     }
 
     public int size() {

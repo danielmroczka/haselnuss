@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class HaselnussInstanceFactoryTest {
+
     @Test
     public void shouldReurnsNotNullObject() {
         assertNotNull(HaselnussInstanceFactory.newHaselnussInstance());

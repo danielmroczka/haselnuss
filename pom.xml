@@ -36,6 +36,13 @@
         <system>GitHub Issues</system>
     </issueManagement>
 
+    <developers>
+        <developer>
+            <name>Daniel Mroczka</name>
+            <email>dmroczka@gmail.com</email>
+        </developer>
+    </developers>
+
     <build>
         <plugins>
             <plugin>

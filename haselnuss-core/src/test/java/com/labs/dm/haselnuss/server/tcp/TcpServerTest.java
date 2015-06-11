@@ -4,7 +4,13 @@ import com.labs.dm.haselnuss.Consts;
 import com.labs.dm.haselnuss.server.tcp.command.Command;
 import com.labs.dm.haselnuss.server.tcp.command.Response;
 import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -17,7 +23,14 @@ import static org.junit.Assert.*;
  */
 public class TcpServerTest {
 
-    TcpServer instance;
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        protected void starting(Description description) {
+            System.out.println("Starting test: " + description.getMethodName());
+        }
+    };
+
+    private TcpServer instance;
 
     @After
     public void tearDown() throws Exception {

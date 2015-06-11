@@ -1,5 +1,7 @@
 package com.labs.dm.haselnuss.server.tcp;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.net.ConnectException;
@@ -12,35 +14,40 @@ import static org.junit.Assert.fail;
  */
 public class TcpConnectionTest {
 
-    @Test
-    public void test() throws Exception {
-        TcpServer server = new TcpServer(6543);
+    private final TcpServer server = new TcpServer(6543);
+
+    @Before
+    public void setUp() throws Exception {
         server.runServer();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        server.close();
+    }
+
+    @Test
+    public void shouldConnectOnCorrectPort() throws Exception {
         try (TcpConnection conn = new TcpConnection("localhost", 6543)) {
             conn.connect();
             assertTrue(conn.isConnected());
         }
-        server.close();
     }
 
     @Test(expected = ConnectException.class)
-    public void testDifferentPort() throws Exception {
-        TcpServer server = new TcpServer(6544);
-        server.runServer();
+    public void shouldNotConnectOnWrongPort() throws Exception {
         try (TcpConnection conn = new TcpConnection("localhost", 12345)) {
             conn.connect();
-            fail("Should fail");
+            fail("Should not connect on wrong port");
         }
-        server.close();
     }
 
     @Test(expected = ConnectException.class)
-    public void test2() throws Exception {
-        TcpServer server = new TcpServer(8787);
-        server.runServer();
+    public void shouldNotConnectOnClosedServer() throws Exception {
         server.close();
-        try (TcpConnection conn = new TcpConnection("localhost", 8787)) {
+        try (TcpConnection conn = new TcpConnection("localhost", 6543)) {
             conn.connect();
+            fail("Should not connect on closd server");
         }
     }
 }

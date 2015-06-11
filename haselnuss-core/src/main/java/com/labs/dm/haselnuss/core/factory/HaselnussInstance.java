@@ -55,6 +55,10 @@ public class HaselnussInstance {
         return new InMemoryStorage(name);
     }
 
+    public void unregister(String name) {
+        pool.remove(name);
+    }
+
     public RestServer createRestServer(int port) {
         return new RestServer(port);
     }
@@ -66,8 +70,10 @@ public class HaselnussInstance {
 
     private void loadConfiguration() {
         try (InputStream input = HaselnussInstance.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
+            logger.info("Loading settings from file: " + CONFIG_FILENAME);
             properties.load(input);
-            logger.info("Loaded settings from file: " + CONFIG_FILENAME);
+            logger.info("Loaded settings: " + properties.keySet());
+
         } catch (FileNotFoundException fnfe) {
             logger.severe("Configuration file not found.");
         } catch (IOException ex) {

@@ -100,6 +100,7 @@ public class FastFileMapStorageTest {
     @Test
     public void wrongFilePath() throws IOException {
         IFileStorage storage = new FastFileMapStorage("xyz://non-existing", "xyz://non-existing");
+        storage.load();
         storage.flush();
     }
 

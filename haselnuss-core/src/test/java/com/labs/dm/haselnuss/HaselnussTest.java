@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class HaselnussTest {
+
     @Test
     public void shouldCreateHaselnussInstance() throws Exception {
         //GIVEN

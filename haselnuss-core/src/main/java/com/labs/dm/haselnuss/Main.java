@@ -1,15 +1,19 @@
 package com.labs.dm.haselnuss;
 
-import com.labs.dm.haselnuss.server.http.RestServer;
 import com.labs.dm.haselnuss.server.tcp.TcpServer;
 
 import java.io.IOException;
 
 /**
+ *
+ * Usage:
+ *
+ * java -jar target/haselnuss-core.jar -server tcp
+ * java -jar target/haselnuss-core.jar -server http
+ *
  * @author daniel
  */
 public class Main {
-
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         System.out.println("Welcome to Haselnuss");
 
@@ -23,13 +27,11 @@ public class Main {
                         if (type != null) {
                             switch (type.trim().toLowerCase()) {
                                 case "tcp": {
-                                    TcpServer server = new TcpServer();
-                                    server.runServer();
+                                    Haselnuss.newInstance().createTcpServer().runServer();
                                     break;
                                 }
                                 case "http": {
-                                    RestServer server = new RestServer(8081);
-                                    server.start();
+                                    Haselnuss.newInstance().createRestServer().start();
                                     break;
                                 }
                                 default: {

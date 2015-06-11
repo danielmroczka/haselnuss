@@ -56,7 +56,6 @@ public class RestServer {
         if (server != null) {
             server.stop(30);
         }
-
     }
 
     public int getPort() {

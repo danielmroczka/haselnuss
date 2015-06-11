@@ -76,6 +76,7 @@ public class FastFileMapStorage extends AbstractHashMapStorage implements Serial
             for (int item = 0; item < size; item++) {
                 map.put((Serializable) ois.readObject(), (Serializable) ois.readObject());
             }
+            logger.info("Loaded " + size + " items. Keys=" + map.keySet());
         } catch (EOFException eof) {
             // nop
         } catch (IOException | ClassNotFoundException ex) {

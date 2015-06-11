@@ -31,8 +31,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void testIP() throws Exception
-    {
+    public void testIP() throws Exception {
         assertNotNull(Utils.ip());
     }
 

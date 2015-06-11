@@ -50,4 +50,14 @@ public class ConnectionPoolTest {
         assertNull(pool.get("test"));
         assertNotEquals(storage, pool.get("test"));
     }
+
+    @Test
+    public void shouldRemove2() {
+        IFileStorage storage = new FastFileMapStorage("test");
+        pool.add("test", storage);
+        pool.get("test");
+        pool.remove("test");
+        //assertNull(storage);
+
+    }
 }
