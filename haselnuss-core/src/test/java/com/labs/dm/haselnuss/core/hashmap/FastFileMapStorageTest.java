@@ -5,7 +5,11 @@ import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.core.IStorage;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -16,7 +20,15 @@ import static org.junit.Assert.*;
  * Created by daniel on 2015-05-21.
  */
 public class FastFileMapStorageTest {
+
     private IFileStorage storage;
+
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        protected void starting(Description description) {
+            System.out.println("Starting test: " + description.getMethodName());
+        }
+    };
 
     @Before
     public void before() throws IOException {

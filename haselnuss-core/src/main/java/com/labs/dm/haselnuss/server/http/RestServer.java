@@ -1,6 +1,7 @@
 package com.labs.dm.haselnuss.server.http;
 
 import com.labs.dm.haselnuss.Haselnuss;
+import com.labs.dm.haselnuss.server.IProvider;
 import com.labs.dm.haselnuss.server.http.handlers.AdminHandler;
 import com.labs.dm.haselnuss.server.http.handlers.MainHandler;
 import com.labs.dm.haselnuss.server.http.handlers.RestHandler;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
 /**
  * @author daniel
  */
-public class RestServer {
+public class RestServer implements IProvider {
 
     private static final Logger logger = Logger.getLogger(RestServer.class.getSimpleName());
     private HttpServer server;
@@ -52,7 +53,7 @@ public class RestServer {
         }
     }
 
-    public void stop() {
+    public void close() {
         if (server != null) {
             server.stop(30);
         }

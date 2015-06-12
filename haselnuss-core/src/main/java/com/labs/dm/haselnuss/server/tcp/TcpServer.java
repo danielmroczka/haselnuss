@@ -2,6 +2,7 @@ package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
 import com.labs.dm.haselnuss.Haselnuss;
+import com.labs.dm.haselnuss.server.IProvider;
 import com.labs.dm.haselnuss.server.tcp.command.Command;
 import com.labs.dm.haselnuss.server.tcp.command.Response;
 import com.labs.dm.haselnuss.server.tcp.command.TcpCommandProcess;
@@ -21,7 +22,7 @@ import static com.labs.dm.haselnuss.Consts.CONFIG_FILENAME;
  * @author daniel
  * @since 28.04.2015
  */
-public class TcpServer implements AutoCloseable {
+public class TcpServer implements IProvider, AutoCloseable {
 
     private static final Logger logger = Logger.getLogger(TcpServer.class.getSimpleName());
     private final Properties properties;
@@ -47,10 +48,10 @@ public class TcpServer implements AutoCloseable {
     public static void main(String argv[]) throws Exception {
 
         TcpServer server = Haselnuss.newInstance().createTcpServer();
-        server.runServer();
+        server.start();
     }
 
-    public void runServer() throws IOException {
+    public void start() throws IOException {
         logger.info("Starting server...");
         serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
         logger.log(Level.INFO, "Server is listening on port: " + serverSocket.getLocalPort());

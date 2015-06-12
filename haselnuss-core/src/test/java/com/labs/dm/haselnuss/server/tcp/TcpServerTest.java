@@ -4,10 +4,8 @@ import com.labs.dm.haselnuss.Consts;
 import com.labs.dm.haselnuss.server.tcp.command.Command;
 import com.labs.dm.haselnuss.server.tcp.command.Response;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -42,7 +40,7 @@ public class TcpServerTest {
     @Test
     public void testRunServer() throws Exception {
         instance = new TcpServer();
-        instance.runServer();
+        instance.start();
 
         try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
             connection.connect();
@@ -55,7 +53,7 @@ public class TcpServerTest {
         Properties properties = new Properties();
         properties.setProperty("tcp.port", "9876");
         instance = new TcpServer(properties);
-        instance.runServer();
+        instance.start();
 
         try (TcpConnection connection = new TcpConnection("localhost", 9876)) {
             connection.connect();
@@ -68,7 +66,7 @@ public class TcpServerTest {
         Properties properties = new Properties();
 
         instance = new TcpServer(properties);
-        instance.runServer();
+        instance.start();
 
         try (TcpConnection connection = new TcpConnection("localhost", Integer.valueOf(Consts.TCP_DEFAULT_PORT))) {
             connection.connect();
@@ -80,7 +78,7 @@ public class TcpServerTest {
     @Test
     public void simpleCommand() throws Exception {
         instance = new TcpServer();
-        instance.runServer();
+        instance.start();
 
         try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
             connection.connect();
@@ -91,7 +89,7 @@ public class TcpServerTest {
     @Test
     public void testCommand() throws Exception {
         instance = new TcpServer();
-        instance.runServer();
+        instance.start();
 
         try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
             connection.connect();
@@ -115,15 +113,15 @@ public class TcpServerTest {
     @Test(expected = BindException.class)
     public void shouldRunOnlyOneInstance() throws Exception {
         try (TcpServer instance1 = new TcpServer(); TcpServer instance2 = new TcpServer()) {
-            instance1.runServer();
-            instance2.runServer();
+            instance1.start();
+            instance2.start();
         }
     }
 
     @Test
     public void loadTest() throws Exception {
         instance = new TcpServer(6543);
-        instance.runServer();
+        instance.start();
         Thread[] threads = new Thread[10];
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(new Worker());

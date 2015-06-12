@@ -1,7 +1,5 @@
 package com.labs.dm.haselnuss;
 
-import com.labs.dm.haselnuss.server.tcp.TcpServer;
-
 import java.io.IOException;
 
 /**
@@ -27,7 +25,7 @@ public class Main {
                         if (type != null) {
                             switch (type.trim().toLowerCase()) {
                                 case "tcp": {
-                                    Haselnuss.newInstance().createTcpServer().runServer();
+                                    Haselnuss.newInstance().createTcpServer().start();
                                     break;
                                 }
                                 case "http": {

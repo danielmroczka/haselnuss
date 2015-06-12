@@ -18,7 +18,7 @@ public class TcpConnectionTest {
 
     @Before
     public void setUp() throws Exception {
-        server.runServer();
+        server.start();
     }
 
     @After

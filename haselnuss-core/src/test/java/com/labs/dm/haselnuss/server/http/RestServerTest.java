@@ -33,7 +33,7 @@ public class RestServerTest {
 
     @AfterClass
     public static void tearDownClass() {
-        server.stop();
+        server.close();
     }
 
     @Test
