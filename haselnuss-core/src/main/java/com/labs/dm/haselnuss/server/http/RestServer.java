@@ -1,5 +1,6 @@
 package com.labs.dm.haselnuss.server.http;
 
+import com.labs.dm.haselnuss.Consts;
 import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.server.IProvider;
 import com.labs.dm.haselnuss.server.http.handlers.AdminHandler;
@@ -22,13 +23,14 @@ public class RestServer implements IProvider {
     private static final Logger logger = Logger.getLogger(RestServer.class.getSimpleName());
     private HttpServer server;
     private int port;
+    private Consts.SERVER_STATUS status = Consts.SERVER_STATUS.STOPPED;
 
     public RestServer(int port) {
         this.port = port;
     }
 
     public static void main(String[] args) throws IOException {
-        Haselnuss.newInstance().createRestServer(8081).start();
+        Haselnuss.newInstance().createRestServer(Consts.HTTP_DEFAULT_PORT).start();
     }
 
     public void start() throws IOException {
@@ -51,12 +53,20 @@ public class RestServer implements IProvider {
         if (Haselnuss.newInstance().getProperties().getProperty("http.start.browser").equals("Y")) {
             Utils.openWebpage(URI.create("http://localhost:" + port));
         }
+
+        status = Consts.SERVER_STATUS.STARTED;
     }
 
     public void close() {
         if (server != null) {
             server.stop(30);
+            status = Consts.SERVER_STATUS.STOPPED;
         }
+    }
+
+    @Override
+    public Consts.SERVER_STATUS status() {
+        return status;
     }
 
     public int getPort() {

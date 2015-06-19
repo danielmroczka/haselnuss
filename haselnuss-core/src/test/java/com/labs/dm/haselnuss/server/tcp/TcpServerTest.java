@@ -1,6 +1,7 @@
 package com.labs.dm.haselnuss.server.tcp;
 
 import com.labs.dm.haselnuss.Consts;
+import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.server.tcp.command.Command;
 import com.labs.dm.haselnuss.server.tcp.command.Response;
 import org.junit.After;
@@ -12,7 +13,6 @@ import org.junit.runner.Description;
 
 import java.io.IOException;
 import java.net.BindException;
-import java.util.Properties;
 
 import static org.junit.Assert.*;
 
@@ -21,10 +21,12 @@ import static org.junit.Assert.*;
  */
 public class TcpServerTest {
 
+    private final int TCP_PORT = Integer.parseInt(Haselnuss.newInstance().getProperties().getProperty("tcp.port"));
+
     @Rule
     public TestRule watcher = new TestWatcher() {
         protected void starting(Description description) {
-            System.out.println("Starting test: " + description.getMethodName());
+            System.out.println("TcpServerTest::Starting test: " + description.getMethodName());
         }
     };
 
@@ -39,10 +41,10 @@ public class TcpServerTest {
 
     @Test
     public void testRunServer() throws Exception {
-        instance = new TcpServer();
+        instance = new TcpServer(TCP_PORT);
         instance.start();
 
-        try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
+        try (TcpConnection connection = new TcpConnection("localhost", TCP_PORT)) {
             connection.connect();
             assertTrue(connection.isConnected());
         }
@@ -50,12 +52,10 @@ public class TcpServerTest {
 
     @Test
     public void testLoadFromProperties() throws Exception {
-        Properties properties = new Properties();
-        properties.setProperty("tcp.port", "9876");
-        instance = new TcpServer(properties);
+        instance = new TcpServer(TCP_PORT);
         instance.start();
 
-        try (TcpConnection connection = new TcpConnection("localhost", 9876)) {
+        try (TcpConnection connection = new TcpConnection("localhost", TCP_PORT)) {
             connection.connect();
             assertTrue(connection.isConnected());
         }
@@ -63,12 +63,10 @@ public class TcpServerTest {
 
     @Test
     public void testDefaultPort() throws Exception {
-        Properties properties = new Properties();
-
-        instance = new TcpServer(properties);
+        instance = new TcpServer(TCP_PORT);
         instance.start();
 
-        try (TcpConnection connection = new TcpConnection("localhost", Integer.valueOf(Consts.TCP_DEFAULT_PORT))) {
+        try (TcpConnection connection = new TcpConnection("localhost", Consts.TCP_DEFAULT_PORT)) {
             connection.connect();
             assertTrue(connection.isConnected());
         }
@@ -77,10 +75,10 @@ public class TcpServerTest {
 
     @Test
     public void simpleCommand() throws Exception {
-        instance = new TcpServer();
+        instance = new TcpServer(TCP_PORT);
         instance.start();
 
-        try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
+        try (TcpConnection connection = new TcpConnection("localhost", TCP_PORT)) {
             connection.connect();
             connection.executeCommand(new Command(Command.CommandType.GET, "key123"));
         }
@@ -88,10 +86,10 @@ public class TcpServerTest {
 
     @Test
     public void testCommand() throws Exception {
-        instance = new TcpServer();
+        instance = new TcpServer(TCP_PORT);
         instance.start();
 
-        try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
+        try (TcpConnection connection = new TcpConnection("localhost", TCP_PORT)) {
             connection.connect();
 
             Response response = connection.executeCommand(new Command(Command.CommandType.PUT, "key123", "val123"));
@@ -112,7 +110,7 @@ public class TcpServerTest {
 
     @Test(expected = BindException.class)
     public void shouldRunOnlyOneInstance() throws Exception {
-        try (TcpServer instance1 = new TcpServer(); TcpServer instance2 = new TcpServer()) {
+        try (TcpServer instance1 = new TcpServer(TCP_PORT); TcpServer instance2 = new TcpServer(TCP_PORT)) {
             instance1.start();
             instance2.start();
         }
@@ -120,7 +118,7 @@ public class TcpServerTest {
 
     @Test
     public void loadTest() throws Exception {
-        instance = new TcpServer(6543);
+        instance = new TcpServer(TCP_PORT);
         instance.start();
         Thread[] threads = new Thread[10];
         for (int i = 0; i < threads.length; i++) {
@@ -132,12 +130,22 @@ public class TcpServerTest {
         }
     }
 
+    @Test
+    public void shouldReturnsCorrectStatus() throws Exception {
+        instance = new TcpServer(9876);
+        assertEquals(Consts.SERVER_STATUS.STOPPED, instance.status());
+        instance.start();
+        assertEquals(Consts.SERVER_STATUS.STARTED, instance.status());
+        instance.close();
+        assertEquals(Consts.SERVER_STATUS.STOPPED, instance.status());
+    }
+
     private class Worker implements Runnable {
         @Override
         public void run() {
             for (int i = 0; i < 1; i++) {
 
-                try (TcpConnection connection = new TcpConnection("localhost", 6543)) {
+                try (TcpConnection connection = new TcpConnection("localhost", TCP_PORT)) {
                     connection.connect();
                     connection.executeCommand(new Command(Command.CommandType.PUT, "key123", "val123"));
                     Response r = connection.executeCommand(new Command(Command.CommandType.GET, "key123"));

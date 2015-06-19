@@ -25,35 +25,24 @@ import static com.labs.dm.haselnuss.Consts.CONFIG_FILENAME;
 public class TcpServer implements IProvider, AutoCloseable {
 
     private static final Logger logger = Logger.getLogger(TcpServer.class.getSimpleName());
-    private final Properties properties;
+    private final int port;
     private final TcpCommandProcess tcpCommandProcess = new TcpCommandProcess();
     private ServerSocket serverSocket;
     private volatile boolean active;
     private int instances;
 
-    public TcpServer() {
-        this.properties = new Properties();
-        loadConfiguration();
-    }
-
-    public TcpServer(Properties properties) {
-        this.properties = properties;
-    }
-
     public TcpServer(int port) {
-        this.properties = new Properties();
-        properties.setProperty("tcp.port", String.valueOf(port));
+        this.port = port;
     }
 
     public static void main(String argv[]) throws Exception {
-
         TcpServer server = Haselnuss.newInstance().createTcpServer();
         server.start();
     }
 
     public void start() throws IOException {
         logger.info("Starting server...");
-        serverSocket = new ServerSocket(Integer.valueOf(properties.getProperty("tcp.port", Consts.TCP_DEFAULT_PORT)));
+        serverSocket = new ServerSocket(port);
         logger.log(Level.INFO, "Server is listening on port: " + serverSocket.getLocalPort());
         logger.log(Level.INFO, "PID: " + Utils.pid());
         active = true;
@@ -97,14 +86,9 @@ public class TcpServer implements IProvider, AutoCloseable {
         logger.info("Server stopped");
     }
 
-    private void loadConfiguration() {
-        try (InputStream input = TcpServer.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME)) {
-            properties.load(input);
-        } catch (FileNotFoundException fnfe) {
-            logger.severe("Configuration file not found.");
-        } catch (IOException ex) {
-            logger.severe(ex.getLocalizedMessage());
-        }
+    @Override
+    public Consts.SERVER_STATUS status() {
+        return active ? Consts.SERVER_STATUS.STARTED : Consts.SERVER_STATUS.STOPPED;
     }
 
     private class ServerThread implements Runnable {

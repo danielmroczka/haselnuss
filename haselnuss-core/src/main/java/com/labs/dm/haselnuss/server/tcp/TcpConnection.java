@@ -54,11 +54,9 @@ public class TcpConnection implements AutoCloseable {
 
         ObjectOutput ois = new ObjectOutputStream(socket.getOutputStream());
         ois.writeObject(command);
-        //ois.close();
 
         ObjectInput oi = new ObjectInputStream(socket.getInputStream());
         Response response = (Response) oi.readObject();
-        //oi.close();
         return response;
     }
 

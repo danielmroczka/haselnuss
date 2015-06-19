@@ -95,7 +95,7 @@ public class HaselnussInstance {
     }
 
     public TcpServer createTcpServer() {
-        int port = (int) properties.get("tcp.port");
+        int port = Integer.parseInt(properties.getProperty("tcp.port"));
         return createTcpServer(port);
     }
 }

@@ -1,14 +1,20 @@
 package com.labs.dm.haselnuss.server.http;
 
+import com.labs.dm.haselnuss.Consts;
 import com.labs.dm.haselnuss.Haselnuss;
 import com.labs.dm.haselnuss.core.IFileStorage;
 import com.labs.dm.haselnuss.utils.HttpClientUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,6 +26,13 @@ public class RestServerTest {
     private static final int port = 9090;
 
     private static final RestServer server = Haselnuss.newInstance().createRestServer(9090);
+
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        protected void starting(Description description) {
+        System.out.println("RestServerTest::Starting test: " + description.getMethodName());
+        }
+    };
 
     @BeforeClass
     public static void setUpClass() throws IOException {
@@ -89,5 +102,16 @@ public class RestServerTest {
         assertEquals(200, con2.getResponseCode());
 
         assertNotNull(HttpClientUtil.responseBody(con2));
+    }
+
+
+    @Test
+    public void shouldReturnsCorrectStatus() throws Exception {
+        RestServer instance = new RestServer(9876);
+        assertEquals(Consts.SERVER_STATUS.STOPPED, instance.status());
+        /*instance.start();
+        assertEquals(Consts.SERVER_STATUS.STARTED, instance.status());
+        instance.close();
+        assertEquals(Consts.SERVER_STATUS.STOPPED, instance.status());*/
     }
 }
