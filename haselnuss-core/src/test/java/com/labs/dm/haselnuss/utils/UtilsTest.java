@@ -2,9 +2,6 @@ package com.labs.dm.haselnuss.utils;
 
 import org.junit.Test;
 
-import java.awt.*;
-import java.net.URI;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -17,22 +14,22 @@ public class UtilsTest {
 
     @Test
     public void checksValidRange() throws Exception {
-        int pid = Utils.pid();
+        int pid = Utils.getPID();
         assertTrue(pid >= 1024);
     }
 
     @Test
     public void shouldAlwaysReturnTheSamePID() throws Exception {
-        int reference = Utils.pid();
+        int reference = Utils.getPID();
 
         for (int i = 0; i < 10; i++) {
-            assertEquals(reference, Utils.pid());
+            assertEquals(reference, Utils.getPID());
         }
     }
 
     @Test
     public void testIP() throws Exception {
-        assertNotNull(Utils.ip());
+        assertNotNull(Utils.getIpAddress());
     }
 
 

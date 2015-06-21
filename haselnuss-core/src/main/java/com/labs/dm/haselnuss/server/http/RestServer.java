@@ -47,7 +47,7 @@ public class RestServer implements IProvider {
         logger.info("Server is listening on port " + port);
         logger.info("Usage: http://localhost:" + port + "/rest/storage/key");
         logger.info("Admin URL: http://localhost:" + port + "/admin");
-        logger.info("PID: " + Utils.pid());
+        logger.info("PID: " + Utils.getPID());
         logger.info("Server started in: " + (System.currentTimeMillis() - time) + " ms");
 
         if (Haselnuss.newInstance().getProperties().getProperty("http.start.browser").equals("Y")) {

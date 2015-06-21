@@ -4,13 +4,22 @@ import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.net.*;
+import java.util.logging.Logger;
 
 /**
  * @author daniel
+ * @since 0.0.1
  */
 public class Utils {
 
-    public static int pid() {
+    private static final Logger logger = Logger.getLogger(Utils.class.getSimpleName());
+
+    /**
+     * Returns Process Identificator
+     *
+     * @return
+     */
+    public static int getPID() {
         RuntimeMXBean rmxb = ManagementFactory.getRuntimeMXBean();
         if (rmxb != null && rmxb.getName() != null) {
             String pid = rmxb.getName().substring(0, rmxb.getName().indexOf("@"));
@@ -26,7 +35,7 @@ public class Utils {
             try {
                 desktop.browse(uri);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.severe(e.getMessage());
             }
         }
     }
@@ -35,20 +44,20 @@ public class Utils {
         try {
             openWebpage(url.toURI());
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
-    public static String ip() {
+    public static String getIpAddress() {
         try
         {
             return Inet4Address.getLocalHost().getHostAddress();
         } catch (UnknownHostException e)
         {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
 
-        return null;
+        return "";
     }
 
 }

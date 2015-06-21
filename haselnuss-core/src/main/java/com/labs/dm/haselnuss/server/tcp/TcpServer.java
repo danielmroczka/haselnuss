@@ -12,11 +12,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static com.labs.dm.haselnuss.Consts.CONFIG_FILENAME;
 
 /**
  * @author daniel
@@ -44,7 +41,7 @@ public class TcpServer implements IProvider, AutoCloseable {
         logger.info("Starting server...");
         serverSocket = new ServerSocket(port);
         logger.log(Level.INFO, "Server is listening on port: " + serverSocket.getLocalPort());
-        logger.log(Level.INFO, "PID: " + Utils.pid());
+        logger.log(Level.INFO, "PID: " + Utils.getPID());
         active = true;
 
         new Thread(new ServerThread()).start();
