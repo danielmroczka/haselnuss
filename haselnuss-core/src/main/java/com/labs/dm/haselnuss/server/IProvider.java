@@ -1,6 +1,6 @@
 package com.labs.dm.haselnuss.server;
 
-import com.labs.dm.haselnuss.Consts;
+import static com.labs.dm.haselnuss.Consts.*;
 
 import java.io.IOException;
 
@@ -9,15 +9,9 @@ import java.io.IOException;
  */
 public interface IProvider {
 
-    enum TYPE {
-        EMBEDDED,
-        HTTP,
-        TCP
-    }
-
     void start() throws IOException;
 
     void close() throws IOException;
 
-    Consts.SERVER_STATUS status();
+    SERVER_STATUS status();
 }

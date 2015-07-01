@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * @author daniel
  */
-public class RestServer implements IProvider {
+public class RestServer implements IProvider, AutoCloseable {
 
     private static final Logger logger = Logger.getLogger(RestServer.class.getSimpleName());
     private HttpServer server;

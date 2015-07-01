@@ -1,4 +1,4 @@
-package com.labs.dm.haselnuss.core;
+package com.labs.dm.haselnuss.experimental;
 
 import java.beans.Transient;
 import java.io.*;
